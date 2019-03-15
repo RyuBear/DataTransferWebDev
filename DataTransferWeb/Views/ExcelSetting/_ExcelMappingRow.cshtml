@@ -1,0 +1,40 @@
+﻿@model ExcelSettingVM
+<style>
+    #table-cont {
+        height: 45vh; /* 固定高度 */
+    }
+</style>
+<div class="table-fix-head" id='table-cont'>
+    <table class="table table-striped table-bordered table-hover" id="dataTables">
+        <thead class="thead-inverse">
+            <tr align="center">
+                <th>Column Name</th>
+                <th>Field Name</th>
+                <th>Default Value</th>
+                <th>Data Type</th>
+                <th>Sheet</th>
+                <th>X</th>
+                <th>New Line Char</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ExcelMappingDataRow.Count > 0)
+            {
+                foreach (var m in Model.ExcelMappingDataRow)
+                {
+                    <tr style="word-break:break-word;" onclick="load('@m.ColumnName', '@m.FieldName', '@m.DefaultValue', '@m.DataType', '@m.SheetName', '@m.X', '@m.NewLineChar');">
+                        <td style="word-wrap: break-word;">
+                            @m.ColumnName
+                        </td>
+                        <td>@m.FieldName</td>
+                        <td>@m.DefaultValue</td>
+                        <td>@m.DataType</td>
+                        <td>@m.SheetName</td>
+                        <td>@m.X</td>
+                        <td>@m.NewLineChar</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

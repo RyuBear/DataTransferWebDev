@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="text/html; charset=utf-8;IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>資料轉換系統</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @RenderSection("styles", required: false)
+
+
+    <!-- Bootstrap Core CSS -->
+    <link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- MetisMenu CSS -->
+    <link href="~/vendor/metisMenu/metisMenu.min.css" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link href="~/dist/css/sb-admin-2.css" rel="stylesheet" />
+    <!-- Custom Fonts -->
+    <link href="~/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/dist/css/table-header-fix.css" rel="stylesheet" />
+
+
+    <style type="text/css">
+    .sidebar_main {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .menu {
+            /*font-family: '微軟正黑體';*/
+            font-weight: normal;
+        }
+
+        .form-control{
+            height: 34px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" style="font-size: large;" href="#">資料轉換系統</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index", "SQLSetting")">SQL設定</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        轉出格式設定
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="@Url.Action("Index", "XMLSetting")">XML</a>
+                        <a class="dropdown-item" href="@Url.Action("Index", "ExcelSetting")">Excel</a>
+                        @*<div class="dropdown-divider"></div>*@
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Logout", "Home")">登出</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="wrapper">
+        <!-- Navigation -->
+        @*<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <a class="navbar-brand" href="#">資料轉換系統</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Index", "SQLSetting")">SQL設定</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            轉出格式設定
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="@Url.Action("Index", "XMLSetting")">XML</a>
+                            <a class="dropdown-item" href="@Url.Action("Index", "ExcelSetting")">Excel</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Logout", "Home")">登出</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>*@
+
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            @RenderBody()
+        </div>
+    </div>
+
+    @RenderSection("scripts", required: false)
+
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="~/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="~/vendor/metisMenu/metisMenu.min.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="~/dist/js/sb-admin-2.js"></script>
+    <script src="~/layer/layer.js"></script>
+
+    <script>
+        function userInfo() {
+            var title;
+            title = "使用者設定";
+            layer.open({
+                type: 2,
+                border: [2, 0.3, '#000'],
+                offset: '50px',
+                area: ['800px', '500px'],
+                fixed: true,
+                maxmin: true,
+                shadeClose: true,
+                shade: [0],
+                title: title,
+                content: '@Url.Action("UptPwd", "User")'
+            });
+        };
+    </script>
+</body>
+</html>

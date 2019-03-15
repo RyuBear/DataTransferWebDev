@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="0f779baea96045699ee7beae63c05be8" Name="Diagram1" ZoomLevel="72">
+        <EntityTypeShape EntityType="TransferDBModel.tblSQLColumns" Width="1.5" PointX="3.375" PointY="1.125" />
+        <EntityTypeShape EntityType="TransferDBModel.tblSQLSetting" Width="1.5" PointX="1.125" PointY="0.5" />
+        <AssociationConnector Association="TransferDBModel.FK_SQLColumns_SQLSetting" />
+        <AssociationConnector Association="TransferDBModel.FK_SQLSetting_SQLSetting" />
+        <EntityTypeShape EntityType="TransferDBModel.tblXMLSetting" Width="1.5" PointX="1.125" PointY="4.25" />
+        <AssociationConnector Association="TransferDBModel.FK_tblXMLSetting_tblSQLSetting" />
+        <AssociationConnector Association="TransferDBModel.FK_tblXMLSetting_tblSQLSetting1" />
+        <EntityTypeShape EntityType="TransferDBModel.tblAdmin" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="TransferDBModel.tblXMLMapping" Width="1.5" PointX="3.375" PointY="4.125" />
+        <AssociationConnector Association="TransferDBModel.FK_tblXMLMapping_tblXMLSetting" />
+        <EntityTypeShape EntityType="TransferDBModel.tblExcelMapping" Width="1.5" PointX="7.625" PointY="4" />
+        <EntityTypeShape EntityType="TransferDBModel.tblExcelSetting" Width="1.5" PointX="5.375" PointY="4" />
+        <AssociationConnector Association="TransferDBModel.FK_tblExcelMapping_tblExcelSetting" />
+        <AssociationConnector Association="TransferDBModel.FK_tblExcelSetting_tblSQLSetting" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

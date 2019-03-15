@@ -1,0 +1,379 @@
+﻿@model XMLSettingVM
+
+@{
+    ViewBag.Title = "轉出格式設定(XML)";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid">
+    @using (Html.BeginForm("Testing", "XMLSetting", FormMethod.Post, new { Id = "IndexForm" }))
+    {
+        <div class="row">
+            @* 左 *@
+            <div class="col-lg-2 col-md-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                @Html.LabelFor(x => x.UnsetColumns)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div id="unsetColumn" class="row">
+                            <div class="col-lg-12 col-md-12">
+                                <select id="UnsetColumns" name="UnsetColumns" size="35" class="form-control" style="height: 80vh;">
+                                    <option value="">-Please Select-</option>
+                                    @foreach (var c in Model.UnsetColumns)
+                                    {
+                                        <option value="@c.ColumnName">@c.ColumnName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @* 中 *@
+            <div class="col-lg-6 col-md-6">
+                @*<div class="row">*@
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-lg-2 col-md-2">
+                                @Html.LabelFor(x => x.SQLName)
+                            </div>
+                            <div class="col-lg-7 col-md-7">
+                                @Html.DropDownListFor(x => x.SQLName, DropDownListMenu.SQLNameOption(), new { @class = "form-control", @style = "font-weight:normal;" })
+                            </div>
+                            <div class="col-lg-1 col-md-1">
+                                <input type="button" id="btnOK" class="btn btn-success" value="OK" onclick="return selectSQL();" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-offset-1 col-md-offset-1 col-lg-3 col-md-3">
+                                @Html.LabelFor(x => x.TagName)
+                            </div>
+                            <div class="col-lg-8 col-md-8">
+                                @Html.HiddenFor(x => x.TagName)
+                                @Html.TextBoxFor(x => x.newTagName, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-offset-1 col-md-offset-1 col-lg-3 col-md-3">
+                                @Html.LabelFor(x => x.FieldName)
+                            </div>
+                            <div class="col-lg-8 col-md-8">
+                                <select id="FieldName" name="FieldName" class="form-control">
+                                    @foreach (var c in Model.UnsetColumns)
+                                    {
+                                        <option value="@c.ColumnName">@c.ColumnName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-offset-1 col-md-offset-1 col-lg-3 col-md-3">
+                                @Html.LabelFor(x => x.DefaultValue)
+                            </div>
+                            <div class="col-lg-8 col-md-8">
+                                @Html.TextBoxFor(x => x.DefaultValue, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-offset-1 col-md-offset-1 col-lg-3 col-md-3">
+                                @Html.LabelFor(x => x.FatherTag)
+                            </div>
+                            <div class="col-lg-8 col-md-8">
+                                <select id="FatherTag" name="FatherTag" class="form-control">
+                                    <option value="">-Please Select-</option>
+                                    @foreach (var c in Model.SetedColumns)
+                                    {
+                                        <option value="@c.ColumnName">@c.ColumnName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-offset-1 col-md-offset-1 col-lg-3 col-md-3">
+                                @Html.LabelFor(x => x.CanRepeat)
+                            </div>
+                            <div class="col-lg-8 col-md-8">
+                                <input type="checkbox" name="CanRepeat" id="CanRepeat" value="true" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-1 col-md-1">
+                                <input type="button" id="btnView" class="btn btn-primary" value="View" onclick="view();" />
+                            </div>
+                            <div class="col-lg-offset-7 col-md-offset-7 col-lg-1 col-md-1">
+                                <input type="button" id="btnAdd" class="btn btn-primary" value="Add" onclick="add();" />
+                            </div>
+                            <div class="col-lg-offset-1 col-md-offset-1 col-lg-1 col-md-1 text-right">
+                                <input type="button" id="btnDelete" class="btn btn-primary" value="Del" onclick="del();" />
+                            </div>
+                        </div>
+                        <div id="mainContent" class="row">
+                            @{
+                                Html.RenderPartial("_XMLMappingRow", Model);
+                            }
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-1 col-md-1 text-right">
+                                @Html.LabelFor(x => x.XMLName)
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                @Html.HiddenFor(x => x.ViewStatus)
+                                @if (Model.ViewStatus == "E")
+                                {
+                                    @Html.TextBoxFor(x => x.XMLName, new { @class = "form-control", @readonly = true })
+                                }
+                                else
+                                {
+                                    @Html.TextBoxFor(x => x.XMLName, new { @class = "form-control" })
+                                }
+                            </div>
+                            <div class="col-lg-offset-1 col-md-offset-1 col-lg-2 col-md-2 text-right">
+                                @Html.LabelFor(x => x.CustomerName)
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                @Html.TextBoxFor(x => x.CustomerName, new { @class = "form-control" })
+                            </div>
+                            <div class="col-lg-1 col-md-1">
+                                <input type="button" id="btnSave" class="btn btn-success" value="Save" onclick="return save();" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*</div>*@
+            </div>
+
+            @* 右 *@
+            <div class="col-lg-4 col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                @Html.LabelFor(x => x.XMLView)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                <div id="previewContent" class="row">
+                                    @{
+                                        Html.RenderPartial("_XMLView", Model);
+                                    }
+                                </div>
+                                @* @Html.TextAreaFor(x => x.XMLView, new { @class = "form-control", @readonly = true, @style = "height: 80vh;" })*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                                        }
+</div>
+
+<script>
+    function selectSQL() {
+        var SQLName = $("#SQLName").val();
+        var param = new Object({
+            SQLName: SQLName
+        });
+        $.ajax(
+        {
+            url: '@Url.Action("AjaxGetColumns")',
+            type: "POST",
+            data: param,
+            success: function (result) {
+                setOptionList(result);
+                loadMappingRow(param);
+            }
+        });
+    }
+
+    function add() {
+        var SQLName = $("#SQLName").val();
+        var TagName = $("#TagName").val();
+        var newTagName = $("#newTagName").val();
+        var FieldName = $("#FieldName").val();
+        var DefaultValue = $("#DefaultValue").val();
+        var Layer = $("#FatherTag").val();
+        var AllowRepeat = document.getElementById('CanRepeat').checked;
+
+        var msg = '';
+        if (SQLName.trim() == '') msg += '請選擇 SQL Name\r\n';
+        if (newTagName.trim() == '') msg += '請輸入 Tag Name\r\n';
+        if (newTagName.trim() == Layer) msg += '父節點不可為自身\r\n';
+        //if (FieldName.trim() == '' && DefaultValue.trim() == '') msg += '請擇一輸入 Field Name 或 Default Value\r\n';
+        //if (Layer.trim() == '') msg += '請輸入 XML Layer\r\n';
+
+        if (msg != '') {
+            alert(msg);
+        } else {
+            var param = new Object({
+                SQLName: SQLName,
+                TagName: TagName,
+                newTagName: newTagName,
+                FieldName: FieldName,
+                DefaultValue: DefaultValue,
+                FatherTag: Layer,
+                CanRepeat: AllowRepeat
+            });
+
+            $.ajax({
+                url: '@Url.Action("AjaxInsertMapping")',
+                type: "POST",
+                data: param,
+                success: function (result) {
+                    if (result.status == 'ok') {
+                        setOptionList(result);
+                        loadMappingRow(param);
+                        reset
+                    }
+                    else {
+                        alert(result.status);
+                    }
+                }
+            });
+        }
+    }
+
+    function del() {
+        var SQLName = $("#SQLName").val();
+        var TagName = $("#TagName").val();
+
+        var param = new Object({
+            SQLName: SQLName,
+            TagName: TagName,
+        });
+
+        $.ajax({
+            url: '@Url.Action("AjaxDeleteMapping")',
+            type: "POST",
+            data: param,
+            success: function (result) {
+                setOptionList(result);
+                loadMappingRow(param);
+            }
+        });
+    }
+
+    // 預覽
+    function view() {
+        var SQLName = $("#SQLName").val();
+
+        var param = new Object({
+            SQLName: SQLName
+        });
+        $.ajax({
+            url: '@Url.Action("AjaxShowXML")',
+            type: "POST",
+            data: param,
+            success: function (result) {
+                $("#previewContent").html(result);
+            }
+        });
+    }
+
+    function setOptionList(result) {
+        $("#UnsetColumns").attr("disabled", false);
+        $("#UnsetColumns").html('');
+        $("#UnsetColumns").html(result.Options.replace("<option value=''>-Please Select-</option>", ""));
+
+        $("#FieldName").attr("disabled", false);
+        $("#FieldName").html('');
+        $("#FieldName").html(result.Options);
+
+        $("#FatherTag").attr("disabled", false);
+        $("#FatherTag").html('');
+        $("#FatherTag").html(result.FatherTagOptions);
+    }
+
+    // 載入 已設定的資料
+    function loadMappingRow(param) {
+        $.ajax({
+            url: '@Url.Action("AjaxShowMappingData")',
+            type: "POST",
+            data: param,
+            success: function (result) {
+                $("#mainContent").html(result);
+                reset();
+            }
+        });
+    }
+
+    function reset() {
+        $("#TagName").val('');
+        $("#newTagName").val('');
+        $("#FieldName").val('');
+        $("#DefaultValue").val('');
+        $("#FatherTag").val('');
+        $("#CanRepeat").val('');
+    }
+
+    function save() {
+        var ViewStatus = $('#ViewStatus').val();
+        var XMLName = $('#XMLName').val();
+        var CustomerName = $('#CustomerName').val();
+        var SQLName = $('#SQLName').val();
+
+        var msg = '';
+        if (XMLName.trim() == '') msg = '請輸入 XML Name!';
+        if (CustomerName.trim() == '') msg = '請輸入 Customer Name!';
+        if (SQLName.trim() == '') msg = '請選擇 SQL Name!';
+
+        if (msg != '') {
+            alert(msg);
+        } else {
+            var param = new Object({
+                XMLName: XMLName,
+            });
+            $.ajax(
+            {
+                url: '@Url.Action("AjaxIsExist")',
+                type: "POST",
+                data: param,
+                success: function (result) {
+                    if (ViewStatus!= 'E' && result.Exist) {
+                        alert('【' + XMLName + '】已存在');
+                        @*if (confirm('【' + XMLName + '】已存在，是否覆蓋?')) {
+                            $("#IndexForm").attr("action", '@Url.Action("Save", "XMLSetting")');
+                            $("#IndexForm").submit();
+                        }*@
+                    } else {
+                        $("#IndexForm").attr("action", '@Url.Action("Save", "XMLSetting")');
+                        $("#IndexForm").submit();
+                    }
+                }
+            });
+        }
+    }
+
+
+    function load(TagName, FieldName, DefaultValue, Layer, AllowRepeat) {
+        var selectItems = $("#FieldName").html();
+        selectItems += "<option value='" + FieldName + "'>" + FieldName + "</option>";
+        $("#FieldName").html(selectItems);
+
+        $("#TagName").val(TagName);
+        $("#newTagName").val(TagName);
+        $("#FieldName").val(FieldName);
+        $("#DefaultValue").val(DefaultValue);
+        $("#FatherTag").val(Layer);
+
+        if (AllowRepeat)
+            document.getElementById('CanRepeat').checked = true;
+    }
+</script>

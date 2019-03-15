@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTransferWeb", "DataTransferWeb\DataTransferWeb.csproj", "{BB2F574D-7AC0-4025-9822-443B2CD0A49E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transfer.Models", "Transfer.Models\Transfer.Models.csproj", "{DF16FC21-485D-4B6F-871C-99EE8D129EED}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BB2F574D-7AC0-4025-9822-443B2CD0A49E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB2F574D-7AC0-4025-9822-443B2CD0A49E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB2F574D-7AC0-4025-9822-443B2CD0A49E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB2F574D-7AC0-4025-9822-443B2CD0A49E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF16FC21-485D-4B6F-871C-99EE8D129EED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF16FC21-485D-4B6F-871C-99EE8D129EED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF16FC21-485D-4B6F-871C-99EE8D129EED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF16FC21-485D-4B6F-871C-99EE8D129EED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

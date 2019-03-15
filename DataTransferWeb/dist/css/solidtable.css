@@ -1,0 +1,18 @@
+﻿
+body {
+    /*font-family: '標楷體';*/
+}
+
+.solidtable {
+    border: 1px solid #00;
+    border-collapse: collapse;
+}
+
+    .solidtable tr, td {
+        border: 1px solid #00;
+    }
+
+p {
+    margin-left: 50px;
+    text-indent: -40px;
+}

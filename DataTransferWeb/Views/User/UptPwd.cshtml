@@ -1,0 +1,129 @@
+﻿@model DataTransferWeb.ViewModels.UserVM
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+    <style type="text/css">
+        body {
+            width: 95%;
+            font-family: '@OnlineExamManageResource.Font';
+        }
+
+        .row {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <br />
+        @using (Ajax.BeginForm("AjaxUpdate", "User", new AjaxOptions { OnSuccess = "success", OnFailure = "handleError" }, new { id = "EditForm" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-lg-offset-1 col-lg-8 col-md-offset-1 col-md-8 col-sm-offset-1 col-sm-10">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
+                                    @Html.LabelFor(x => x.Account)：@Html.DisplayFor(x => x.Account)
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
+                                    @Html.LabelFor(x => x.Name)：@Html.DisplayFor(x => x.Name)
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
+                                    @Html.LabelFor(x => x.UserType)：
+                                    @if (Model.UserType.Equals("admin"))
+                                    {
+                                        <label>@OnlineExamManageResource.SysAdmin</label>
+                                    }
+                                    else
+                                    {
+                                        <label>@OnlineExamManageResource.Supervisor</label>
+                                    }
+                                </div>
+                            </div>
+
+                            <hr />
+                            <div class="row">
+                                <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-offset-1 col-sm-10">
+                                    <table style="border: none;">
+                                        <tr>
+                                            <td style="padding-left: 0">
+                                                @Html.LabelFor(x => x.Password)：
+                                            </td>
+                                            <td>
+                                                @Html.PasswordFor(x => x.Password, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(x => x.Password, "", new { @class = "text-danger" })
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right">
+                                                @Html.LabelFor(x => x.NewPassword)：
+                                            </td>
+                                            <td>
+                                                @Html.PasswordFor(x => x.NewPassword, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(x => x.NewPassword, "", new { @class = "text-danger" })
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Html.LabelFor(x => x.NewPassword_Confirm)：
+                                            </td>
+                                            <td>
+                                                @Html.PasswordFor(x => x.NewPassword_Confirm, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(x => x.NewPassword_Confirm, "", new { @class = "text-danger" })
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-offset-1 col-lg-8 col-md-offset-1 col-md-8 col-sm-offset-1 col-sm-10 text-right">
+                    <input type="button" id="save" class="btn btn-success" value="@OnlineExamManageResource.Update" onclick="savePwd()" />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+    </div>
+    <script>
+        function savePwd() {
+            $("#EditForm").submit();
+        }
+
+        function success(result) {
+            if (result.status == "success") {
+                parent.alertify.alert('@MessageResource.UpdateSuccess');
+                parent.layer.closeAll();
+            } else if (result.status != undefined) {
+                alertify.error("@MessageResource.UpdateFailed：" + result.status);
+            }
+        }
+
+        function handleError(ajaxContext) {
+            var response = ajaxContext.get_response();
+            var statusCode = response.get_statusCode();
+            alertify.error("Sorry, the request failed with status code " + statusCode);
+        }
+    </script>
+</body>
+</html>

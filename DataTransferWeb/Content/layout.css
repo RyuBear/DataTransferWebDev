@@ -1,0 +1,162 @@
+﻿body {
+    /*font-family: '微軟正黑體';*/
+    font-size: large;
+}
+
+#Logo {
+    background-color: lightgray;
+    font-size: 3rem;
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+    padding: 1px 20px;
+    margin-bottom: 50px;
+}
+
+#ExamInfo {
+    background-color: #f8f8f8;
+    /*font-family: '微軟正黑體';*/
+    width: 50%;
+    margin: 0 auto;
+    padding: 1px 20px;
+    border-radius: 10px;
+    min-height: 120px;
+    margin-bottom: 50px;
+}
+
+    #ExamInfo p {
+        margin-top: 10px;
+        line-height: 40px;
+        font-size: 2rem;
+    }
+
+.layoutcontainer {
+    background-color: #f8f8f8;
+    width: 50%;
+    margin: 0 auto;
+    border: 1px solid gray;
+    padding: 1px 20px;
+    border-radius: 10px;
+    padding-bottom: 20px;
+    min-height: 450px;
+}
+
+#notice_logo {
+    margin: -15px 0px 20px 15px;
+}
+
+    #notice_logo label {
+        background-color: #f8f8f8;
+        font-size: 2rem;
+        border-radius: 10px;
+    }
+
+#notice {
+    margin-left: 30px;
+    margin-right: 30px;
+    line-height: 30px;
+    background-color: #fff;
+    border: 1px solid;
+    min-height: 250px;
+}
+
+#imgDiv {
+    margin-top: -80px;
+    margin-right: 50px;
+    float: right;
+}
+
+.clearfix {
+    clear: both;
+}
+
+.login {
+    margin-top: 30px;
+    float: right;
+    width: 40%;
+}
+
+    .login p {
+        text-align: right;
+    }
+
+.login_object {
+    margin-top: 30px;
+    float: right;
+    width: 60%;
+}
+
+    .login_object input[type="text"],
+    .login_object input[type="password"] {
+        width: 50%;
+        font-size: 2rem;
+    }
+
+    .login_object input[type="button"] {
+        background-color: #f8f8f8;
+        margin-left: 90px;
+        padding: 5px;
+        font-size: 16px;
+        width: 30%;
+        border-radius: 10px;
+    }
+
+.button {
+    margin-top: -50px;
+    padding: 5px;
+    font-size: 16px;
+    width: 20%;
+    border-radius: 4px;
+}
+
+.right_buttom {
+    margin-top: -50px;
+    width: 70%;
+    text-align: right;
+}
+
+.option_list {
+    margin-top: 30px;
+    margin-left: 50px;
+}
+
+.option {
+    line-height: 40px;
+    font-size: 2rem;
+}
+
+.notice_li {
+    line-height: 30px;
+    text-indent: -4em;
+    margin-left: 5em;
+    margin-right: 0.5em;
+}
+
+.notice_ckb {
+    margin-top: 10px;
+    margin-left: 30px;
+}
+
+.button_disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    margin-top: -50px;
+    padding: 5px;
+    font-size: 16px;
+    width: 20%;
+    border-radius: 4px;
+}
+
+/*  自訂 ol 項目 */
+/*ol li {
+    list-style: none;
+    quotes: "一、" "" "二、" "" "三、" "" "四、" "" "五、" "" "六、" "" "七、" "" "八、" "" "九、" "";
+}
+
+    ol li:before {
+        content: open-quote ". ";
+    }
+
+ol:after {
+    content: close-quote;
+}*/

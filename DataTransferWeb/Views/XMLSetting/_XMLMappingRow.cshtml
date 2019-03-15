@@ -1,0 +1,36 @@
+﻿@model XMLSettingVM
+<style>
+    #table-cont {
+        height: 40vh; /* 固定高度 */
+    }
+</style>
+<div class="table-fix-head" id='table-cont'>
+    <table class="table table-striped table-bordered table-hover" id="dataTables">
+        <thead class="thead-inverse">
+            <tr align="center">
+                <th>Tag Name</th>
+                <th>Field Name</th>
+                <th>Default Value</th>
+                <th>XML Layer</th>
+                <th>Repeat</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.XMLMappingDataRow.Count > 0)
+            {
+                foreach (var m in Model.XMLMappingDataRow)
+                {
+                    <tr style="word-break:break-word;" onclick="load('@m.TagName', '@m.FieldName', '@m.DefaultValue', '@m.FatherTag', @m.CanRepeat);">
+                        <td style="word-wrap: break-word;">
+                            @m.TagName
+                        </td>
+                        <td>@m.FieldName</td>
+                        <td>@m.DefaultValue</td>
+                        <td>@m.FatherTag</td>
+                        <td>@m.CanRepeat</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,13 @@
+﻿@model XMLSettingVM
+<style>
+    pre {
+        height: 80vh; /* 固定高度 */
+        width: 100%;
+    }
+</style>
+
+
+<pre>
+@Html.Raw(Model.XMLView)
+    @*@Html.TextAreaFor(x => x.XMLView, new { @class = "form-control", @readonly = true, @style = "height: 80vh;" })*@
+</pre>

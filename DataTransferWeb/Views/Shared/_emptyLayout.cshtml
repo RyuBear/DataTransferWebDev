@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文檔轉換系統</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/angularjs")
+    @RenderSection("styles", required: false)
+
+    <script src="~/Scripts/screenfull.js"></script>
+    <link href="~/Content/freelancer.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="~/Content/themes/base/all.css" rel="stylesheet" />
+    <link href="~/Content/layout.css" rel="stylesheet" />
+
+    @*美化訊息視窗*@
+    <link href="~/Content/alertify.core.css" rel="stylesheet" />
+    <link href="~/Content/alertify.default.css" rel="stylesheet" />
+    <script src="~/Scripts/alertify.min.js"></script>
+
+    @*鎖功能鍵*@
+    <script src="~/Scripts/lock.js"></script>
+
+    <script>
+        $(function () {
+            if (screenfull.enabled) {
+                screenfull.request();
+            }
+        });
+    </script>
+
+    <style type="text/css">
+        body {
+            font-family: '@OnlineExamResource.Font';
+        }
+        .ui-dialog-title{
+            font-family: '@OnlineExamResource.Font';
+        }
+    </style>
+</head>
+<body id="page-top" class="index" ng-app="exam">
+
+    @RenderBody()
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+    @*<script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="~/Scripts/classie.js"></script>
+    <script src="~/Scripts/cbpAnimatedHeader.js"></script>
+    <!-- Contact Form JavaScript -->
+    <script src="~/Scripts/jqBootstrapValidation.js"></script>
+    <script src="~/Scripts/contact_me.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="~/Scripts/freelancer.js"></script>*@
+</body>
+</html>

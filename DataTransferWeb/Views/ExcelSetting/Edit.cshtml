@@ -1,0 +1,338 @@
+﻿@model ExcelSettingVM
+
+@{
+    ViewBag.Title = "轉出格式設定(Excel)";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Testing", "ExcelSetting", FormMethod.Post, new { Id = "IndexForm" }))
+{
+    <div class="container-fluid">
+
+        <div class="row">
+            @* 左 *@
+            <div class="col-lg-2 col-md-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                @Html.LabelFor(x => x.UnsetColumns)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div id="unsetColumn" class="row">
+                            <div class="col-lg-12 col-md-12">
+                                <select id="UnsetColumns" name="UnsetColumns" size="35" class="form-control" style="height: 80vh;">
+                                    @foreach (var c in Model.UnsetColumns)
+                                    {
+                                        <option value="@c.ColumnName">@c.ColumnName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @* 中 *@
+            <div class="col-lg-10 col-md-10">
+                @*<div class="row">*@
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-lg-2 col-md-2">
+                                @Html.LabelFor(x => x.SQLName)
+                            </div>
+                            <div class="col-lg-7 col-md-7">
+                                @Html.DropDownListFor(x => x.SQLName, DropDownListMenu.SQLNameOption(), new { @class = "form-control", @style = "font-weight:normal;" })
+                            </div>
+                            <div class="col-lg-1 col-md-1">
+                                <input type="button" id="btnOK" class="btn btn-success" value="OK" onclick="return selectSQL();" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-offset-1 col-md-offset-1 col-lg-2 col-md-2">
+                                @Html.LabelFor(x => x.ColumnName)
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                @Html.HiddenFor(x => x.ColumnName)
+                                @Html.TextBoxFor(x => x.newColumnName, new { @class = "form-control" })
+                            </div>
+
+                            <div class="col-lg-offset-1 col-md-offset-1 col-lg-2 col-md-2">
+                                @Html.LabelFor(x => x.SheetName)
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                @Html.TextBoxFor(x => x.SheetName, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-offset-1 col-md-offset-1 col-lg-2 col-md-2">
+                                @Html.LabelFor(x => x.FieldName)
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                <select id="FieldName" name="FieldName" class="form-control">
+                                    <option value="">-Please Select-</option>
+                                    @foreach (var c in Model.UnsetColumns)
+                                    {
+                                        <option value="@c.ColumnName">@c.ColumnName</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-lg-offset-1 col-md-offset-1 col-lg-2 col-md-2">
+                                @Html.LabelFor(x => x.X)
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                @Html.TextBoxFor(x => x.X, new { @class = "form-control", @type = "number" })
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-offset-1 col-md-offset-1 col-lg-2 col-md-2">
+                                @Html.LabelFor(x => x.DefaultValue)
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                @Html.TextBoxFor(x => x.DefaultValue, new { @class = "form-control" })
+                            </div>
+
+                            <div class="col-lg-offset-1 col-md-offset-1 col-lg-2 col-md-2">
+                                @Html.LabelFor(x => x.NewLineChar)
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                @Html.TextBoxFor(x => x.NewLineChar, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-offset-1 col-md-offset-1 col-lg-2 col-md-2">
+                                @Html.LabelFor(x => x.DataType)
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                @Html.DropDownListFor(x => x.DataType, DropDownListMenu.DataTypeOtion(), new { @class = "form-control", @style = "font-weight:normal;" })
+                            </div>
+
+                            <div class="col-lg-offset-1 col-md-offset-1 col-lg-2 col-md-2">
+                                <input type="button" id="btnAdd" class="btn btn-default" value="Add" onclick="add();" />
+                            </div>
+                            <div class="col-lg-offset-1 col-md-offset-1 col-lg-2 col-md-2">
+                                <input type="button" id="btnDelete" class="btn btn-default" value="Del" onclick="del();" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div id="mainContent" class="row">
+                            @{
+                                Html.RenderPartial("_ExcelMappingRow", Model);
+                            }
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-1 col-md-1 text-right">
+                                @Html.LabelFor(x => x.ExcelName)
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                @Html.HiddenFor(x => x.ViewStatus)
+                                @if (Model.ViewStatus == "E")
+                                {
+                                    @Html.TextBoxFor(x => x.ExcelName, new { @class = "form-control", @readonly = true })
+                                }
+                                else
+                                {
+                                    @Html.TextBoxFor(x => x.ExcelName, new { @class = "form-control" })
+                                }
+                            </div>
+                            <div class="col-lg-offset-1 col-md-offset-1 col-lg-2 col-md-2 text-right">
+                                @Html.LabelFor(x => x.CustomerName)
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                @Html.TextBoxFor(x => x.CustomerName, new { @class = "form-control" })
+                            </div>
+                            <div class="col-lg-1 col-md-1">
+                                <input type="button" id="btnSave" class="btn btn-success" value="Save" onclick="return save();" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*</div>*@
+            </div>
+        </div>
+    </div>
+                                }
+
+<script>
+    function selectSQL() {
+        var SQLName = $("#SQLName").val();
+        var param = new Object({
+            SQLName: SQLName
+        });
+        $.ajax(
+        {
+            url: '@Url.Action("AjaxGetColumns")',
+            type: "POST",
+            data: param,
+            success: function (result) {
+                setOptionList(result);
+                loadMappingRow(param);
+            }
+        });
+    }
+
+    function add() {
+        var SQLName = $("#SQLName").val();
+        var ColumnName = $("#ColumnName").val();
+        var newColumnName = $("#newColumnName").val();
+        var FieldName = $("#FieldName").val();
+        var DefaultValue = $("#DefaultValue").val();
+        var SheetName = $("#SheetName").val();
+        var X = $("#X").val();
+        var DataType = $("#DataType").val();
+        var NewLineChar = $("#NewLineChar").val();
+
+        var msg = '';
+        if (SQLName.trim() == '') msg += '請選擇 SQL Name\r\n';
+        if (newColumnName.trim() == '') msg += '請輸入 Column Name\r\n';
+        if (SheetName.trim() == '') msg += '請輸入 Sheet Name\r\n';
+        if (X.trim() == '') msg += '請輸入 X\r\n';
+        if (DataType.trim() == '') msg += '請選擇 Data Type\r\n';
+
+        alert(X);
+        if (msg != '') {
+            alert(msg);
+        } else {
+            var param = new Object({
+                SQLName: SQLName,
+                ColumnName: ColumnName,
+                newColumnName: newColumnName,
+                FieldName: FieldName,
+                DefaultValue: DefaultValue,
+                SheetName: SheetName,
+                X: X,
+                DataType: DataType,
+                NewLineChar: NewLineChar
+            });
+
+            $.ajax({
+                url: '@Url.Action("AjaxInsertMapping")',
+                type: "POST",
+                data: param,
+                success: function (result) {
+                    if (result.status == 'ok') {
+                        setOptionList(result);
+                        loadMappingRow(param);
+                        reset
+                    }
+                    else {
+                        alert(result.status);
+                    }
+                }
+            });
+        }
+    }
+
+    function del() {
+        var SQLName = $("#SQLName").val();
+        var ColumnName = $("#ColumnName").val();
+
+        var param = new Object({
+            SQLName: SQLName,
+            ColumnName: ColumnName,
+        });
+
+        $.ajax({
+            url: '@Url.Action("AjaxDeleteMapping")',
+            type: "POST",
+            data: param,
+            success: function (result) {
+                setOptionList(result);
+                loadMappingRow(param);
+            }
+        });
+    }
+
+    function setOptionList(result) {
+        $("#UnsetColumns").attr("disabled", false);
+        $("#UnsetColumns").html('');
+        $("#UnsetColumns").html(result.Options.replace("<option value=''>-Please Select-</option>", ""));
+
+        $("#FieldName").attr("disabled", false);
+        $("#FieldName").html('');
+        $("#FieldName").html(result.Options);
+    }
+
+    // 載入 已設定的資料
+    function loadMappingRow(param) {
+        $.ajax({
+            url: '@Url.Action("AjaxShowMappingData")',
+            type: "POST",
+            data: param,
+            success: function (result) {
+                $("#mainContent").html(result);
+                reset();
+            }
+        });
+    }
+
+    function reset() {
+        $("#ColumnName").val('');
+        $("#newColumnName").val('');
+        $("#FieldName").val('');
+        $("#DefaultValue").val('');
+        $("#SheetName").val('');
+        $("#X").val('');
+        $("#NewLineChar").val('');
+        $("#DataType").val('');
+    }
+
+    function save() {
+        var ViewStatus = $('#ViewStatus').val();
+        var ExcelName = $('#ExcelName').val();
+        var CustomerName = $('#CustomerName').val();
+        var SQLName = $('#SQLName').val();
+
+        var msg = '';
+        if (ExcelName.trim() == '') msg = '請輸入 Excel Name!';
+        if (CustomerName.trim() == '') msg = '請輸入 Customer Name!';
+        if (SQLName.trim() == '') msg = '請選擇 SQL Name!';
+
+        if (msg != '') {
+            alert(msg);
+        } else {
+            var param = new Object({
+                ExcelName: ExcelName,
+            });
+            $.ajax(
+            {
+                url: '@Url.Action("AjaxIsExist")',
+                type: "POST",
+                data: param,
+                success: function (result) {
+                    if (ViewStatus != 'E' && result.Exist) {
+                        alert('【' + ExcelName + '】已存在');
+                    } else {
+                        $("#IndexForm").attr("action", '@Url.Action("Save", "ExcelSetting")');
+                        $("#IndexForm").submit();
+                    }
+                }
+            });
+        }
+    }
+
+    function load(ColumnName, FieldName, DefaultValue, DataType, SheetName, X, NewLineChar) {
+        var selectItems = $("#FieldName").html();
+        selectItems += "<option value='" + FieldName + "'>" + FieldName + "</option>";
+        $("#FieldName").html(selectItems);
+
+        $("#ColumnName").val(ColumnName);
+        $("#newColumnName").val(ColumnName);
+        $("#FieldName").val(FieldName);
+        $("#DefaultValue").val(DefaultValue);
+        $("#DataType").val(DataType);
+        $("#SheetName").val(SheetName);
+        $("#X").val(X);
+        $("#NewLineChar").val(NewLineChar);
+    }
+</script>

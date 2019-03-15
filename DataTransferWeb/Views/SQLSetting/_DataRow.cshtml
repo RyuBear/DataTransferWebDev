@@ -1,0 +1,31 @@
+﻿@using System.Data
+@model SQLSettingVM
+
+<div class="row">
+    <div class="table-fix-head" id='table-cont'>
+        @if (Model.SQLResultDataRow.Rows.Count > 0)
+        {
+            <table class="table table-striped table-bordered table-hover" id="dataTables">
+                <thead class="thead-inverse">
+                    <tr align="center">
+                        @for (int i = 0; i < Model.SQLResultDataRow.Columns.Count; i++)
+                {
+                            <th>@Model.SQLResultDataRow.Columns[i].ColumnName</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.SQLResultDataRow.Rows.Count; i++)
+                {
+                        <tr>
+                            @for (int j = 0; j < Model.SQLResultDataRow.Columns.Count; j++)
+                    {
+                                <td>@(Model.SQLResultDataRow.Rows[i][j].ToString())</td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
