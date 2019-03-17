@@ -46,6 +46,15 @@ namespace DataTransferWeb.ViewModels
         [Display(Name = "Customer Name")]
         public string CustomerName { get; set; }
 
+        [Display(Name = "File Name")]
+        public string FileName { get; set; }
+        
+        [Display(Name = "File Name Date Format")]
+        public string FileNameDateFormat { get; set; }
+
+        [Display(Name = "User ID")]
+        public string UserID { get; set; }
+
         [Display(Name = "XML Setting Data Row")]
         public List<tblXMLMapping> XMLMappingDataRow { get; set; }
 

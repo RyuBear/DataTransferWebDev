@@ -9,6 +9,8 @@ namespace DataTransferWeb.ViewModels
 {
     public class SQLSettingVM
     {
+        public string ViewStatus { get; set; }
+
         public List<SelectListItem> TypeItems { get; set; }        // SQL Type選單        
 
         [Display(Name = "SQL Statement")]

@@ -1,12 +1,6 @@
-﻿
-using DataTransferWeb.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
-using System.Data;
-using Transfer.Models.Models;
 using Transfer.Models;
-using System.Xml;
 
 namespace DataTransferWeb.ViewModels
 {

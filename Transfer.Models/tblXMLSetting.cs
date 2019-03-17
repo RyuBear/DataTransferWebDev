@@ -23,15 +23,17 @@ namespace Transfer.Models
         public string XMLName { get; set; }
         public string SQLName { get; set; }
         public string CustomerName { get; set; }
+        public string FileName { get; set; }
+        public string FileNameDateFormat { get; set; }
         public System.DateTime CreateTime { get; set; }
         public string Creator { get; set; }
         public Nullable<System.DateTime> UpdateTime { get; set; }
         public string Updator { get; set; }
+        public string UserId { get; set; }
     
-        public virtual tblSQLSetting tblSQLSetting { get; set; }
-        public virtual tblXMLSetting tblXMLSetting1 { get; set; }
-        public virtual tblXMLSetting tblXMLSetting2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblXMLMapping> tblXMLMapping { get; set; }
+        public virtual tblXMLSetting tblXMLSetting1 { get; set; }
+        public virtual tblXMLSetting tblXMLSetting2 { get; set; }
     }
 }

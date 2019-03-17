@@ -1,0 +1,127 @@
+﻿@model SQLSettingVM
+
+@{
+    ViewBag.Title = "SQL語法設定";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid">
+    @using (Html.BeginForm("Testing", "SQLSetting", FormMethod.Post, new { Id = "IndexForm" }))
+    {
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                @Html.LabelFor(x => x.SQLStatement)
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-11 col-md-11">
+                                @Html.TextAreaFor(x => x.SQLStatement, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-2 col-md-2">
+                                <input id="btnTesting" name="btnTesting" type="button" value="SQL Testing" onclick="testing();" class="btn btn-success btn-block" />
+                            </div>
+                            <div class="col-lg-10 col-md-10">
+                                <input type="text" value="@Model.SQLResult" class="form-control" readonly />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4">
+                                @Html.LabelFor(x => x.SQLResultDataRow)
+                            </div>
+                            <div class="col-lg-offset-3 col-md-offset-3 col-lg-3 col-md-3 text-right">
+                                @Html.LabelFor(x => x.DataRow)
+                            </div>
+                            <div class="col-lg-2 col-md-2">
+                                @Html.TextBoxFor(x => x.DataRow, new { @class = "form-control", @type = "number" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        @{
+                            Html.RenderPartial("_DataRow", Model);
+                        }
+                        <div class="row">
+                            <div class="col-lg-2 col-md-2 text-right">
+                                @Html.LabelFor(x => x.SQLName)
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                @Html.HiddenFor(x => x.ViewStatus)
+                                @if (Model.ViewStatus == "E")
+                                {
+                                    @Html.TextBoxFor(x => x.SQLName, new { @class = "form-control", @readonly = true })
+                                }
+                                else
+                                {
+                                    @Html.TextBoxFor(x => x.SQLName, new { @class = "form-control" })
+                                }
+                            </div>
+                            <div class="col-lg-offset-2 col-md-offset-2 col-lg-2 col-md-2 text-right">
+                                @Html.LabelFor(x => x.SQLType)
+                            </div>
+                            <div class="col-lg-2 col-md-2">
+                                @Html.DropDownListFor(x => x.SQLType, Model.TypeItems, new { @class = "form-control" })
+                            </div>
+                            <div class="col-lg-1 col-md-1">
+                                <input type="button" id="btnSave" class="btn btn-success" value="Save" onclick="return save();" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                            }
+</div>
+
+
+<script>
+    function testing() {
+        $("#IndexForm").attr("action", '@Url.Action("Testing", "SQLSetting")');
+        $("#IndexForm").submit();
+        //fxheaderInit2("table-cont", 200);
+    }
+
+    function save() {
+        var ViewStatus = $('#ViewStatus').val();
+        var SQLName = $('#SQLName').val();
+        if (SQLName.trim() == '') {
+            alert('請輸入 SQL Name!');
+        } else {
+            var param = new Object({
+                SQLName: SQLName
+            });
+            $.ajax(
+            {
+                url: '@Url.Action("AjaxIsExist")',
+                type: "POST",
+                data: param,
+                success: function (result) {
+                    if (ViewStatus != 'E' && result.Exist) {
+                        alert('【' + SQLName + '】已存在');
+                        @*if (confirm('【' + SQLName + '】已存在，是否覆蓋?')) {
+                            $("#IndexForm").attr("action", '@Url.Action("Save", "SQLSetting")');
+                            $("#IndexForm").submit();
+                        }*@
+                    } else {
+                        $("#IndexForm").attr("action", '@Url.Action("Save", "SQLSetting")');
+                        $("#IndexForm").submit();
+                    }
+                }
+            });
+        }
+    }
+</script>

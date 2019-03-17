@@ -66,7 +66,7 @@ namespace Transfer.Models.Repository
         /// 儲存 Excel Setting
         /// </summary>
         /// <returns></returns>
-        public string Save(string ExcelName, string CustomerName, string SQLName, string Creator, List<tblExcelMapping> Mappings)
+        public string Save(string ExcelName, string CustomerName, string SQLName, string FileName, string DateFormat, string UserID, string Creator, List<tblExcelMapping> Mappings)
         {
             tblExcelSetting setting = this.Get(x => x.ExcelName.Equals(ExcelName, StringComparison.OrdinalIgnoreCase));
             if (setting == null)
@@ -76,6 +76,9 @@ namespace Transfer.Models.Repository
                     ExcelName = ExcelName,
                     CustomerName = CustomerName,
                     SQLName = SQLName,
+                    FileName = FileName,
+                    FileNameDateFormat = DateFormat,
+                    UserId = UserID,
                     CreateTime = Now,
                     Creator = Creator
                 };
@@ -92,6 +95,9 @@ namespace Transfer.Models.Repository
             {
                 setting.SQLName = SQLName;
                 setting.CustomerName = CustomerName;
+                setting.FileName = FileName;
+                setting.FileNameDateFormat = DateFormat;
+                setting.UserId = UserID;
                 setting.UpdateTime = Now;
                 setting.Updator = Creator;
 

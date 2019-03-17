@@ -18,7 +18,6 @@ namespace Transfer.Models
         public tblSQLSetting()
         {
             this.tblSQLColumns = new HashSet<tblSQLColumns>();
-            this.tblXMLSetting = new HashSet<tblXMLSetting>();
             this.tblExcelSetting = new HashSet<tblExcelSetting>();
         }
     
@@ -35,8 +34,6 @@ namespace Transfer.Models
         public virtual ICollection<tblSQLColumns> tblSQLColumns { get; set; }
         public virtual tblSQLSetting tblSQLSetting1 { get; set; }
         public virtual tblSQLSetting tblSQLSetting2 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblXMLSetting> tblXMLSetting { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblExcelSetting> tblExcelSetting { get; set; }
     }

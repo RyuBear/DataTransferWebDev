@@ -1,33 +1,34 @@
-﻿@model SQLSettingVM
+﻿@model SQLSettingListVM
 
 @{
-    ViewBag.Title = "SQL語法設定";
+    ViewBag.Title = "SQL Setting List";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <div class="container-fluid">
-    @using (Html.BeginForm("Testing", "SQLSetting", FormMethod.Post, new { Id = "IndexForm" }))
+    @using (Html.BeginForm("Index", "SQLSetting", FormMethod.Post, new { Id = "IndexForm" }))
     {
         <div class="row">
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-lg-12 col-md-12">
-                                @Html.LabelFor(x => x.SQLStatement)
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-11 col-md-11">
-                                @Html.TextAreaFor(x => x.SQLStatement, new { @class = "form-control" })
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
                             <div class="col-lg-2 col-md-2">
-                                <input id="btnTesting" name="btnTesting" type="button" value="SQL Testing" onclick="testing();" class="btn btn-success btn-block" />
+                                @Html.LabelFor(x => x.SQLName)
                             </div>
-                            <div class="col-lg-10 col-md-10">
-                                <input type="text" value="@Model.SQLResult" class="form-control" readonly />
+                            <div class="col-lg-2 col-md-2">
+                                @Html.TextBoxFor(x => x.SQLName, new { @class = "form-control" })
+                            </div>
+                            <div class="col-lg-2 col-md-2">
+                                @Html.LabelFor(x => x.SQLType)
+                            </div>
+                            <div class="col-lg-2 col-md-2">
+                                @Html.DropDownListFor(x => x.SQLType, DropDownListMenu.SQLTypeOption(), new { @class = "form-control" })
+                            </div>
+                            <div class="col-lg-2 col-md-2">
+                            </div>
+                            <div class="col-lg-2 col-md-2">
+                                <input id="btnSearch" name="btnSearch" type="submit" value="Search" class="btn btn-success btn-block" />
                             </div>
                         </div>
                     </div>
@@ -40,78 +41,99 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row">
-                            <div class="col-lg-4 col-md-4">
-                                @Html.LabelFor(x => x.SQLResultDataRow)
+                            <div class="col-lg-9 col-md-9">
+                                @Html.LabelFor(x => x.settings)
+                                <font color="red">
+                                    @ViewBag.SysMsg
+                                </font>
                             </div>
-                            <div class="col-lg-offset-3 col-md-offset-3 col-lg-3 col-md-3 text-right">
-                                @Html.LabelFor(x => x.DataRow)
-                            </div>
-                            <div class="col-lg-2 col-md-2">
-                                @Html.TextBoxFor(x => x.DataRow, new { @class = "form-control", @type = "number" })
+                            <div class="col-lg-offset-1 col-md-offset-1 col-lg-2 col-md-2">
+                                <p>
+                                    <a href='@Url.Action("Load")' class="btn btn-primary btn-block">Create New</a>
+                                    
+                                </p>
                             </div>
                         </div>
                     </div>
                     <div class="panel-body">
-                        @{
-                            Html.RenderPartial("_DataRow", Model);
-                        }
                         <div class="row">
-                            <div class="col-lg-2 col-md-2 text-right">
-                                @Html.LabelFor(x => x.SQLName)
-                            </div>
-                            <div class="col-lg-3 col-md-3">
-                                @Html.TextBoxFor(x => x.SQLName, new { @class = "form-control" })
-                            </div>
-                            <div class="col-lg-offset-2 col-md-offset-2 col-lg-2 col-md-2 text-right">
-                                @Html.LabelFor(x => x.SQLType)
-                            </div>
-                            <div class="col-lg-2 col-md-2">
-                                @Html.DropDownListFor(x => x.SQLType, Model.TypeItems, new { @class = "form-control" })
-                            </div>
-                            <div class="col-lg-1 col-md-1">
-                                <input type="button" id="btnSave" class="btn btn-success" value="Save" onclick="return save();" />
+                            <div class="table-fix-head" id='table-cont'>
+                                <table class="table table-striped table-bordered table-hover" id="dataTables">
+                                    <thead class="thead-inverse">
+                                        <tr align="center">
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.SQLName)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.SQLType)
+                                            </th>
+                                            <th>
+                                                Data Row
+                                            </th>
+                                            <th>
+                                                Creator
+                                            </th>
+                                            <th>
+                                                Create Time
+                                            </th>
+                                            <th>
+                                                Updator
+                                            </th>
+                                            <th>
+                                                Update Time
+                                            </th>
+                                            <th colspan="2"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.settings)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.SQLName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.SQLType)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.DataRow)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Creator)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.CreateTime)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Updator)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.UpdateTime)
+                                                </td>
+                                                <td>
+                                                    <a href='@Url.Action("Load", new { id = @item.SQLName })' class="btn btn-primary btn-block">Edit</a>
+                                                </td>
+                                                <td>
+                                                    <a href='#' onclick="del('@item.SQLName');" class="btn btn-primary btn-block">Delete</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-                            }
+    }
 </div>
 
-
 <script>
-    function testing() {
-        $("#IndexForm").attr("action", '@Url.Action("Testing", "SQLSetting")');
-        $("#IndexForm").submit();
-        //fxheaderInit2("table-cont", 200);
-    }
-
-    function save() {
-        var SQLName = $('#SQLName').val();
-        if (SQLName.trim() == '') {
-            alert('請輸入 SQL Name!');
-        } else {
-            var param = new Object({
-                SQLName: SQLName
-            });
-            $.ajax(
-            {
-                url: '@Url.Action("AjaxIsExist")',
-                type: "POST",
-                data: param,
-                success: function (result) {
-                    if (result.Exist) {
-                        if (confirm('【' + SQLName + '】已存在，是否覆蓋?')) {
-                            $("#IndexForm").attr("action", '@Url.Action("Save", "SQLSetting")');
-                            $("#IndexForm").submit();
-                        }
-                    } else {
-                        $("#IndexForm").attr("action", '@Url.Action("Save", "SQLSetting")');
-                        $("#IndexForm").submit();
-                    }
-                }
-            });
+    function del(id) {
+        if (confirm('確定刪除?')) {
+            $("#IndexForm").attr("action", '@Url.Action("Delete")/' + id);
+            $("#IndexForm").submit();
         }
     }
 </script>

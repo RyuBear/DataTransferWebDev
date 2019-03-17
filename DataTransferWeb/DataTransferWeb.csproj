@@ -235,6 +235,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TransferDB.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Extentions\CheckBoxListExtensions.cs" />
+    <Compile Include="Extentions\Enums\Position.cs" />
     <Compile Include="Helpers\CultureHelper.cs" />
     <Compile Include="Helpers\EnumExtension.cs" />
     <Compile Include="Helpers\EnumHelper.cs" />
@@ -242,6 +244,7 @@
     <Compile Include="Helpers\LanguageEnum.cs" />
     <Compile Include="Models\UserData.cs" />
     <Compile Include="ViewModels\ExcelSettingListVM.cs" />
+    <Compile Include="ViewModels\SQLSettingListVM.cs" />
     <Compile Include="ViewModels\XMLSettingListVM.cs" />
     <Compile Include="ViewModels\ExcelSettingVM.cs" />
     <Compile Include="ViewModels\XMLSettingVM.cs" />
@@ -679,7 +682,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\User\UptPwd.cshtml" />
-    <Content Include="Views\SQLSetting\Index.cshtml" />
+    <Content Include="Views\SQLSetting\Edit.cshtml" />
     <Content Include="Views\SQLSetting\_DataRow.cshtml" />
     <Content Include="Views\XMLSetting\Edit.cshtml" />
     <Content Include="Views\XMLSetting\_XMLMappingRow.cshtml" />
@@ -688,6 +691,8 @@
     <Content Include="Views\ExcelSetting\_ExcelMappingRow.cshtml" />
     <Content Include="Views\ExcelSetting\Edit.cshtml" />
     <Content Include="Views\ExcelSetting\Index.cshtml" />
+    <Content Include="Views\SQLSetting\Index.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\CheckBoxList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,4 +1,5 @@
 ﻿@model ExcelSettingVM
+@using Extensions.Enums
 
 @{
     ViewBag.Title = "轉出格式設定(Excel)";
@@ -131,10 +132,45 @@
 
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-lg-1 col-md-1 text-right">
+                            <div class="col-lg-3 col-md-3 text-right">
+                                @Html.LabelFor(x => x.FileName)
+                            </div>
+                            <div class="col-lg-4 col-md-4">
+                                @Html.TextBoxFor(x => x.FileName, new { @class = "form-control" })
+                            </div>
+                            <div class="col-lg-5 col-md-5">
+                                @Html.EditorFor(model => model.FileNameDateFormat,
+                                                "CheckBoxList",
+                                                new
+                                                {
+                                                    TagName = "DateFormats",
+                                                    CheckBoxItems = DropDownListMenu.DateFormatOption(Model.FileNameDateFormat),
+                                                    Position = Position.Vertical,
+                                                    Numbers = 3
+                                                })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 text-right">
+                                @Html.LabelFor(x => x.CustomerName)
+                            </div>
+                            <div class="col-lg-4 col-md-4">
+                                @Html.TextBoxFor(x => x.CustomerName, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 text-right">
+                                @Html.LabelFor(x => x.UserID)
+                            </div>
+                            <div class="col-lg-4 col-md-4">
+                                @Html.TextBoxFor(x => x.UserID, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 text-right">
                                 @Html.LabelFor(x => x.ExcelName)
                             </div>
-                            <div class="col-lg-3 col-md-3">
+                            <div class="col-lg-4 col-md-4">
                                 @Html.HiddenFor(x => x.ViewStatus)
                                 @if (Model.ViewStatus == "E")
                                 {
@@ -145,15 +181,12 @@
                                     @Html.TextBoxFor(x => x.ExcelName, new { @class = "form-control" })
                                 }
                             </div>
-                            <div class="col-lg-offset-1 col-md-offset-1 col-lg-2 col-md-2 text-right">
-                                @Html.LabelFor(x => x.CustomerName)
-                            </div>
-                            <div class="col-lg-3 col-md-3">
-                                @Html.TextBoxFor(x => x.CustomerName, new { @class = "form-control" })
-                            </div>
                             <div class="col-lg-1 col-md-1">
                                 <input type="button" id="btnSave" class="btn btn-success" value="Save" onclick="return save();" />
                             </div>
+                        </div>
+                        <div class="row">
+                            <font color="red">@Model.SaveResult</font>
                         </div>
                     </div>
                 </div>
@@ -292,11 +325,14 @@
         var ExcelName = $('#ExcelName').val();
         var CustomerName = $('#CustomerName').val();
         var SQLName = $('#SQLName').val();
+        var FileName = $('#FileName').val();
+        var UserID = $('#UserID').val();
 
         var msg = '';
-        if (ExcelName.trim() == '') msg = '請輸入 Excel Name!';
-        if (CustomerName.trim() == '') msg = '請輸入 Customer Name!';
-        if (SQLName.trim() == '') msg = '請選擇 SQL Name!';
+        if (SQLName.trim() == '') msg += '請選擇 SQL Name!\r\n';
+        if (FileName.trim() == '') msg += '請輸入 File Name!\r\n';
+        if (CustomerName.trim() == '') msg += '請輸入 Customer Name!\r\n';
+        if (ExcelName.trim() == '') msg += '請輸入 Excel Name!';
 
         if (msg != '') {
             alert(msg);

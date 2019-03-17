@@ -74,6 +74,10 @@ namespace DataTransferWeb.Controllers
                     model.ExcelName = setting.ExcelName;
                     model.SQLName = setting.SQLName;
                     model.CustomerName = setting.CustomerName;
+                    model.FileName = setting.FileName;
+                    model.FileNameDateFormat = setting.FileNameDateFormat;
+                    model.UserID = setting.UserId;
+
                     foreach (var m in mapping)
                     {
                         model.ExcelMappingDataRow.Add(new tblExcelMapping()
@@ -153,7 +157,7 @@ namespace DataTransferWeb.Controllers
         {
             List<tblExcelMapping> ExcelMappings = new List<tblExcelMapping>();
             string ColumnName = string.Empty;
-           
+
             #region 寫入暫存 Session ExcelMappings
             try
             {
@@ -334,7 +338,7 @@ namespace DataTransferWeb.Controllers
 
             return PartialView("_ExcelMappingRow", model);
         }
-        
+
         [HttpPost]
         [ActionName("AjaxIsExist")]
         public ActionResult isExist(string ExcelName)
@@ -354,7 +358,7 @@ namespace DataTransferWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult Save(ExcelSettingVM vm)
+        public ActionResult Save(ExcelSettingVM vm, string[] DateFormats)
         {
             if (string.IsNullOrEmpty(vm.ExcelName))
                 vm.SaveResult += "請輸入 Excel Name!\r\n";
@@ -363,6 +367,12 @@ namespace DataTransferWeb.Controllers
             if (string.IsNullOrEmpty(vm.SQLName))
                 vm.SaveResult += "請選擇 SQL Name!\r\n";
 
+            vm.FileNameDateFormat = string.Join(",", DateFormats);
+
+            if (!string.IsNullOrEmpty(vm.SaveResult))
+            {
+                return View("Edit", vm);
+            }
             #region 取得暫存 Session ExcelMappings
             List<tblExcelMapping> ExcelMappings = new List<tblExcelMapping>();
             string ColumnName = string.Empty;
@@ -376,9 +386,8 @@ namespace DataTransferWeb.Controllers
 
             using (tblExcelSettingRepository setting = new tblExcelSettingRepository())
             {
-                vm.SaveResult = setting.Save(vm.ExcelName, vm.CustomerName, vm.SQLName, userInfo.Account, ExcelMappings);
+                vm.SaveResult = setting.Save(vm.ExcelName, vm.CustomerName, vm.SQLName, vm.FileName, vm.FileNameDateFormat, vm.UserID, userInfo.Account, ExcelMappings);
                 if (vm.SaveResult.Equals("ok")) vm.SaveResult = "Save Successful!";
-
             }
             return RedirectToAction("Index");
         }

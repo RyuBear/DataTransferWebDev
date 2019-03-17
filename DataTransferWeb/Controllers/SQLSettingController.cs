@@ -7,6 +7,7 @@ using DataTransferWeb.ViewModels;
 using Transfer.Models.Repository;
 using System.Data;
 using Transfer.Models.Models;
+using Transfer.Models;
 
 namespace DataTransferWeb.Controllers
 {
@@ -18,7 +19,48 @@ namespace DataTransferWeb.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            return View(model);
+            SQLSettingListVM vm = new SQLSettingListVM();
+
+            using (tblSQLSettingRepository rep = new tblSQLSettingRepository())
+            {
+                vm.settings = rep.get(vm.SQLName, vm.SQLType);
+            }
+
+            ViewBag.SysMsg = TempData["SysMsg"];
+            return View(vm);
+        }
+
+        [HttpPost]
+        public ActionResult Index(SQLSettingListVM vm)
+        {
+            using (tblSQLSettingRepository rep = new tblSQLSettingRepository())
+            {
+                vm.settings = rep.get(vm.SQLName, vm.SQLType);
+            }
+            return View(vm);
+        }
+
+
+        [HttpGet]
+        public ActionResult Load(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return View("Edit", model);
+            }
+
+            model.ViewStatus = "E";
+            string SQLName = id;
+
+            using (tblSQLSettingRepository rep = new tblSQLSettingRepository())
+            {
+                tblSQLSetting setting = rep.select(SQLName);
+                model.SQLName = setting.SQLName;
+                model.SQLStatement = setting.SQLStatement;
+                model.SQLType = setting.SQLType;
+                model.DataRow = setting.DataRow;
+            }
+            return View("Edit", model);
         }
 
         [HttpPost]
@@ -38,8 +80,6 @@ namespace DataTransferWeb.Controllers
                     }
                     else
                     {
-                        //string sql = "SELECT TOP (" + vm.DataRow + ") " + vm.SQLStatement.Remove(index, 6);
-
                         string sql = Func.SQLTop(vm.SQLStatement, vm.DataRow);
                         Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(sql);
 
@@ -48,7 +88,7 @@ namespace DataTransferWeb.Controllers
                     }
                 }
             }
-            return View("Index", vm);
+            return View("Edit", vm);
         }
 
         [HttpPost]
@@ -73,7 +113,10 @@ namespace DataTransferWeb.Controllers
         public ActionResult Save(SQLSettingVM vm)
         {
             if (!Func.SQLIsValid(vm.SQLStatement))
+            {
                 vm.SQLResult = "SQL語句不合法!";
+                return View("Edit", vm);
+            }
             else
             {
                 using (DataAccess da = new DataAccess())
@@ -103,7 +146,26 @@ namespace DataTransferWeb.Controllers
                     if (vm.SQLResult.Equals("ok")) vm.SQLResult = "Save Successful!";
                 }
             }
-            return View("Index", vm);
+            return RedirectToAction("Index");
+        }
+
+
+
+        public ActionResult Delete(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return RedirectToAction("Index");
+            }
+            using (tblSQLSettingRepository rep = new tblSQLSettingRepository())
+            {
+                string result = rep.Delete(id);
+                if (result != "ok")
+                {
+                    TempData["SysMsg"] = result;
+                }
+            }
+            return RedirectToAction("Index");
         }
     }
 }

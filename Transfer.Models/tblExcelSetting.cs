@@ -23,10 +23,13 @@ namespace Transfer.Models
         public string ExcelName { get; set; }
         public string SQLName { get; set; }
         public string CustomerName { get; set; }
+        public string FileName { get; set; }
+        public string FileNameDateFormat { get; set; }
         public System.DateTime CreateTime { get; set; }
         public string Creator { get; set; }
         public Nullable<System.DateTime> UpdateTime { get; set; }
         public string Updator { get; set; }
+        public string UserId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblExcelMapping> tblExcelMapping { get; set; }

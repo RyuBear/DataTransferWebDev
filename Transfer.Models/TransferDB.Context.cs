@@ -27,10 +27,10 @@ namespace Transfer.Models
     
         public virtual DbSet<tblSQLColumns> tblSQLColumns { get; set; }
         public virtual DbSet<tblSQLSetting> tblSQLSetting { get; set; }
-        public virtual DbSet<tblXMLSetting> tblXMLSetting { get; set; }
         public virtual DbSet<tblAdmin> tblAdmin { get; set; }
         public virtual DbSet<tblXMLMapping> tblXMLMapping { get; set; }
         public virtual DbSet<tblExcelMapping> tblExcelMapping { get; set; }
         public virtual DbSet<tblExcelSetting> tblExcelSetting { get; set; }
+        public virtual DbSet<tblXMLSetting> tblXMLSetting { get; set; }
     }
 }

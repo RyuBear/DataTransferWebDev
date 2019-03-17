@@ -12,6 +12,20 @@ using System.Web.Mvc;
 public static class DropDownListMenu
 {
     /// <summary>
+    /// SQL Type 選單
+    /// </summary>
+    /// <returns></returns>
+    public static IEnumerable<SelectListItem> SQLTypeOption()
+    {
+        List<SelectListItem> items = new List<SelectListItem>();
+        items.Add(new SelectListItem { Text = "-Please Select-", Value = "" });
+        items.Add(new SelectListItem() { Text = "提單", Value = "提單" });
+        items.Add(new SelectListItem() { Text = "帳單", Value = "帳單" });
+        items.Add(new SelectListItem() { Text = "報單", Value = "報單" });
+        return items;
+    }
+
+    /// <summary>
     /// SQL Name 選單
     /// </summary>
     /// <returns></returns>
@@ -69,6 +83,33 @@ public static class DropDownListMenu
         foreach (var c in values)
         {
             items.Add(new SelectListItem { Text = Enum.GetName(typeof(DataTypeEnum), c), Value = Enum.GetName(typeof(DataTypeEnum), c) });
+        }
+        return items;
+    }
+
+
+    /// <summary>
+    /// SQL Type 選單
+    /// </summary>
+    /// <returns></returns>
+    public static IEnumerable<SelectListItem> DateFormatOption(string selected = "")
+    {
+        string[] DateFormat = new string[] { "yyyy", "MM", "dd", "hh", "mm", "ss" };
+
+        var items = new List<SelectListItem>();
+
+        var selectedFormat= string.IsNullOrWhiteSpace(selected) ? null : selected.Split(',');
+
+        foreach (var c in DateFormat)
+        {
+            items.Add(item: new SelectListItem()
+            {
+                Value = c,
+                Text = c,
+                Selected = selectedFormat == null
+                    ? false
+                    : selectedFormat.Contains(c.ToString())
+            });
         }
         return items;
     }

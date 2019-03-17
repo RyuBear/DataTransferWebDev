@@ -74,7 +74,7 @@ namespace Transfer.Models.Repository
         /// 儲存 XML Setting
         /// </summary>
         /// <returns></returns>
-        public string Save(string XMLName, string CustomerName, string SQLName, string Creator, List<tblXMLMapping> Mappings)
+        public string Save(string XMLName, string CustomerName, string SQLName, string FileName, string DateFormat, string UserID, string Creator, List<tblXMLMapping> Mappings)
         {
             tblXMLSetting setting = this.Get(x => x.XMLName.Equals(XMLName, StringComparison.OrdinalIgnoreCase));
             if (setting == null)
@@ -84,6 +84,9 @@ namespace Transfer.Models.Repository
                     XMLName = XMLName,
                     CustomerName = CustomerName,
                     SQLName = SQLName,
+                    FileName = FileName,
+                    FileNameDateFormat = DateFormat,
+                    UserId = UserID,
                     CreateTime = Now,
                     Creator = Creator
                 };
@@ -100,6 +103,9 @@ namespace Transfer.Models.Repository
             {
                 setting.SQLName = SQLName;
                 setting.CustomerName = CustomerName;
+                setting.FileName = FileName;
+                setting.FileNameDateFormat = DateFormat;
+                setting.UserId = UserID;
                 setting.UpdateTime = Now;
                 setting.Updator = Creator;
 

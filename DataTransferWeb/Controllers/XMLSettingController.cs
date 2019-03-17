@@ -74,6 +74,10 @@ namespace DataTransferWeb.Controllers
                     model.XMLName = setting.XMLName;
                     model.SQLName = setting.SQLName;
                     model.CustomerName = setting.CustomerName;
+                    model.FileName = setting.FileName;
+                    model.FileNameDateFormat = setting.FileNameDateFormat;
+                    model.UserID = setting.UserId;
+
                     foreach (var m in mapping)
                     {
                         model.XMLMappingDataRow.Add(new tblXMLMapping()
@@ -536,7 +540,7 @@ namespace DataTransferWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult Save(XMLSettingVM vm)
+        public ActionResult Save(XMLSettingVM vm, string[] DateFormats)
         {
             if (string.IsNullOrEmpty(vm.XMLName))
                 vm.SaveResult += "請輸入 XML Name!\r\n";
@@ -544,6 +548,13 @@ namespace DataTransferWeb.Controllers
                 vm.SaveResult += "請輸入 Customer Name!\r\n";
             if (string.IsNullOrEmpty(vm.SQLName))
                 vm.SaveResult += "請選擇 SQL Name!\r\n";
+
+            vm.FileNameDateFormat = string.Join(",", DateFormats);
+
+            if (!string.IsNullOrEmpty(vm.SaveResult))
+            {
+                return View("Edit", vm);
+            }
 
             #region 取得暫存 Session XMLMappings
             List<tblXMLMapping> xmlMappings = new List<tblXMLMapping>();
@@ -558,7 +569,7 @@ namespace DataTransferWeb.Controllers
 
             using (tblXMLSettingRepository setting = new tblXMLSettingRepository())
             {
-                vm.SaveResult = setting.Save(vm.XMLName, vm.CustomerName, vm.SQLName, userInfo.Account, xmlMappings);
+                vm.SaveResult = setting.Save(vm.XMLName, vm.CustomerName, vm.SQLName, vm.FileName, vm.FileNameDateFormat, vm.UserID, userInfo.Account, xmlMappings);
                 if (vm.SaveResult.Equals("ok")) vm.SaveResult = "Save Successful!";
 
             }
