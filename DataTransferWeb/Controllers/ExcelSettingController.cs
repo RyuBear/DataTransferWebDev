@@ -334,7 +334,7 @@ namespace DataTransferWeb.Controllers
             catch { }
             #endregion
 
-            model.ExcelMappingDataRow = ExcelMappings.OrderBy(x => x.X).ToList(); ;
+            model.ExcelMappingDataRow = ExcelMappings.OrderBy(x => x.SheetName).ThenBy(x => x.X).ToList();
 
             return PartialView("_ExcelMappingRow", model);
         }

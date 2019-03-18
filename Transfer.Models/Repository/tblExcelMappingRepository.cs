@@ -12,7 +12,7 @@ namespace Transfer.Models.Repository
     {
         public IEnumerable<tblExcelMapping> get(string ExcelName)
         {
-            IEnumerable<tblExcelMapping> mapping = this.GetSome(x => x.ExcelName.Equals(ExcelName, StringComparison.OrdinalIgnoreCase)).OrderBy(x => x.X);
+            IEnumerable<tblExcelMapping> mapping = this.GetSome(x => x.ExcelName.Equals(ExcelName, StringComparison.OrdinalIgnoreCase)).OrderBy(x => x.SheetName).ThenBy(x => x.X).ToList();
             return mapping;
         }
 

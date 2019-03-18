@@ -38,7 +38,6 @@ namespace DataTransferWeb.Controllers
         [HttpPost]
         public ActionResult Index(XMLSettingListVM vm)
         {
-
             using (tblXMLSettingRepository rep = new tblXMLSettingRepository())
             {
                 vm.settings = rep.get(vm.XMLName, vm.SQLName, vm.CustomerName);
@@ -398,27 +397,24 @@ namespace DataTransferWeb.Controllers
                 {
                     using (DataAccess da = new DataAccess())
                     {
-                        // 將 top(n) 帶入 SQL語句
-                        //int index = SQLSetting.SQLStatement.IndexOf("Select", StringComparison.OrdinalIgnoreCase);  // 找出第一個select的位置
-                        //string sql = "SELECT TOP (" + SQLSetting.DataRow + ") " + SQLSetting.SQLStatement.Remove(index, 6);
-
-                        string sql = Func.SQLTop(SQLSetting.SQLStatement, SQLSetting.DataRow);
+                        string sql = Func.SqlPlusTop(SQLSetting.SQLStatement, SQLSetting.DataRow);
                         Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(sql);
                         DataTable dt = result.Item2;
 
-                        XmlDocument xmlDoc = new XmlDocument();
-                        //根節點 只有1個
-                        var rootTag = xmlMappings.Where(x => string.IsNullOrEmpty(x.FatherTag)).First();
+                        XmlDocument xmlDoc = Func.GenerateXML(dt, xmlMappings);
 
-                        XmlElement root = xmlDoc.CreateElement(rootTag.TagName);
-                        for (int i = 0; i < dt.Rows.Count; i++)
-                            appendXmlByRow(dt.Rows[i], xmlMappings, xmlDoc, root, rootTag.TagName, 1);
+                        //XmlDocument xmlDoc = new XmlDocument();
+                        ////根節點 只有1個
+                        //var rootTag = xmlMappings.Where(x => string.IsNullOrEmpty(x.FatherTag)).First();
 
-                        //addSubElement(xmlMappings, xmlDoc, root, rootTag.TagName, dt);
-                        xmlDoc.AppendChild(root);
+                        //XmlElement root = xmlDoc.CreateElement(rootTag.TagName);
+                        //for (int i = 0; i < dt.Rows.Count; i++)
+                        //    appendXmlByRow(dt.Rows[i], xmlMappings, xmlDoc, root, rootTag.TagName, 1);
+
+                        ////addSubElement(xmlMappings, xmlDoc, root, rootTag.TagName, dt);
+                        //xmlDoc.AppendChild(root);
 
                         model.XMLView = Server.HtmlEncode(Func.BeautifyXML(xmlDoc));
-
                     }
                 }
                 else
@@ -429,36 +425,6 @@ namespace DataTransferWeb.Controllers
             #endregion
 
             return PartialView("_XMLView", model);
-        }
-
-        void addSubElement(List<tblXMLMapping> mappings, XmlDocument xmlDoc, XmlElement root, string FatherTag, DataTable dt)
-        {
-            var subs = mappings.Where(x => x.FatherTag.Equals(FatherTag, StringComparison.OrdinalIgnoreCase));
-            foreach (tblXMLMapping s in subs)
-            {
-                for (int i = 0; i < dt.Rows.Count; i++)
-                {
-                    string value = string.Empty;
-                    if (!string.IsNullOrEmpty(s.FieldName) || !string.IsNullOrEmpty(s.DefaultValue))
-                    {
-                        if (string.IsNullOrEmpty(s.FieldName))
-                            value = s.DefaultValue;
-                        else
-                            value = (string.IsNullOrEmpty(dt.Rows[i][s.FieldName].ToString())) ? s.DefaultValue : dt.Rows[i][s.FieldName].ToString();
-                    }
-
-                    XmlNodeList nodes = root.GetElementsByTagName(s.TagName);
-                    int nodeCount = nodes.Cast<XmlNode>().Where(n => n.InnerText == value).Count();
-
-                    if (nodeCount == 0)
-                    {
-                        XmlElement element = xmlDoc.CreateElement(s.TagName);
-                        element.InnerText = value;
-                        addSubElement(mappings, xmlDoc, element, s.TagName, dt);
-                        root.AppendChild(element);
-                    }
-                }
-            }
         }
 
         void appendXmlByRow(DataRow row, List<tblXMLMapping> mappings, XmlDocument xmlDoc, XmlElement Node, string FatherTag, int layer)

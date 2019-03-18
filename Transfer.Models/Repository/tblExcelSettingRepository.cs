@@ -43,6 +43,13 @@ namespace Transfer.Models.Repository
         }
 
 
+        public List<tblExcelSetting> getByCustomer(string CustomerName)
+        {
+            IQueryable<tblExcelSetting> settings = this.GetSome(x => x.CustomerName.Equals(CustomerName, StringComparison.OrdinalIgnoreCase));
+
+            return settings.ToList();
+        }
+
         public bool Delete(string ExcelName)
         {
             try

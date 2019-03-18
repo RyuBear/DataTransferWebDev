@@ -1,0 +1,38 @@
+﻿@model QueryVM
+<style>
+    #table-cont {
+        height: 30vh; /* 固定高度 */
+    }
+</style>
+<div class="table-fix-head" id='table-cont'>
+    <table class="table table-striped table-bordered table-hover" id="dataTables">
+        <thead class="thead-inverse">
+            <tr align="center">
+                <th>Column Name</th>
+                <th>Comparison</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model.Columns != null && Model.Columns.Count > 0)
+            {
+                for (var i = 0; i < Model.Columns.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @Model.Columns[i].ColumnName
+                            @Html.Hidden(string.Format("vm.Columns[{0}].ColumnName", i), Model.Columns[i].ColumnName)
+                        </td>
+                        <td>
+                            @Html.DropDownList(string.Format("vm.Columns[{0}].Comparison", i), DropDownListMenu.ComparisonOption(Model.Columns[i].Comparison), new { @class = "form-control", @style = "font-weight:normal;" })
+                        </td>
+                        <td>
+                            @Html.TextBox(string.Format("vm.Columns[{0}].Value", i), Model.Columns[i].Value, new { @class = "form-control" })
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

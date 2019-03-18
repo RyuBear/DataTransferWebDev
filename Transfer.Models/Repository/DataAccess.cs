@@ -4,7 +4,9 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using System.Web;
+using Transfer.Models.Models;
 
 namespace Transfer.Models.Repository
 {
@@ -165,6 +167,59 @@ namespace Transfer.Models.Repository
                 return Tuple.Create(false, ds, ex.Message);
             }
 
+            return Tuple.Create(true, ds, msg);
+        }
+
+        public Tuple<bool, DataTable, string> TryExecuteDataTable(string sqlCommand, int? Row, List<ColumnData> columns)
+        {
+            string msg = string.Empty;
+
+            #region 整理 SQL 語句
+            StringBuilder strCon = new StringBuilder();
+            foreach (var c in columns)
+            {
+                if (!string.IsNullOrEmpty(c.Value))
+                    strCon.AppendFormat(" and " + c.ColumnName + c.Comparison + "@" + c.ColumnName);
+            }
+            if (!string.IsNullOrEmpty(strCon.ToString()))
+            {
+                strCon.Insert(0, " where 1=1");
+            }
+
+            int index = sqlCommand.IndexOf(" Order by ", StringComparison.OrdinalIgnoreCase);  // 找出最後 Order by 的位置
+
+            string topRow = string.Empty;
+            if (Row != null)
+            {
+                topRow = "TOP (" + Row + ")";
+            }
+            string sql = "SELECT " + topRow + " * FROM (" + sqlCommand + ") T " + strCon.ToString();
+            if (index > 0)
+                sql = "SELECT " + topRow + " * FROM (" + sqlCommand.Substring(0, index) + ") T " + strCon.ToString() + " " + sqlCommand.Substring(index);
+            #endregion
+
+            DataTable ds = new DataTable();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentException("參數為空值", "sqlCommand");
+                cmd.Parameters.Clear();
+                foreach (var c in columns)
+                {
+                    if (!string.IsNullOrEmpty(c.Value))
+                    {
+                        cmd.Parameters.Add(new SqlParameter { ParameterName = c.ColumnName, Value = c.Value.ToSqlType() });
+                    }
+                }
+                cmd.CommandText = sql;
+                cmd.CommandType = CommandType.Text;
+
+                da.Fill(ds);
+                msg = "Success";
+            }
+            catch (Exception ex)
+            {
+                return Tuple.Create(false, ds, ex.Message);
+            }
             return Tuple.Create(true, ds, msg);
         }
 

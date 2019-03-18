@@ -32,6 +32,12 @@ namespace Transfer.Models.Repository
             return setting;
         }
 
+        public IEnumerable<tblXMLSetting> getByCustomer(string CustomerName)
+        {
+            IEnumerable<tblXMLSetting> settings = this.GetSome(x => x.CustomerName.Equals(CustomerName, StringComparison.OrdinalIgnoreCase));
+            return settings;
+        }
+
         public List<tblXMLSetting> get(string XMLName, string SQLName, string CustomerName)
         {
             //Expression<Func<tblXMLSetting, bool>> condition = PredicateBuilder.New<tblXMLSetting>(true);

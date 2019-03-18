@@ -1,0 +1,167 @@
+﻿@model QueryVM
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Query", "Query", FormMethod.Post, new { Id = "IndexForm" }))
+{
+    @*@Html.AntiForgeryToken()*@
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.CustomerName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.TextBox("vm.CustomerName", @Model.CustomerName, new { htmlAttributes = new { @class = "form-control", @onchange = "loadFormat();" } })
+                @Html.ValidationMessageFor(model => model.CustomerName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Format, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("vm.Format", DropDownListMenu.FormatOption(Model.Format), new { @class = "form-control", @style = "font-weight:normal;", @onchange = "loadFormat();" })
+                @Html.ValidationMessageFor(model => model.Format, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.SettingName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("vm.SettingName", DropDownListMenu.SettingOption(Model.CustomerName, Model.Format, Model.SettingName), new { @class = "form-control", @style = "font-weight:normal;", @onchange = "loadColumns();" })
+                @Html.ValidationMessageFor(model => model.SettingName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-8">
+                <div id="ColumnSetDiv" class="row">
+                    @{
+                        Html.RenderPartial("_ColumnSet", Model);
+                    }
+                </div>
+            </div>
+            <div class="col-md-4">
+                <input type="button" value="Save" class="btn btn-primary btn-block" />
+                <br />
+                <input type="button" value="Query" class="btn btn-primary btn-block"  onclick="query();" />
+                @*<input type="button" value="Query" onclick="preview();" class="btn btn-primary btn-block" />*@
+                <br />
+                <font color="red">
+                    @ViewBag.QueryMsg
+                </font>
+                <br />
+                @Html.LabelFor(model => model.DataRow, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-4">
+                    @Html.TextBox("vm.DataRow", @Model.DataRow, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+                    @Html.ValidationMessageFor(model => model.DataRow, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div id="PreviewDiv" class="col-md-12">
+                @{
+                    Html.RenderPartial("_DataRow", Model);
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DataDestination, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.DropDownList("vm.DataDestination", DropDownListMenu.DestinationOption(Model.DataDestination), new { @class = "form-control", @style = "font-weight:normal;" })
+                @Html.ValidationMessageFor(model => model.DataDestination, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FileName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                <input type="text" id="vm_FileName" name="vm.FileName" value="@Model.FileName" class="form-control" />
+                @*@Html.TextBoxFor(model => model.FileName, new { @id = "vm_FileName", @name = "vm.FileName", @class = "form -control" })*@
+                @Html.ValidationMessageFor(model => model.FileName, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2">
+                <input type="button" value="btnGenerate" onclick="generate();" class="btn btn-primary btn-block" />
+            </div>
+            <div class="col-md-4">
+                <font color="red">
+                    @ViewBag.GenerateMsg
+                </font>
+            </div>
+        </div>
+    </div>
+                    }
+
+<script>
+    function loadFormat() {
+        var CustomerName = $("#vm_CustomerName").val();
+        var Format = $("#vm_Format").val();
+        var msg = '';
+        if (CustomerName.trim() == '') msg += '請輸入 Customer Name\r\n';
+        if (Format.trim() == '') msg += '請選擇 Format\r\n';
+
+        if (msg != '') {
+            //alert(msg);
+        } else {
+            var param = new Object({
+                CustomerName: CustomerName,
+                Format: Format
+            });
+
+            $.ajax({
+                url: '@Url.Action("AjaxLoadFormat")',
+                type: "POST",
+                data: param,
+                success: function (result) {
+                    if (result.status == 'ok') {
+                        setOptionList(result);
+                    }
+                    else {
+                        alert(result.status);
+                    }
+                }
+            });
+        }
+    }
+
+    function setOptionList(result) {
+        $("#vm_SettingName").attr("disabled", false);
+        $("#vm_SettingName").html('');
+        $("#vm_SettingName").html(result.Options);
+    }
+
+    function loadColumns() {
+        var Format = $("#vm_Format").val();
+        var SettingName = $("#vm_SettingName").val();
+        var msg = '';
+
+        if (msg != '') {
+            //alert(msg);
+        } else {
+            var param = new Object({
+                Format: Format,
+                SettingName: SettingName,
+            });
+
+            $.ajax({
+                url: '@Url.Action("AjaxLoadColumns")',
+                type: "POST",
+                data: param,
+                success: function (result) {
+                    $("#ColumnSetDiv").html(result);
+                }
+            });
+        }
+    }
+
+    function query() {
+        $("#IndexForm").attr("action", '@Url.Action("Query")');
+        $("#IndexForm").submit();
+    }
+
+    function generate() {
+        $("#IndexForm").attr("action", '@Url.Action("Generate")');
+        $("#IndexForm").submit();
+    }
+</script>

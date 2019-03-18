@@ -10,5 +10,10 @@ namespace Transfer.Models.Models
     {
         public string ColumnName { get; set; }
         public int Idx { get; set; }
+
+
+        public string Comparison{ get; set; }
+
+        public string Value { get; set; }
     }
 }

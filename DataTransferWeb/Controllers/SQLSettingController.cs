@@ -80,7 +80,7 @@ namespace DataTransferWeb.Controllers
                     }
                     else
                     {
-                        string sql = Func.SQLTop(vm.SQLStatement, vm.DataRow);
+                        string sql = Func.SqlPlusTop(vm.SQLStatement, vm.DataRow);
                         Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(sql);
 
                         vm.SQLResultDataRow = result.Item2;
@@ -124,7 +124,7 @@ namespace DataTransferWeb.Controllers
                     // 將 top(n) 帶入 SQL語句
                     //int index = vm.SQLStatement.IndexOf("Select", StringComparison.OrdinalIgnoreCase);  // 找出第一個select的位置
                     //string sql = "SELECT TOP (" + vm.DataRow + ") " + vm.SQLStatement.Remove(index, 6);
-                    string sql = Func.SQLTop(vm.SQLStatement, vm.DataRow);
+                    string sql = Func.SqlPlusTop(vm.SQLStatement, vm.DataRow);
                     Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(sql);
 
                     vm.SQLResultDataRow = result.Item2;
@@ -148,9 +148,7 @@ namespace DataTransferWeb.Controllers
             }
             return RedirectToAction("Index");
         }
-
-
-
+        
         public ActionResult Delete(string id)
         {
             if (string.IsNullOrEmpty(id))

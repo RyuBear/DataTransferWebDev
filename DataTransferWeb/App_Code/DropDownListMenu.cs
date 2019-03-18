@@ -89,7 +89,7 @@ public static class DropDownListMenu
 
 
     /// <summary>
-    /// SQL Type 選單
+    /// 檔案日期格式 選單
     /// </summary>
     /// <returns></returns>
     public static IEnumerable<SelectListItem> DateFormatOption(string selected = "")
@@ -98,7 +98,7 @@ public static class DropDownListMenu
 
         var items = new List<SelectListItem>();
 
-        var selectedFormat= string.IsNullOrWhiteSpace(selected) ? null : selected.Split(',');
+        var selectedFormat = string.IsNullOrWhiteSpace(selected) ? null : selected.Split(',');
 
         foreach (var c in DateFormat)
         {
@@ -109,6 +109,125 @@ public static class DropDownListMenu
                 Selected = selectedFormat == null
                     ? false
                     : selectedFormat.Contains(c.ToString())
+            });
+        }
+        return items;
+    }
+
+    /// <summary>
+    /// Format 選單
+    /// </summary>
+    /// <returns></returns>
+    public static IEnumerable<SelectListItem> FormatOption(string selected = "")
+    {
+        string[] Comparisons = new string[] { "XML", "EXCEL" };
+
+        var items = new List<SelectListItem>();
+        items.Add(new SelectListItem { Text = "-Please Select-", Value = "" });
+
+        foreach (var c in Comparisons)
+        {
+            items.Add(item: new SelectListItem()
+            {
+                Value = c,
+                Text = c,
+                Selected = (string.IsNullOrEmpty(selected))
+                    ? false
+                    : selected.Equals(c, StringComparison.OrdinalIgnoreCase)
+            });
+        }
+        return items;
+    }
+
+    /// <summary>
+    /// Setting 選單
+    /// </summary>
+    /// <returns></returns>
+    public static IEnumerable<SelectListItem> SettingOption(string CustomerName = "", string Format = "", string selected = "")
+    {
+        var items = new List<SelectListItem>();
+        items.Add(new SelectListItem { Text = "-Please Select-", Value = "" });
+        if (string.IsNullOrEmpty(CustomerName) || string.IsNullOrEmpty(Format))
+            return items;
+
+        if (Format.Equals("XML"))
+        {
+            using (tblXMLSettingRepository rep = new tblXMLSettingRepository())
+            {
+                List<tblXMLSetting> setting = rep.getByCustomer(CustomerName).ToList();
+                foreach (var s in setting)
+                {
+                    items.Add(item: new SelectListItem()
+                    {
+                        Value = s.XMLName,
+                        Text = s.XMLName,
+                        Selected = (string.IsNullOrEmpty(selected)) ? false : selected.Equals(s.XMLName, StringComparison.OrdinalIgnoreCase)
+                    });
+                }
+            }
+        }
+        else if (Format.Equals("EXCEL"))
+        {
+            using (tblExcelSettingRepository rep = new tblExcelSettingRepository())
+            {
+                List<tblExcelSetting> setting = rep.getByCustomer(CustomerName).ToList();
+                foreach (var s in setting)
+                {
+                    items.Add(item: new SelectListItem()
+                    {
+                        Value = s.ExcelName,
+                        Text = s.ExcelName,
+                        Selected = (string.IsNullOrEmpty(selected)) ? false : selected.Equals(s.ExcelName, StringComparison.OrdinalIgnoreCase)
+                    });
+                }
+            }
+        }
+        return items;
+    }
+
+    /// <summary>
+    /// Comparison 選單
+    /// </summary>
+    /// <returns></returns>
+    public static IEnumerable<SelectListItem> ComparisonOption(string selected = "")
+    {
+        string[] Comparisons = new string[] { "=", ">=", "<=", ">", "<" };
+
+        var items = new List<SelectListItem>();
+
+        foreach (var c in Comparisons)
+        {
+            items.Add(item: new SelectListItem()
+            {
+                Value = c,
+                Text = c,
+                Selected = (string.IsNullOrEmpty(selected))
+                    ? false
+                    : selected.Equals(c, StringComparison.OrdinalIgnoreCase)
+            });
+        }
+        return items;
+    }
+
+
+    /// <summary>
+    /// Data Destination 選單
+    /// </summary>
+    /// <returns></returns>
+    public static IEnumerable<SelectListItem> DestinationOption(string selected = "")
+    {
+        string[] Comparisons = new string[] { "Download", "FTP", "EMail" };
+
+        var items = new List<SelectListItem>();
+        foreach (var c in Comparisons)
+        {
+            items.Add(item: new SelectListItem()
+            {
+                Value = c,
+                Text = c,
+                Selected = (string.IsNullOrEmpty(selected))
+                    ? false
+                    : selected.Equals(c, StringComparison.OrdinalIgnoreCase)
             });
         }
         return items;
