@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Web.Mvc;
-using StackExchange.Redis;
-using Newtonsoft.Json;
-using System.Configuration;
 using DataTransferWeb.Models;
 
 namespace DataTransferWeb
@@ -12,18 +9,8 @@ namespace DataTransferWeb
     [Authorize] //代表該整個Controller必須要先進行過表單驗證登入後才可以進入
     public class BaseController : Controller
     {
-        private static string sessionType
-        {
-            get
-            {
-                return ConfigurationManager.AppSettings["sessionType"].ToString();
-            }
-        }
         public UserData userInfo;
         public List<SelectListItem> ClassRoomItems;
-
-
-        //public string curExam;
 
         public BaseController()
         {
