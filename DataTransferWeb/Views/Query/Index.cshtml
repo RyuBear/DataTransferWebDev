@@ -26,7 +26,7 @@
             </div>
             @Html.LabelFor(model => model.SettingName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-4">
-                @Html.DropDownList("vm.SettingName", DropDownListMenu.SettingOption(Model.CustomerName, Model.Format, Model.SettingName), new { @class = "form-control", @style = "font-weight:normal;", @onchange = "loadColumns();" })
+                @Html.DropDownList("vm.SettingName", DropDownListMenu.SettingOption(Model.UserID, Model.CustomerName, Model.Format, Model.SettingName), new { @class = "form-control", @style = "font-weight:normal;", @onchange = "loadColumns();" })
                 @Html.ValidationMessageFor(model => model.SettingName, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -42,7 +42,7 @@
             <div class="col-md-4">
                 <input type="button" value="Save" class="btn btn-primary btn-block" />
                 <br />
-                <input type="button" value="Query" class="btn btn-primary btn-block"  onclick="query();" />
+                <input type="button" value="Query" class="btn btn-primary btn-block" onclick="query();" />
                 @*<input type="button" value="Query" onclick="preview();" class="btn btn-primary btn-block" />*@
                 <br />
                 <font color="red">

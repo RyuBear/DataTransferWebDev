@@ -395,25 +395,6 @@ namespace DataTransferWeb
                 #endregion
 
                 #region 填入內容
-                ////顯示有逗號區分的數值資料
-                //HSSFCellStyle styleNumeric = (HSSFCellStyle)workbook.CreateCellStyle();
-                //HSSFDataFormat format = (HSSFDataFormat)workbook.CreateDataFormat();
-                //styleNumeric.DataFormat = format.GetFormat("###,##0");
-                //cell.CellStyle = styleNumeric;
-
-                ////顯示百分比符號 
-                //HSSFCellStyle stylePercent = (HSSFCellStyle)workbook.CreateCellStyle();
-                //HSSFDataFormat format = (HSSFDataFormat)workbook.CreateDataFormat();
-                //stylePercent.DataFormat = format.GetFormat("#0.00%");
-                //cell.CellStyle = stylePercent;
-
-                ////顯示日期格式
-                //HSSFCellStyle styleDate = (HSSFCellStyle)workbook.CreateCellStyle();
-                //HSSFDataFormat format = (HSSFDataFormat)workbook.CreateDataFormat();
-                //styleDate.DataFormat = format.GetFormat("yyyy-mm-dd");
-                //cell.CellStyle = styleDate;
-
-
                 for (int i = 0; i < Columns.Count(); i++)
                 {
                     int X = Columns[i].X;

@@ -19,10 +19,12 @@ namespace DataTransferWeb.Controllers
     public class QueryController : BaseController
     {
         QueryVM model = new QueryVM();
+        tblLogRepository log = new tblLogRepository();
 
         [HttpGet]
         public ActionResult Index()
         {
+            model.UserID = userInfo.Account;
             return View(model);
         }
 
@@ -46,7 +48,7 @@ namespace DataTransferWeb.Controllers
             {
                 using (tblXMLSettingRepository rep = new tblXMLSettingRepository())
                 {
-                    List<tblXMLSetting> setting = rep.getByCustomer(vm.CustomerName).ToList();
+                    List<tblXMLSetting> setting = rep.getByCustomer(userInfo.Account, vm.CustomerName).ToList();
                     foreach (var s in setting)
                     {
                         options.AppendFormat("<option value='{0}'>{1}</option>", s.XMLName, s.XMLName);
@@ -58,7 +60,7 @@ namespace DataTransferWeb.Controllers
             {
                 using (tblExcelSettingRepository rep = new tblExcelSettingRepository())
                 {
-                    List<tblExcelSetting> setting = rep.getByCustomer(vm.CustomerName).ToList();
+                    List<tblExcelSetting> setting = rep.getByCustomer(userInfo.Account, vm.CustomerName).ToList();
                     foreach (var s in setting)
                     {
                         options.AppendFormat("<option value='{0}'>{1}</option>", s.ExcelName, s.ExcelName);
@@ -125,6 +127,8 @@ namespace DataTransferWeb.Controllers
         [HttpPost]
         public ActionResult Query(QueryVM vm)
         {
+            vm.UserID = userInfo.Account;
+
             string SQLName = string.Empty;
             if (!canQuery(vm))
             {
@@ -187,93 +191,114 @@ namespace DataTransferWeb.Controllers
         [HttpPost]
         public ActionResult Generate(QueryVM vm)
         {
-            string SQLName = string.Empty;
-            if (!canGenerate(vm))
+            vm.UserID = userInfo.Account;
+            try
             {
-                return View("Index", vm);
-            }
-
-            #region XML
-            if (vm.Format.Equals("XML"))
-            {
-                using (tblXMLSettingRepository rep = new tblXMLSettingRepository())
-                using (tblXMLMappingRepository map = new tblXMLMappingRepository())
+                string SQLName = string.Empty;
+                if (!canGenerate(vm))
                 {
-                    tblXMLSetting setting = rep.get(vm.SettingName);
-                    if (setting != null)
-                    {
-                        SQLName = setting.SQLName;
-                    }
-                    List<tblXMLMapping> mapping = map.get(vm.SettingName).ToList();
-                    using (tblSQLSettingRepository set = new tblSQLSettingRepository())
-                    {
-                        tblSQLSetting sqlSetting = set.select(SQLName);
-                        using (DataAccess da = new DataAccess())
-                        {
-                            Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(sqlSetting.SQLStatement.Replace("\r\n", ""), null, vm.Columns);
-                            vm.SQLResultDataRow = result.Item2;
-                            XmlDocument xmlDoc = Func.GenerateXML(result.Item2, mapping);
+                    return View("Index", vm);
+                }
 
-                            MemoryStream ms = new MemoryStream();
-                            using (XmlWriter writer = XmlWriter.Create(ms))
+                #region XML
+                if (vm.Format.Equals("XML"))
+                {
+                    using (tblXMLSettingRepository rep = new tblXMLSettingRepository())
+                    using (tblXMLMappingRepository map = new tblXMLMappingRepository())
+                    {
+                        tblXMLSetting setting = rep.get(vm.SettingName);
+                        if (setting != null)
+                        {
+                            SQLName = setting.SQLName;
+                        }
+                        List<tblXMLMapping> mapping = map.get(vm.SettingName).ToList();
+                        using (tblSQLSettingRepository set = new tblSQLSettingRepository())
+                        {
+                            tblSQLSetting sqlSetting = set.select(SQLName);
+                            using (DataAccess da = new DataAccess())
                             {
-                                xmlDoc.WriteTo(writer); // Write to memorystream
+                                Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(sqlSetting.SQLStatement.Replace("\r\n", ""), null, vm.Columns);
+                                if (!result.Item1)
+                                {
+                                    log.Save("轉出", userInfo.Name, vm.CustomerName, vm.Format, vm.DataDestination, vm.DestinationPath, vm.FileName, "失敗", result.Item3);
+                                    return View("Index", vm);
+                                }
+
+                                vm.SQLResultDataRow = result.Item2;
+                                XmlDocument xmlDoc = Func.GenerateXML(result.Item2, mapping);
+
+                                MemoryStream ms = new MemoryStream();
+                                using (XmlWriter writer = XmlWriter.Create(ms))
+                                {
+                                    xmlDoc.WriteTo(writer); // Write to memorystream
+                                }
+
+                                byte[] data = ms.ToArray();
+
+                                Response.Clear();
+                                Response.ContentType = "application/octet-stream";
+                                Response.AddHeader("Content-Disposition", "attachment; filename=" + HttpUtility.UrlEncode(vm.FileName));
+                                Response.Charset = "UTF-8";
+                                Response.BinaryWrite(data);
+                                Response.End();
+                                ms.Flush(); // Probably not needed
+                                ms.Close();
+
+                                log.Save("轉出", userInfo.Name, vm.CustomerName, vm.Format, vm.DataDestination, vm.DestinationPath, vm.FileName, "成功", "");
                             }
-
-                            byte[] data = ms.ToArray();
-
-                            Response.Clear();
-                            Response.ContentType = "application/octet-stream";
-                            Response.AddHeader("Content-Disposition", "attachment; filename=" + HttpUtility.UrlEncode(vm.FileName));
-                            Response.Charset = "UTF-8";
-                            Response.BinaryWrite(data);
-                            Response.End();
-                            ms.Flush(); // Probably not needed
-                            ms.Close();
                         }
                     }
                 }
-            }
-            #endregion
-            #region EXCEL
-            else if (vm.Format.Equals("EXCEL"))
-            {
-                using (tblExcelSettingRepository rep = new tblExcelSettingRepository())
-                using (tblExcelMappingRepository map = new tblExcelMappingRepository())
+                #endregion
+                #region EXCEL
+                else if (vm.Format.Equals("EXCEL"))
                 {
-                    tblExcelSetting setting = rep.get(vm.SettingName);
-                    if (setting != null)
+                    using (tblExcelSettingRepository rep = new tblExcelSettingRepository())
+                    using (tblExcelMappingRepository map = new tblExcelMappingRepository())
                     {
-                        SQLName = setting.SQLName;
-                    }
-
-                    List<tblExcelMapping> mapping = map.get(vm.SettingName).ToList();
-                    using (tblSQLSettingRepository set = new tblSQLSettingRepository())
-                    {
-                        tblSQLSetting sqlSetting = set.select(SQLName);
-                        using (DataAccess da = new DataAccess())
+                        tblExcelSetting setting = rep.get(vm.SettingName);
+                        if (setting != null)
                         {
-                            Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(sqlSetting.SQLStatement.Replace("\r\n", ""), null, vm.Columns);
-                            vm.SQLResultDataRow = result.Item2;
-                            HSSFWorkbook book = Func.GenerateExcel(result.Item2, mapping);
+                            SQLName = setting.SQLName;
+                        }
 
-                            MemoryStream ms = new MemoryStream();
-                            book.Write(ms);
-                            Response.AddHeader("Content-Disposition", string.Format("attachment; filename={0}", HttpUtility.UrlEncode(vm.FileName)));
-                            Response.BinaryWrite(ms.ToArray());
-                            Response.End();
-                            book = null;
-                            ms.Close();
-                            ms.Dispose();
+                        List<tblExcelMapping> mapping = map.get(vm.SettingName).ToList();
+                        using (tblSQLSettingRepository set = new tblSQLSettingRepository())
+                        {
+                            tblSQLSetting sqlSetting = set.select(SQLName);
+                            using (DataAccess da = new DataAccess())
+                            {
+                                Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(sqlSetting.SQLStatement.Replace("\r\n", ""), null, vm.Columns);
+                                if (!result.Item1)
+                                {
+                                    log.Save("轉出", userInfo.Name, vm.CustomerName, vm.Format, vm.DataDestination, vm.DestinationPath, vm.FileName, "失敗", result.Item3);
+                                    return View("Index", vm);
+                                }
+                                vm.SQLResultDataRow = result.Item2;
+                                HSSFWorkbook book = Func.GenerateExcel(result.Item2, mapping);
+
+                                MemoryStream ms = new MemoryStream();
+                                book.Write(ms);
+                                Response.AddHeader("Content-Disposition", string.Format("attachment; filename={0}", HttpUtility.UrlEncode(vm.FileName)));
+                                Response.BinaryWrite(ms.ToArray());
+                                Response.End();
+                                book = null;
+                                ms.Close();
+                                ms.Dispose();
+
+                                log.Save("轉出", userInfo.Name, vm.CustomerName, vm.Format, vm.DataDestination, vm.DestinationPath, vm.FileName, "成功", "");
+                            }
                         }
                     }
                 }
+                #endregion
             }
-            #endregion
-
+            catch (Exception ex)
+            {
+                log.Save("轉出", userInfo.Name, vm.CustomerName, vm.Format, vm.DataDestination, vm.DestinationPath, vm.FileName, "失敗", ex.Message.Replace("\r\n", ""));
+            }
             return View("Index", vm);
         }
-
 
         bool canGenerate(QueryVM vm)
         {
@@ -289,46 +314,6 @@ namespace DataTransferWeb.Controllers
                 return true;
             else
                 return false;
-        }
-
-        [HttpPost]
-        public ActionResult Save(SQLSettingVM vm)
-        {
-            if (!Func.SQLIsValid(vm.SQLStatement))
-            {
-                vm.SQLResult = "SQL語句不合法!";
-                return View("Edit", vm);
-            }
-            else
-            {
-                using (DataAccess da = new DataAccess())
-                {
-                    // 將 top(n) 帶入 SQL語句
-                    //int index = vm.SQLStatement.IndexOf("Select", StringComparison.OrdinalIgnoreCase);  // 找出第一個select的位置
-                    //string sql = "SELECT TOP (" + vm.DataRow + ") " + vm.SQLStatement.Remove(index, 6);
-                    string sql = Func.SqlPlusTop(vm.SQLStatement, vm.DataRow);
-                    Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(sql);
-
-                    vm.SQLResultDataRow = result.Item2;
-                    vm.SQLResult = result.Item3;
-                }
-
-                List<ColumnData> Columns = new List<ColumnData>();
-                for (int i = 0; i < vm.SQLResultDataRow.Columns.Count; i++)
-                {
-                    Columns.Add(new ColumnData()
-                    {
-                        ColumnName = vm.SQLResultDataRow.Columns[i].ColumnName,
-                        Idx = i
-                    });
-                }
-                using (tblSQLSettingRepository setting = new tblSQLSettingRepository())
-                {
-                    vm.SQLResult = setting.Save(vm.SQLName, vm.SQLStatement, vm.DataRow, vm.SQLType, Columns, userInfo.Account);
-                    if (vm.SQLResult.Equals("ok")) vm.SQLResult = "Save Successful!";
-                }
-            }
-            return RedirectToAction("Index");
         }
 
     }

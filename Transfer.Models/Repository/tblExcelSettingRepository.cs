@@ -43,9 +43,9 @@ namespace Transfer.Models.Repository
         }
 
 
-        public List<tblExcelSetting> getByCustomer(string CustomerName)
+        public List<tblExcelSetting> getByCustomer(string UserID, string CustomerName)
         {
-            IQueryable<tblExcelSetting> settings = this.GetSome(x => x.CustomerName.Equals(CustomerName, StringComparison.OrdinalIgnoreCase));
+            IQueryable<tblExcelSetting> settings = this.GetSome(x => x.UserId.Contains(UserID) && x.CustomerName.Equals(CustomerName, StringComparison.OrdinalIgnoreCase));
 
             return settings.ToList();
         }
@@ -85,7 +85,7 @@ namespace Transfer.Models.Repository
                     SQLName = SQLName,
                     FileName = FileName,
                     FileNameDateFormat = DateFormat,
-                    UserId = UserID,
+                    UserId = "," + UserID + ",",
                     CreateTime = Now,
                     Creator = Creator
                 };
@@ -104,7 +104,7 @@ namespace Transfer.Models.Repository
                 setting.CustomerName = CustomerName;
                 setting.FileName = FileName;
                 setting.FileNameDateFormat = DateFormat;
-                setting.UserId = UserID;
+                setting.UserId = "," + UserID + ",";
                 setting.UpdateTime = Now;
                 setting.Updator = Creator;
 

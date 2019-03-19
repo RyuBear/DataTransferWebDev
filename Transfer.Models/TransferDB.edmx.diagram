@@ -18,6 +18,7 @@
         <AssociationConnector Association="TransferDBModel.FK_tblExcelSetting_tblSQLSetting" />
         <AssociationConnector Association="TransferDBModel.FK_tblXMLMapping_tblXMLSetting" />
         <AssociationConnector Association="TransferDBModel.FK_tblXMLSetting_tblSQLSetting" />
+        <EntityTypeShape EntityType="TransferDBModel.tblLog" Width="1.5" PointX="5.375" PointY="3.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

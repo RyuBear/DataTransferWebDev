@@ -32,5 +32,6 @@ namespace Transfer.Models
         public virtual DbSet<tblExcelMapping> tblExcelMapping { get; set; }
         public virtual DbSet<tblExcelSetting> tblExcelSetting { get; set; }
         public virtual DbSet<tblXMLSetting> tblXMLSetting { get; set; }
+        public virtual DbSet<tblLog> tblLog { get; set; }
     }
 }

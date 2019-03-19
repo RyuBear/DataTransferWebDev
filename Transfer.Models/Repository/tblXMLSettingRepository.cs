@@ -32,22 +32,14 @@ namespace Transfer.Models.Repository
             return setting;
         }
 
-        public IEnumerable<tblXMLSetting> getByCustomer(string CustomerName)
+        public IEnumerable<tblXMLSetting> getByCustomer(string UserID, string CustomerName)
         {
-            IEnumerable<tblXMLSetting> settings = this.GetSome(x => x.CustomerName.Equals(CustomerName, StringComparison.OrdinalIgnoreCase));
+            IEnumerable<tblXMLSetting> settings = this.GetSome(x => x.UserId.Contains(UserID) && x.CustomerName.Equals(CustomerName, StringComparison.OrdinalIgnoreCase));
             return settings;
         }
 
         public List<tblXMLSetting> get(string XMLName, string SQLName, string CustomerName)
         {
-            //Expression<Func<tblXMLSetting, bool>> condition = PredicateBuilder.New<tblXMLSetting>(true);
-            //if (!string.IsNullOrEmpty(XMLName)) condition = condition.And(p => p.XMLName.Equals(XMLName, StringComparison.OrdinalIgnoreCase));
-            //if (!string.IsNullOrEmpty(SQLName)) condition = condition.And(p => p.SQLName.Equals(SQLName, StringComparison.OrdinalIgnoreCase));
-            //if (!string.IsNullOrEmpty(CustomerName)) condition = condition.And(p => p.CustomerName.Equals(CustomerName, StringComparison.OrdinalIgnoreCase));
-
-            //IEnumerable<tblXMLSetting> setting = this.GetSome(condition);
-
-
             IQueryable<tblXMLSetting> settings = this.GetAll();
             if (!string.IsNullOrEmpty(XMLName)) settings = this.GetSome(settings, x => x.XMLName.Equals(XMLName, StringComparison.OrdinalIgnoreCase));
             if (!string.IsNullOrEmpty(SQLName)) settings = this.GetSome(settings, x => x.SQLName.Equals(SQLName, StringComparison.OrdinalIgnoreCase));
@@ -92,7 +84,7 @@ namespace Transfer.Models.Repository
                     SQLName = SQLName,
                     FileName = FileName,
                     FileNameDateFormat = DateFormat,
-                    UserId = UserID,
+                    UserId = "," + UserID + ",",
                     CreateTime = Now,
                     Creator = Creator
                 };
@@ -111,7 +103,7 @@ namespace Transfer.Models.Repository
                 setting.CustomerName = CustomerName;
                 setting.FileName = FileName;
                 setting.FileNameDateFormat = DateFormat;
-                setting.UserId = UserID;
+                setting.UserId = "," + UserID + ",";
                 setting.UpdateTime = Now;
                 setting.Updator = Creator;
 

@@ -11,6 +11,8 @@ namespace DataTransferWeb.ViewModels
 {
     public class QueryVM
     {
+        public string UserID { get; set; }
+
         [Required]
         [Display(Name = "Customer Name")]
         public string CustomerName { get; set; }

@@ -91,6 +91,7 @@
     <Compile Include="Interface\IRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\EFGenericRepository.cs" />
+    <Compile Include="Repository\tblLogRepository.cs" />
     <Compile Include="Repository\tblExcelSettingRepository.cs" />
     <Compile Include="Repository\tblExcelMappingRepository.cs" />
     <Compile Include="Repository\tblXMLSettingRepository.cs" />
@@ -108,6 +109,9 @@
       <DependentUpon>TransferDB.tt</DependentUpon>
     </Compile>
     <Compile Include="tblExcelSetting.cs">
+      <DependentUpon>TransferDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblLog.cs">
       <DependentUpon>TransferDB.tt</DependentUpon>
     </Compile>
     <Compile Include="tblSQLColumns.cs">

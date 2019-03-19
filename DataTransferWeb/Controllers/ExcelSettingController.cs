@@ -392,7 +392,6 @@ namespace DataTransferWeb.Controllers
             return RedirectToAction("Index");
         }
 
-
         public ActionResult Delete(string id)
         {
             if (string.IsNullOrEmpty(id))

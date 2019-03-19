@@ -43,6 +43,22 @@
           <Property Name="UpdateTime" Type="datetime" />
           <Property Name="Updator" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="tblLog">
+          <Key>
+            <PropertyRef Name="LogID" />
+          </Key>
+          <Property Name="LogID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="UserID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Format" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="ExecuteTime" Type="datetime" Nullable="false" />
+          <Property Name="Destination" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Path" Type="nvarchar(max)" />
+          <Property Name="FileName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Message" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="tblSQLColumns">
           <Key>
             <PropertyRef Name="SQLName" />
@@ -173,6 +189,7 @@
           <EntitySet Name="tblAdmin" EntityType="Self.tblAdmin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblExcelMapping" EntityType="Self.tblExcelMapping" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblExcelSetting" EntityType="Self.tblExcelSetting" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblLog" EntityType="Self.tblLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblSQLColumns" EntityType="Self.tblSQLColumns" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblSQLSetting" EntityType="Self.tblSQLSetting" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblXMLMapping" EntityType="Self.tblXMLMapping" Schema="dbo" store:Type="Tables" />
@@ -238,6 +255,7 @@
             <End Role="tblXMLSetting" EntitySet="tblXMLSetting" />
             <End Role="tblXMLSetting1" EntitySet="tblXMLSetting" />
           </AssociationSet>
+          <EntitySet Name="tblLog" EntityType="TransferDBModel.tblLog" />
           </EntityContainer>
         <EntityType Name="tblSQLColumns">
           <Key>
@@ -415,6 +433,22 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="tblLog">
+          <Key>
+            <PropertyRef Name="LogID" />
+          </Key>
+          <Property Name="LogID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="UserID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Format" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ExecuteTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Destination" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Path" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FileName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -514,6 +548,23 @@
                 <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
                 <ScalarProperty Name="SQLName" ColumnName="SQLName" />
                 <ScalarProperty Name="XMLName" ColumnName="XMLName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblLog">
+            <EntityTypeMapping TypeName="TransferDBModel.tblLog">
+              <MappingFragment StoreEntitySet="tblLog">
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="ExecuteTime" ColumnName="ExecuteTime" />
+                <ScalarProperty Name="Format" ColumnName="Format" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="LogID" ColumnName="LogID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

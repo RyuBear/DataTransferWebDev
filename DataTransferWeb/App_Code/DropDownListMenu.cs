@@ -143,7 +143,7 @@ public static class DropDownListMenu
     /// Setting 選單
     /// </summary>
     /// <returns></returns>
-    public static IEnumerable<SelectListItem> SettingOption(string CustomerName = "", string Format = "", string selected = "")
+    public static IEnumerable<SelectListItem> SettingOption(string UserID, string CustomerName = "", string Format = "", string selected = "")
     {
         var items = new List<SelectListItem>();
         items.Add(new SelectListItem { Text = "-Please Select-", Value = "" });
@@ -154,7 +154,7 @@ public static class DropDownListMenu
         {
             using (tblXMLSettingRepository rep = new tblXMLSettingRepository())
             {
-                List<tblXMLSetting> setting = rep.getByCustomer(CustomerName).ToList();
+                List<tblXMLSetting> setting = rep.getByCustomer(UserID, CustomerName).ToList();
                 foreach (var s in setting)
                 {
                     items.Add(item: new SelectListItem()
@@ -170,7 +170,7 @@ public static class DropDownListMenu
         {
             using (tblExcelSettingRepository rep = new tblExcelSettingRepository())
             {
-                List<tblExcelSetting> setting = rep.getByCustomer(CustomerName).ToList();
+                List<tblExcelSetting> setting = rep.getByCustomer(UserID, CustomerName).ToList();
                 foreach (var s in setting)
                 {
                     items.Add(item: new SelectListItem()
@@ -209,7 +209,6 @@ public static class DropDownListMenu
         return items;
     }
 
-
     /// <summary>
     /// Data Destination 選單
     /// </summary>
@@ -219,6 +218,30 @@ public static class DropDownListMenu
         string[] Comparisons = new string[] { "Download", "FTP", "EMail" };
 
         var items = new List<SelectListItem>();
+        foreach (var c in Comparisons)
+        {
+            items.Add(item: new SelectListItem()
+            {
+                Value = c,
+                Text = c,
+                Selected = (string.IsNullOrEmpty(selected))
+                    ? false
+                    : selected.Equals(c, StringComparison.OrdinalIgnoreCase)
+            });
+        }
+        return items;
+    }
+
+    /// <summary>
+    /// Status 選單
+    /// </summary>
+    /// <returns></returns>
+    public static IEnumerable<SelectListItem> StatusOption(string selected = "")
+    {
+        string[] Comparisons = new string[] { "成功", "失敗" };
+
+        var items = new List<SelectListItem>();
+        items.Add(new SelectListItem { Text = "-Please Select-", Value = "" });
         foreach (var c in Comparisons)
         {
             items.Add(item: new SelectListItem()
