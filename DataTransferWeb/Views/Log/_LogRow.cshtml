@@ -1,0 +1,42 @@
+﻿@model LogListVM
+<style>
+    #table-cont {
+        height: 50vh; /* 固定高度 */
+    }
+</style>
+<div class="table-fix-head" id='table-cont'>
+    <table class="table table-striped table-bordered table-hover" id="dataTables">
+        <thead class="thead-inverse">
+            <tr align="center">
+                <th>轉出/入</th>
+                <th>使用者</th>
+                <th>客戶</th>
+                <th>格式</th>
+                <th>執行結果</th>
+                <th>執行時間</th>
+                <th>產出方式</th>
+                <th>FTP/Mail</th>
+                <th>檔案名稱</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.logs.Count() > 0)
+            {
+                foreach (var m in Model.logs)
+                {
+                    <tr style="word-break:break-word;">
+                        <td>@m.Type</td>
+                        <td>@m.UserID</td>
+                        <td>@m.CustomerName</td>
+                        <td>@m.Format</td>
+                        <td>@m.Status</td>
+                        <td>@m.ExecuteTime</td>
+                        <td>@m.Destination</td>
+                        <td>@m.Path</td>
+                        <td>@m.FileName</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
