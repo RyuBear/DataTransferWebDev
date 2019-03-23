@@ -4,6 +4,18 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    .progress-label {
+        position: absolute;
+        left: 40vw;
+        top: 40vh;
+        font-weight: bold;
+        text-shadow: 1px 1px 0 #fff;
+        background-color: white;
+        width: 20vw;
+        text-align: center;
+    }
+</style>
 
 @using (Html.BeginForm("Query", "Query", FormMethod.Post, new { Id = "IndexForm" }))
 {
@@ -68,10 +80,42 @@
         <div class="form-group">
             @Html.LabelFor(model => model.DataDestination, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-2">
-                @Html.DropDownList("vm.DataDestination", DropDownListMenu.DestinationOption(Model.DataDestination), new { @class = "form-control", @style = "font-weight:normal;" })
+                @Html.DropDownList("vm.DataDestination", DropDownListMenu.DestinationOption(Model.DataDestination), new { @class = "form-control", @style = "font-weight:normal;", @onchange = "showDiv();" })
                 @Html.ValidationMessageFor(model => model.DataDestination, "", new { @class = "text-danger" })
             </div>
+        </div>
 
+        <div id="MailDiv" class="form-group">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            <div class="col-md-4">
+                @*<input type="text" id="vm_Email" name="vm.Email" value="@Model.Email" class="form-control" />*@
+                @Html.TextBox("vm.Email", @Model.Email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div id="FTPDiv" class="form-group">
+            @Html.LabelFor(model => model.FTPServerIP, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.TextBox("vm.FTPServerIP", @Model.FTPServerIP, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.FTPServerIP, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.FTPPort, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-1">
+                @Html.TextBox("vm.FTPPort", @Model.FTPPort, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.FTPPort, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.FTPUserName, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
+                @Html.TextBox("vm.FTPUserName", @Model.FTPUserName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.FTPUserName, "", new { @class = "text-danger" })
+            </div>
+            @Html.LabelFor(model => model.FTPPassword, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-2">
+                @Html.Password("vm.FTPPassword", @Model.FTPPassword, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.FTPPassword, "", new { @class = "text-danger" })
+            </div>
         </div>
 
         <div class="form-group">
@@ -86,14 +130,37 @@
             </div>
             <div class="col-md-4">
                 <font color="red">
-                    @ViewBag.GenerateMsg
+                    @ViewBag.ExeResult
                 </font>
             </div>
         </div>
     </div>
                     }
 
+<!-- 模态框（Modal） -->
+<div class="modal fade fa-upload" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="background-color:hsla(240, 0%, 50%, 0.6);">
+    <div class="progress-label">processing...</div>
+</div>
+
 <script>
+    $(function () {
+        showDiv();
+    });
+
+    function showDiv() {
+        var destination = $("#vm_DataDestination").val();
+        if (destination == "Download") {
+            $("#MailDiv").hide();
+            $("#FTPDiv").hide();
+        } else if (destination == "FTP") {
+            $("#MailDiv").hide();
+            $("#FTPDiv").show();
+        } else if (destination == "EMail") {
+            $("#MailDiv").show();
+            $("#FTPDiv").hide();
+        }
+    }
+
     function loadFormat() {
         var CustomerName = $("#vm_CustomerName").val();
         var Format = $("#vm_Format").val();
@@ -101,9 +168,7 @@
         if (CustomerName.trim() == '') msg += '請輸入 Customer Name\r\n';
         if (Format.trim() == '') msg += '請選擇 Format\r\n';
 
-        if (msg != '') {
-            //alert(msg);
-        } else {
+        if (msg == '') {
             var param = new Object({
                 CustomerName: CustomerName,
                 Format: Format
@@ -136,9 +201,7 @@
         var SettingName = $("#vm_SettingName").val();
         var msg = '';
 
-        if (msg != '') {
-            //alert(msg);
-        } else {
+        if (msg == '') {
             var param = new Object({
                 Format: Format,
                 SettingName: SettingName,
@@ -156,12 +219,60 @@
     }
 
     function query() {
-        $("#IndexForm").attr("action", '@Url.Action("Query")');
-        $("#IndexForm").submit();
+        var CustomerName = $("#vm_CustomerName").val();
+        var Format = $("#vm_Format").val();
+        var Setting = $("#vm_SettingName").val();
+        var msg = '';
+        if (CustomerName.trim() == '') msg += '請輸入 Customer Name\r\n';
+        if (Format.trim() == '') msg += '請選擇 Format\r\n';
+        if (Setting.trim() == '') msg += '請選擇 XML/Excel Name\r\n';
+
+        if (msg != '') {
+            alert(msg);
+        } else {
+            $("#IndexForm").attr("action", '@Url.Action("Query")');
+            $("#IndexForm").submit();
+        }
     }
 
     function generate() {
-        $("#IndexForm").attr("action", '@Url.Action("Generate")');
-        $("#IndexForm").submit();
+        var CustomerName = $("#vm_CustomerName").val();
+        var Format = $("#vm_Format").val();
+        var Setting = $("#vm_SettingName").val();
+        var Destination = $("#vm_DataDestination").val();
+
+        var msg = '';
+        if (CustomerName.trim() == '') msg += '請輸入 Customer Name\r\n';
+        if (Format.trim() == '') msg += '請選擇 Format\r\n';
+        if (Setting.trim() == '') msg += '請選擇 XML/Excel Name\r\n';
+        if (Destination.trim() == '') msg += '請選擇 Data Destination\r\n';
+
+        if (Destination == "FTP") {
+            var FtpServer = $("#vm_FTPServerIP").val();
+            var UserName = $("#vm_FTPUserName").val();
+            var Password = $("#vm_FTPPassword").val();
+            if (FtpServer.trim() == '') msg += '請輸入 FTP Server\r\n';
+            if (UserName.trim() == '') msg += '請輸入 User Name\r\n';
+            if (Password.trim() == '') msg += '請輸入 Password\r\n';
+        } else if (Destination == "EMail") {
+            var Mail = $("#vm_Email").val();
+            if (Mail.trim() == '') msg += '請輸入 Email\r\n';
+        }
+        var FileName = $("#vm_FileName").val();
+        if (FileName.trim() == '') msg += '請輸入 File Name\r\n';
+
+        if (msg != '') {
+            alert(msg);
+        } else {
+            if (Destination != "Download") {
+                $('#myModal').modal({
+                    backdrop: false,
+                    keyboard: false,
+                    show: true
+                })
+            }
+            $("#IndexForm").attr("action", '@Url.Action("Generate")');
+            $("#IndexForm").submit();
+        }
     }
 </script>

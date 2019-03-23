@@ -62,8 +62,8 @@ namespace DataTransferWeb.Controllers
             using (tblSQLColumnsRepository rep = new tblSQLColumnsRepository())
             {
                 model.UnsetColumns = rep.getAllColumns(model.SQLName).ToList();
-                var options = new StringBuilder();
-                options.AppendFormat("<option value='{0}'>{1}</option>", "", "-Please Select-");
+                //var options = new StringBuilder();
+                //options.AppendFormat("<option value='{0}'>{1}</option>", "", "-Please Select-");
 
                 using (tblExcelSettingRepository setRep = new tblExcelSettingRepository())
                 using (tblExcelMappingRepository ExcelRep = new tblExcelMappingRepository())
@@ -76,7 +76,7 @@ namespace DataTransferWeb.Controllers
                     model.CustomerName = setting.CustomerName;
                     model.FileName = setting.FileName;
                     model.FileNameDateFormat = setting.FileNameDateFormat;
-                    model.UserID = setting.UserId;
+                    model.UserID = (string.IsNullOrEmpty(setting.UserId)) ? "" : setting.UserId.Substring(1, setting.UserId.Length - 2);
 
                     foreach (var m in mapping)
                     {

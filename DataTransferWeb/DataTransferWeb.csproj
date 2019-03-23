@@ -61,6 +61,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\AutoMapper.Net4.dll</HintPath>
     </Reference>
+    <Reference Include="FluentFTP, Version=23.1.0.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentFTP.23.1.0\lib\net45\FluentFTP.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=1.0.0.999, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpZipLib.1.0.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
@@ -130,6 +134,10 @@
     </Reference>
     <Reference Include="NPOI.OpenXmlFormats, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
       <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.OpenXmlFormats.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Renci.SshNet, Version=2016.1.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
+      <HintPath>..\packages\SSH.NET.2016.1.0\lib\net40\Renci.SshNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="StackExchange.Redis, Version=1.2.3.0, Culture=neutral, processorArchitecture=MSIL">
@@ -244,7 +252,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Code\ExcelProcess.cs" />
+    <Compile Include="App_Code\MailProcess.cs" />
+    <Compile Include="App_Code\Extension.cs" />
+    <Compile Include="App_Code\FtpProcess.cs" />
     <Compile Include="App_Code\PasswordUtility.cs" />
+    <Compile Include="App_Code\SFtpProcess.cs" />
+    <Compile Include="App_Code\XmlProcess.cs" />
     <Compile Include="Comparer\ColumnComparer.cs" />
     <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\QueryController.cs" />
@@ -264,6 +278,8 @@
     <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="Helpers\DataTypeEnum.cs" />
     <Compile Include="Helpers\LanguageEnum.cs" />
+    <Compile Include="Models\FTPData.cs" />
+    <Compile Include="Models\EmailData.cs" />
     <Compile Include="Models\UserData.cs" />
     <Compile Include="ViewModels\LogListVM.cs" />
     <Compile Include="ViewModels\ExcelSettingListVM.cs" />
@@ -560,6 +576,7 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <None Include="Scripts\_references.js" />
+    <Content Include="SQL Script\20190322.sql" />
     <Content Include="vendor\bootstrap-social\bootstrap-social.css" />
     <Content Include="vendor\bootstrap\css\bootstrap.css" />
     <Content Include="vendor\bootstrap\css\bootstrap.min.css" />
@@ -731,6 +748,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Files\" />
     <Folder Include="Image\" />
   </ItemGroup>
   <ItemGroup>

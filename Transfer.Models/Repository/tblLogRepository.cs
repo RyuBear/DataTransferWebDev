@@ -28,8 +28,10 @@ namespace Transfer.Models.Repository
         /// 寫入 Log
         /// </summary>
         /// <returns></returns>
-        public void Save(string Type, string UserID, string CustomerName, string Format, string Destination, string Path, string FileName, string Status, string Message)
+        public void Save(string Type, string UserID, string CustomerName, string Format, string Destination, string Email, string FtpServer, string FileName, string Status, string Message)
         {
+            string Path = string.Empty;
+            if (Destination.Equals("FTP")) Path = FtpServer; else if (Destination.Equals("EMail", StringComparison.OrdinalIgnoreCase)) Path = Email;
             tblLog log = new tblLog()
             {
                 Type = Type,

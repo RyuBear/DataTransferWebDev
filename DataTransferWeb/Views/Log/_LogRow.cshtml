@@ -1,7 +1,7 @@
 ﻿@model LogListVM
 <style>
     #table-cont {
-        height: 50vh; /* 固定高度 */
+        height: 80vh; /* 固定高度 */
     }
 </style>
 <div class="table-fix-head" id='table-cont'>
@@ -29,7 +29,7 @@
                         <td>@m.UserID</td>
                         <td>@m.CustomerName</td>
                         <td>@m.Format</td>
-                        <td>@m.Status</td>
+                        <td title="@m.Message">@m.Status</td>
                         <td>@m.ExecuteTime</td>
                         <td>@m.Destination</td>
                         <td>@m.Path</td>

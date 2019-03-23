@@ -1,8 +1,12 @@
 ﻿@using System.Data
 @model QueryVM
-
+<style>
+    #table-cont-data {
+        height: 35vh; /* 固定高度 */
+    }
+</style>
 <div class="row">
-    <div class="table-fix-head" id='table-cont'>
+    <div class="table-fix-head tall-table" id='table-cont-data'>
         @if (Model.SQLResultDataRow != null)
         {
             <table class="table table-striped table-bordered table-hover" id="dataTables">

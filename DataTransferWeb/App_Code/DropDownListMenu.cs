@@ -19,9 +19,14 @@ public static class DropDownListMenu
     {
         List<SelectListItem> items = new List<SelectListItem>();
         items.Add(new SelectListItem { Text = "-Please Select-", Value = "" });
-        items.Add(new SelectListItem() { Text = "提單", Value = "提單" });
-        items.Add(new SelectListItem() { Text = "帳單", Value = "帳單" });
-        items.Add(new SelectListItem() { Text = "報單", Value = "報單" });
+        using (bscodeRepository rep = new bscodeRepository())
+        {
+            var types = rep.getSqlType();
+            foreach(var type in types)
+            {
+                items.Add(new SelectListItem { Text = type.cd, Value = type.cd });
+            }
+        }
         return items;
     }
 

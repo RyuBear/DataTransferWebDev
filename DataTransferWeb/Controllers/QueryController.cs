@@ -12,6 +12,7 @@ using System.Text;
 using System.IO;
 using System.Xml;
 using NPOI.HSSF.UserModel;
+using DataTransferWeb.Models;
 
 namespace DataTransferWeb.Controllers
 {
@@ -124,7 +125,7 @@ namespace DataTransferWeb.Controllers
             return PartialView("_ColumnSet", vm);
         }
 
-        [HttpPost]
+        //[HttpPost]
         public ActionResult Query(QueryVM vm)
         {
             vm.UserID = userInfo.Account;
@@ -177,9 +178,9 @@ namespace DataTransferWeb.Controllers
         bool canQuery(QueryVM vm)
         {
             string msg = string.Empty;
-            if (string.IsNullOrEmpty(vm.CustomerName)) msg += "請輸入 Customer Name\r\n";
-            if (string.IsNullOrEmpty(vm.Format)) msg += "請選擇 Format\r\n";
-            if (string.IsNullOrEmpty(vm.SettingName)) msg += "請選擇 XML/Excel Name\r\n";
+            if (string.IsNullOrEmpty(vm.CustomerName)) msg += "請輸入 Customer Name" + Environment.NewLine;
+            if (string.IsNullOrEmpty(vm.Format)) msg += "請選擇 Format" + Environment.NewLine;
+            if (string.IsNullOrEmpty(vm.SettingName)) msg += "請選擇 XML/Excel Name" + Environment.NewLine;
 
             ViewBag.QueryMsg = msg;
             if (string.IsNullOrEmpty(msg))
@@ -192,12 +193,14 @@ namespace DataTransferWeb.Controllers
         public ActionResult Generate(QueryVM vm)
         {
             vm.UserID = userInfo.Account;
+            string exeResult = string.Empty;
             try
             {
                 string SQLName = string.Empty;
                 if (!canGenerate(vm))
                 {
-                    return View("Index", vm);
+                    return RedirectToAction("Query", vm);
+                    //return View("Index", vm);
                 }
 
                 #region XML
@@ -220,31 +223,75 @@ namespace DataTransferWeb.Controllers
                                 Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(sqlSetting.SQLStatement.Replace("\r\n", ""), null, vm.Columns);
                                 if (!result.Item1)
                                 {
-                                    log.Save("轉出", userInfo.Name, vm.CustomerName, vm.Format, vm.DataDestination, vm.DestinationPath, vm.FileName, "失敗", result.Item3);
+                                    log.Save("轉出", userInfo.Name, vm.CustomerName, vm.Format, vm.DataDestination, vm.Email, vm.FTPServerIP, vm.FileName, "失敗", result.Item3);
                                     return View("Index", vm);
                                 }
 
                                 vm.SQLResultDataRow = result.Item2;
-                                XmlDocument xmlDoc = Func.GenerateXML(result.Item2, mapping);
+                                XmlDocument xmlDoc = XmlProcess.GenerateXML(result.Item2, mapping);
 
-                                MemoryStream ms = new MemoryStream();
-                                using (XmlWriter writer = XmlWriter.Create(ms))
+                                if (vm.DataDestination.Equals("Download", StringComparison.OrdinalIgnoreCase))
                                 {
-                                    xmlDoc.WriteTo(writer); // Write to memorystream
+                                    MemoryStream ms = new MemoryStream();
+                                    using (XmlWriter writer = XmlWriter.Create(ms))
+                                    {
+                                        xmlDoc.WriteTo(writer); // Write to memorystream
+                                    }
+
+                                    byte[] data = ms.ToArray();
+
+                                    Response.Clear();
+                                    Response.ContentType = "application/octet-stream";
+                                    Response.AddHeader("Content-Disposition", "attachment; filename=" + HttpUtility.UrlEncode(vm.FileName));
+                                    Response.Charset = "UTF-8";
+                                    Response.BinaryWrite(data);
+                                    Response.End();
+                                    ms.Flush(); // Probably not needed
+                                    ms.Close();
                                 }
-
-                                byte[] data = ms.ToArray();
-
-                                Response.Clear();
-                                Response.ContentType = "application/octet-stream";
-                                Response.AddHeader("Content-Disposition", "attachment; filename=" + HttpUtility.UrlEncode(vm.FileName));
-                                Response.Charset = "UTF-8";
-                                Response.BinaryWrite(data);
-                                Response.End();
-                                ms.Flush(); // Probably not needed
-                                ms.Close();
-
-                                log.Save("轉出", userInfo.Name, vm.CustomerName, vm.Format, vm.DataDestination, vm.DestinationPath, vm.FileName, "成功", "");
+                                else if (vm.DataDestination.Equals("FTP", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    xmlDoc.Save(Server.MapPath("~/Files/" + vm.FileName));
+                                    FTPData ftpData = new FTPData()
+                                    {
+                                        FTPServerIP = vm.FTPServerIP,
+                                        Port = vm.FTPPort ?? 21,
+                                        UserName = vm.FTPUserName,
+                                        Password = vm.FTPPassword,
+                                        file = new FileInfo(Server.MapPath("~/Files/" + vm.FileName))
+                                    };
+                                    if (vm.FTPPort == 22)
+                                    {
+                                        SFtpProcess uploader = new SFtpProcess(ftpData);
+                                        exeResult = uploader.Put(ftpData.file, ftpData.DirName);
+                                    }
+                                    else
+                                    {
+                                        FtpProcess uploader = new FtpProcess();
+                                        exeResult = uploader.Upload(ftpData);
+                                    }
+                                }
+                                else if (vm.DataDestination.Equals("EMail", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    xmlDoc.Save(Server.MapPath("~/Files/" + vm.FileName));
+                                    string subject = string.Empty;
+                                    using (bscodeRepository bscode = new bscodeRepository())
+                                    {
+                                        subject = bscode.getSubject(sqlSetting.SQLType);
+                                    }
+                                    MailProcess sender = new MailProcess();
+                                    EmailData mailData = new EmailData()
+                                    {
+                                        To = vm.Email,
+                                        Subject = subject,
+                                        Attachment = new FileInfo(Server.MapPath("~/Files/" + vm.FileName))
+                                    };
+                                    exeResult = sender.SendEmail(mailData);
+                                }
+                                if (!string.IsNullOrEmpty(exeResult))
+                                    log.Save("轉出", userInfo.Name, vm.CustomerName, vm.Format, vm.DataDestination, vm.Email, vm.FTPServerIP, vm.FileName, "失敗", exeResult);
+                                else
+                                    log.Save("轉出", userInfo.Name, vm.CustomerName, vm.Format, vm.DataDestination, vm.Email, vm.FTPServerIP, vm.FileName, "成功", "");
                             }
                         }
                     }
@@ -271,22 +318,71 @@ namespace DataTransferWeb.Controllers
                                 Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(sqlSetting.SQLStatement.Replace("\r\n", ""), null, vm.Columns);
                                 if (!result.Item1)
                                 {
-                                    log.Save("轉出", userInfo.Name, vm.CustomerName, vm.Format, vm.DataDestination, vm.DestinationPath, vm.FileName, "失敗", result.Item3);
+                                    log.Save("轉出", userInfo.Name, vm.CustomerName, vm.Format, vm.DataDestination, vm.Email, vm.FTPServerIP, vm.FileName, "失敗", result.Item3);
                                     return View("Index", vm);
                                 }
                                 vm.SQLResultDataRow = result.Item2;
-                                HSSFWorkbook book = Func.GenerateExcel(result.Item2, mapping);
+                                HSSFWorkbook book = ExcelProcess.GenerateExcel(result.Item2, mapping);
 
-                                MemoryStream ms = new MemoryStream();
-                                book.Write(ms);
-                                Response.AddHeader("Content-Disposition", string.Format("attachment; filename={0}", HttpUtility.UrlEncode(vm.FileName)));
-                                Response.BinaryWrite(ms.ToArray());
-                                Response.End();
-                                book = null;
-                                ms.Close();
-                                ms.Dispose();
+                                if (vm.DataDestination.Equals("Download", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    MemoryStream ms = new MemoryStream();
+                                    book.Write(ms);
+                                    Response.AddHeader("Content-Disposition", string.Format("attachment; filename={0}", HttpUtility.UrlEncode(vm.FileName)));
+                                    Response.BinaryWrite(ms.ToArray());
+                                    Response.End();
+                                    book = null;
+                                    ms.Close();
+                                    ms.Dispose();
+                                }
+                                else if (vm.DataDestination.Equals("FTP", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    FileStream file = new FileStream(Server.MapPath("~/Files/" + vm.FileName), FileMode.Create);//產生檔案
+                                    book.Write(file);
+                                    file.Close();
 
-                                log.Save("轉出", userInfo.Name, vm.CustomerName, vm.Format, vm.DataDestination, vm.DestinationPath, vm.FileName, "成功", "");
+                                    FTPData ftpData = new FTPData()
+                                    {
+                                        FTPServerIP = vm.FTPServerIP,
+                                        Port = vm.FTPPort ?? 21,
+                                        UserName = vm.FTPUserName,
+                                        Password = vm.FTPPassword,
+                                        file = new FileInfo(Server.MapPath("~/Files/" + vm.FileName))
+                                    };
+                                    if (vm.FTPPort == 22)
+                                    {
+                                        SFtpProcess uploader = new SFtpProcess(ftpData);
+                                        exeResult = uploader.Put(ftpData.file, ftpData.DirName);
+                                    }
+                                    else
+                                    {
+                                        FtpProcess uploader = new FtpProcess();
+                                        exeResult = uploader.Upload(ftpData);
+                                    }
+                                }
+                                else if (vm.DataDestination.Equals("EMail", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    FileStream file = new FileStream(Server.MapPath("~/Files/" + vm.FileName), FileMode.Create);//產生檔案
+                                    book.Write(file);
+                                    file.Close();
+                                    string subject = string.Empty;
+                                    using (bscodeRepository bscode = new bscodeRepository())
+                                    {
+                                        subject = bscode.getSubject(sqlSetting.SQLType);
+                                    }
+                                    MailProcess sender = new MailProcess();
+                                    EmailData mailData = new EmailData()
+                                    {
+                                        To = vm.Email,
+                                        Subject = subject,
+                                        Attachment = new FileInfo(Server.MapPath("~/Files/" + vm.FileName))
+                                    };
+                                    exeResult = sender.SendEmail(mailData);
+                                }
+                                if (!string.IsNullOrEmpty(exeResult))
+                                    log.Save("轉出", userInfo.Name, vm.CustomerName, vm.Format, vm.DataDestination, vm.Email, vm.FTPServerIP, vm.FileName, "失敗", exeResult);
+                                else
+                                    log.Save("轉出", userInfo.Name, vm.CustomerName, vm.Format, vm.DataDestination, vm.Email, vm.FTPServerIP, vm.FileName, "成功", "");
                             }
                         }
                     }
@@ -295,21 +391,38 @@ namespace DataTransferWeb.Controllers
             }
             catch (Exception ex)
             {
-                log.Save("轉出", userInfo.Name, vm.CustomerName, vm.Format, vm.DataDestination, vm.DestinationPath, vm.FileName, "失敗", ex.Message.Replace("\r\n", ""));
+                exeResult = ex.Message.Replace("\r\n", "");
+                log.Save("轉出", userInfo.Name, vm.CustomerName, vm.Format, vm.DataDestination, vm.Email, vm.FTPServerIP, vm.FileName, "失敗", exeResult);
             }
+
+            if (!string.IsNullOrEmpty(exeResult))
+                ViewBag.ExeResult = exeResult;
+            else
+                ViewBag.ExeResult = "操作完成";
             return View("Index", vm);
         }
 
         bool canGenerate(QueryVM vm)
         {
             string msg = string.Empty;
-            if (string.IsNullOrEmpty(vm.CustomerName)) msg += "請輸入 Customer Name\r\n";
-            if (string.IsNullOrEmpty(vm.Format)) msg += "請選擇 Format\r\n";
-            if (string.IsNullOrEmpty(vm.SettingName)) msg += "請選擇 XML/Excel Name\r\n";
-            if (string.IsNullOrEmpty(vm.DataDestination)) msg += "請選擇 Data Destination\r\n";
-            if (string.IsNullOrEmpty(vm.FileName)) msg += "請輸入 File Name\r\n";
+            if (string.IsNullOrEmpty(vm.CustomerName)) msg += "請輸入 Customer Name" + Environment.NewLine;
+            if (string.IsNullOrEmpty(vm.Format)) msg += "請選擇 Format" + Environment.NewLine;
+            if (string.IsNullOrEmpty(vm.SettingName)) msg += "請選擇 XML/Excel Name" + Environment.NewLine;
+            if (string.IsNullOrEmpty(vm.DataDestination))
+                msg += "請選擇 Data Destination" + Environment.NewLine;
+            else if (vm.DataDestination.Equals("FTP"))
+            {
+                if (string.IsNullOrEmpty(vm.FTPServerIP)) msg += "請輸入 FTP Server" + Environment.NewLine;
+                if (string.IsNullOrEmpty(vm.FTPUserName)) msg += "請輸入 User Name" + Environment.NewLine;
+                if (string.IsNullOrEmpty(vm.FTPPassword)) msg += "請輸入 Password" + Environment.NewLine;
+            }
+            else if (vm.DataDestination.Equals("EMail"))
+            {
+                if (string.IsNullOrEmpty(vm.Email)) msg += "請輸入 Email" + Environment.NewLine;
+            }
+            if (string.IsNullOrEmpty(vm.FileName)) msg += "請輸入 File Name" + Environment.NewLine;
 
-            ViewBag.GenerateMsg = msg;
+            ViewBag.ExeResult = msg;
             if (string.IsNullOrEmpty(msg))
                 return true;
             else

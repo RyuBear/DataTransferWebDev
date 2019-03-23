@@ -61,8 +61,8 @@ namespace DataTransferWeb.Controllers
             using (tblSQLColumnsRepository rep = new tblSQLColumnsRepository())
             {
                 model.UnsetColumns = rep.getAllColumns(model.SQLName).ToList();
-                var options = new StringBuilder();
-                options.AppendFormat("<option value='{0}'>{1}</option>", "", "-Please Select-");
+                //var options = new StringBuilder();
+                //options.AppendFormat("<option value='{0}'>{1}</option>", "", "-Please Select-");
 
                 using (tblXMLSettingRepository setRep = new tblXMLSettingRepository())
                 using (tblXMLMappingRepository xmlRep = new tblXMLMappingRepository())
@@ -75,7 +75,7 @@ namespace DataTransferWeb.Controllers
                     model.CustomerName = setting.CustomerName;
                     model.FileName = setting.FileName;
                     model.FileNameDateFormat = setting.FileNameDateFormat;
-                    model.UserID = setting.UserId;
+                    model.UserID = (string.IsNullOrEmpty(setting.UserId)) ? "" : setting.UserId.Substring(1, setting.UserId.Length - 2);
 
                     foreach (var m in mapping)
                     {
@@ -401,7 +401,7 @@ namespace DataTransferWeb.Controllers
                         Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(sql);
                         DataTable dt = result.Item2;
 
-                        XmlDocument xmlDoc = Func.GenerateXML(dt, xmlMappings);
+                        XmlDocument xmlDoc = XmlProcess.GenerateXML(dt, xmlMappings);
 
                         //XmlDocument xmlDoc = new XmlDocument();
                         ////根節點 只有1個

@@ -19,6 +19,10 @@
         <AssociationConnector Association="TransferDBModel.FK_tblXMLMapping_tblXMLSetting" />
         <AssociationConnector Association="TransferDBModel.FK_tblXMLSetting_tblSQLSetting" />
         <EntityTypeShape EntityType="TransferDBModel.tblLog" Width="1.5" PointX="5.375" PointY="3.75" />
+        <EntityTypeShape EntityType="TransferDBModel.tblSMTP" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="TransferDBModel.bscode" Width="1.5" PointX="7.375" PointY="3.75" />
+        <EntityTypeShape EntityType="TransferDBModel.bscode_kind" Width="1.5" PointX="5.375" PointY="8.75" />
+        <AssociationConnector Association="TransferDBModel.FK_bscode_bscode" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

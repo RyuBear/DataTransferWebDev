@@ -39,8 +39,24 @@ namespace DataTransferWeb.ViewModels
 
         [Display(Name = "Data Destination")]
         public string DataDestination { get; set; }
+
+        #region FTP SET
+        [Display(Name = "FTP Server")]
+        public string FTPServerIP { get; set; }
+        [Display(Name = "Port")]
+        public int? FTPPort { get; set; }
+
+        [Display(Name = "User Name")]
+        public string FTPUserName { get; set; }
         
-        public string DestinationPath { get; set; }
+        [Display(Name = "Password")]
+        public string FTPPassword{ get; set; }
+        #endregion
+
+        #region Email SET
+        [Display(Name = "E-Mail")]
+        public string Email { get; set; }
+        #endregion
 
         [Display(Name = "SQL Result Data Row")]
         public DataTable SQLResultDataRow { get; set; }

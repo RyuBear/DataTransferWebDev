@@ -85,12 +85,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="bscode.cs">
+      <DependentUpon>TransferDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="bscode_kind.cs">
+      <DependentUpon>TransferDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ColumnData.cs" />
     <Compile Include="PasswordUtility.cs" />
     <Compile Include="Repository\DataAccess.cs" />
     <Compile Include="Interface\IRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\EFGenericRepository.cs" />
+    <Compile Include="Repository\bscodeRepository.cs" />
+    <Compile Include="Repository\tblSMTPRepository.cs" />
     <Compile Include="Repository\tblLogRepository.cs" />
     <Compile Include="Repository\tblExcelSettingRepository.cs" />
     <Compile Include="Repository\tblExcelMappingRepository.cs" />
@@ -112,6 +120,9 @@
       <DependentUpon>TransferDB.tt</DependentUpon>
     </Compile>
     <Compile Include="tblLog.cs">
+      <DependentUpon>TransferDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblSMTP.cs">
       <DependentUpon>TransferDB.tt</DependentUpon>
     </Compile>
     <Compile Include="tblSQLColumns.cs">

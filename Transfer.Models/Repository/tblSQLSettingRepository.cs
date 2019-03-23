@@ -116,7 +116,7 @@ namespace Transfer.Models.Repository
                 if (this.ExecuteNonQuery(_sql, ps))
                     return "ok";
                 else
-                    return "刪除失敗(已有 XML/Excel設定指定該SQL";
+                    return "刪除失敗(已有 XML/Excel設定指定該SQL)";
             }
             catch (Exception ex)
             {
