@@ -352,7 +352,7 @@
         $("#FieldName").val('');
         $("#DefaultValue").val('');
         $("#FatherTag").val('');
-        $("#CanRepeat").val('');
+        document.getElementById('CanRepeat').checked = false;
     }
 
     function save() {
@@ -410,5 +410,7 @@
 
         if (AllowRepeat)
             document.getElementById('CanRepeat').checked = true;
+        else
+            document.getElementById('CanRepeat').checked = false;
     }
 </script>

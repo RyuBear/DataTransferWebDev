@@ -55,6 +55,7 @@
           <Property Name="SheetName" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="X" Type="int" Nullable="false" />
           <Property Name="NewLineChar" Type="nvarchar" MaxLength="2" />
+          <Property Name="CanRepeat" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="tblExcelSetting">
           <Key>
@@ -294,13 +295,8 @@
           </AssociationSet>
           <EntitySet Name="tblAdmin" EntityType="TransferDBModel.tblAdmin" />
           <EntitySet Name="tblXMLMapping" EntityType="TransferDBModel.tblXMLMapping" />
-          <EntitySet Name="tblExcelMapping" EntityType="TransferDBModel.tblExcelMapping" />
           <EntitySet Name="tblExcelSetting" EntityType="TransferDBModel.tblExcelSetting" />
           <EntitySet Name="tblXMLSetting" EntityType="TransferDBModel.tblXMLSetting" />
-          <AssociationSet Name="FK_tblExcelMapping_tblExcelSetting" Association="TransferDBModel.FK_tblExcelMapping_tblExcelSetting">
-            <End Role="tblExcelSetting" EntitySet="tblExcelSetting" />
-            <End Role="tblExcelMapping" EntitySet="tblExcelMapping" />
-          </AssociationSet>
           <AssociationSet Name="FK_tblExcelSetting_tblSQLSetting" Association="TransferDBModel.FK_tblExcelSetting_tblSQLSetting">
             <End Role="tblSQLSetting" EntitySet="tblSQLSetting" />
             <End Role="tblExcelSetting" EntitySet="tblExcelSetting" />
@@ -320,6 +316,11 @@
           <AssociationSet Name="FK_bscode_bscode" Association="TransferDBModel.FK_bscode_bscode">
             <End Role="bscode" EntitySet="bscode" />
             <End Role="bscode1" EntitySet="bscode" />
+          </AssociationSet>
+          <EntitySet Name="tblExcelMapping" EntityType="TransferDBModel.tblExcelMapping" />
+          <AssociationSet Name="FK_tblExcelMapping_tblExcelSetting" Association="TransferDBModel.FK_tblExcelMapping_tblExcelSetting">
+            <End Role="tblExcelSetting" EntitySet="tblExcelSetting" />
+            <End Role="tblExcelMapping" EntitySet="tblExcelMapping" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="tblSQLColumns">
@@ -400,21 +401,6 @@
           <Property Name="Updator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tblXMLSetting" Relationship="TransferDBModel.FK_tblXMLMapping_tblXMLSetting" FromRole="tblXMLMapping" ToRole="tblXMLSetting" />
         </EntityType>
-        <EntityType Name="tblExcelMapping">
-          <Key>
-            <PropertyRef Name="ExcelName" />
-            <PropertyRef Name="ColumnName" />
-          </Key>
-          <Property Name="ExcelName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ColumnName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="FieldName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DefaultValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DataType" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="SheetName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="X" Type="Int32" Nullable="false" />
-          <Property Name="NewLineChar" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="tblExcelSetting" Relationship="TransferDBModel.FK_tblExcelMapping_tblExcelSetting" FromRole="tblExcelMapping" ToRole="tblExcelSetting" />
-        </EntityType>
         <EntityType Name="tblExcelSetting">
           <Key>
             <PropertyRef Name="ExcelName" />
@@ -428,9 +414,9 @@
           <Property Name="Creator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
           <Property Name="Updator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="tblExcelMapping" Relationship="TransferDBModel.FK_tblExcelMapping_tblExcelSetting" FromRole="tblExcelSetting" ToRole="tblExcelMapping" />
           <NavigationProperty Name="tblSQLSetting" Relationship="TransferDBModel.FK_tblExcelSetting_tblSQLSetting" FromRole="tblExcelSetting" ToRole="tblSQLSetting" />
           <Property Name="UserId" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblExcelMapping" Relationship="TransferDBModel.FK_tblExcelMapping_tblExcelSetting" FromRole="tblExcelSetting" ToRole="tblExcelMapping" />
         </EntityType>
         <EntityType Name="tblXMLSetting">
           <Key>
@@ -450,18 +436,6 @@
           <NavigationProperty Name="tblXMLSetting2" Relationship="TransferDBModel.FK_tblXMLSetting_tblSQLSetting" FromRole="tblXMLSetting1" ToRole="tblXMLSetting" />
           <Property Name="UserId" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
-        <Association Name="FK_tblExcelMapping_tblExcelSetting">
-          <End Type="TransferDBModel.tblExcelSetting" Role="tblExcelSetting" Multiplicity="1" />
-          <End Type="TransferDBModel.tblExcelMapping" Role="tblExcelMapping" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblExcelSetting">
-              <PropertyRef Name="ExcelName" />
-            </Principal>
-            <Dependent Role="tblExcelMapping">
-              <PropertyRef Name="ExcelName" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_tblExcelSetting_tblSQLSetting">
           <End Type="TransferDBModel.tblSQLSetting" Role="tblSQLSetting" Multiplicity="1" />
           <End Type="TransferDBModel.tblExcelSetting" Role="tblExcelSetting" Multiplicity="*" />
@@ -567,6 +541,34 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="tblExcelMapping">
+          <Key>
+            <PropertyRef Name="ExcelName" />
+            <PropertyRef Name="ColumnName" />
+          </Key>
+          <Property Name="ExcelName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ColumnName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="FieldName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DefaultValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DataType" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="SheetName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="X" Type="Int32" Nullable="false" />
+          <Property Name="NewLineChar" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="CanRepeat" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="tblExcelSetting" Relationship="TransferDBModel.FK_tblExcelMapping_tblExcelSetting" FromRole="tblExcelMapping" ToRole="tblExcelSetting" />
+        </EntityType>
+        <Association Name="FK_tblExcelMapping_tblExcelSetting">
+          <End Type="TransferDBModel.tblExcelSetting" Role="tblExcelSetting" Multiplicity="1" />
+          <End Type="TransferDBModel.tblExcelMapping" Role="tblExcelMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblExcelSetting">
+              <PropertyRef Name="ExcelName" />
+            </Principal>
+            <Dependent Role="tblExcelMapping">
+              <PropertyRef Name="ExcelName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -620,20 +622,6 @@
                 <ScalarProperty Name="FieldName" ColumnName="FieldName" />
                 <ScalarProperty Name="TagName" ColumnName="TagName" />
                 <ScalarProperty Name="XMLName" ColumnName="XMLName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblExcelMapping">
-            <EntityTypeMapping TypeName="TransferDBModel.tblExcelMapping">
-              <MappingFragment StoreEntitySet="tblExcelMapping">
-                <ScalarProperty Name="NewLineChar" ColumnName="NewLineChar" />
-                <ScalarProperty Name="X" ColumnName="X" />
-                <ScalarProperty Name="SheetName" ColumnName="SheetName" />
-                <ScalarProperty Name="DataType" ColumnName="DataType" />
-                <ScalarProperty Name="DefaultValue" ColumnName="DefaultValue" />
-                <ScalarProperty Name="FieldName" ColumnName="FieldName" />
-                <ScalarProperty Name="ColumnName" ColumnName="ColumnName" />
-                <ScalarProperty Name="ExcelName" ColumnName="ExcelName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -725,6 +713,21 @@
                 <ScalarProperty Name="cd_descp" ColumnName="cd_descp" />
                 <ScalarProperty Name="cd_type" ColumnName="cd_type" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblExcelMapping">
+            <EntityTypeMapping TypeName="TransferDBModel.tblExcelMapping">
+              <MappingFragment StoreEntitySet="tblExcelMapping">
+                <ScalarProperty Name="CanRepeat" ColumnName="CanRepeat" />
+                <ScalarProperty Name="NewLineChar" ColumnName="NewLineChar" />
+                <ScalarProperty Name="X" ColumnName="X" />
+                <ScalarProperty Name="SheetName" ColumnName="SheetName" />
+                <ScalarProperty Name="DataType" ColumnName="DataType" />
+                <ScalarProperty Name="DefaultValue" ColumnName="DefaultValue" />
+                <ScalarProperty Name="FieldName" ColumnName="FieldName" />
+                <ScalarProperty Name="ColumnName" ColumnName="ColumnName" />
+                <ScalarProperty Name="ExcelName" ColumnName="ExcelName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

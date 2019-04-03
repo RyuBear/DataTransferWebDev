@@ -31,8 +31,8 @@ namespace Transfer.Models
         public string Updator { get; set; }
         public string UserId { get; set; }
     
+        public virtual tblSQLSetting tblSQLSetting { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblExcelMapping> tblExcelMapping { get; set; }
-        public virtual tblSQLSetting tblSQLSetting { get; set; }
     }
 }

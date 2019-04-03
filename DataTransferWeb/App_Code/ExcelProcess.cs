@@ -110,8 +110,8 @@ namespace DataTransferWeb
                             cell.CellStyle = dataStyle;
                             SetCellValue(ref cell, Columns[i].DataType, value);
                         }
-                        // 判斷是否和上筆資料一致，是的話合併儲存格
-                        else if (row == 0 || (dt.Rows[row][Columns[i].FieldName].ToString() != dt.Rows[row - 1][Columns[i].FieldName].ToString()))
+                        // 判斷是否和上筆資料一致
+                        else if (row == 0 || !Columns[i].CanRepeat || (dt.Rows[row][Columns[i].FieldName].ToString() != dt.Rows[row - 1][Columns[i].FieldName].ToString()))
                         {
                             if (fixRow > 0)
                                 sheet.AddMergedRegion(new CellRangeAddress(fixRow, row, i, i));
@@ -121,6 +121,7 @@ namespace DataTransferWeb
                             SetCellValue(ref cell, Columns[i].DataType, value);
                             fixRow = -1;
                         }
+                        // 是的話合併儲存格
                         else if (fixRow < 0)
                         {
                             fixRow = row;

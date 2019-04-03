@@ -15,6 +15,7 @@
                 <th>Sheet</th>
                 <th>X</th>
                 <th>New Line Char</th>
+                <th>Repeat Show</th>
             </tr>
         </thead>
         <tbody>
@@ -22,7 +23,7 @@
             {
                 foreach (var m in Model.ExcelMappingDataRow)
                 {
-                    <tr style="word-break:break-word;" onclick="load('@m.ColumnName', '@m.FieldName', '@m.DefaultValue', '@m.DataType', '@m.SheetName', '@m.X', '@m.NewLineChar');">
+                    <tr style="word-break:break-word;" onclick="load('@m.ColumnName', '@m.FieldName', '@m.DefaultValue', '@m.DataType', '@m.SheetName', '@m.X', '@m.NewLineChar', @m.CanRepeat);">
                         <td style="word-wrap: break-word;">
                             @m.ColumnName
                         </td>
@@ -32,6 +33,7 @@
                         <td>@m.SheetName</td>
                         <td>@m.X</td>
                         <td>@m.NewLineChar</td>
+                        <td>@m.CanRepeat</td>
                     </tr>
                 }
             }

@@ -22,6 +22,7 @@ namespace Transfer.Models
         public string SheetName { get; set; }
         public int X { get; set; }
         public string NewLineChar { get; set; }
+        public bool CanRepeat { get; set; }
     
         public virtual tblExcelSetting tblExcelSetting { get; set; }
     }

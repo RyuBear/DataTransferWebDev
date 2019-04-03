@@ -88,7 +88,8 @@ namespace DataTransferWeb.Controllers
                             DataType = m.DataType,
                             SheetName = m.SheetName,
                             X = m.X,
-                            NewLineChar = m.NewLineChar
+                            NewLineChar = m.NewLineChar,
+                            CanRepeat = m.CanRepeat
                         });
                     }
 
@@ -196,6 +197,7 @@ namespace DataTransferWeb.Controllers
                 X = vm.X,
                 DataType = vm.DataType.GetDescription(),
                 NewLineChar = vm.NewLineChar,
+                CanRepeat = vm.CanRepeat
             };
             ExcelMappings.Add(mapping);
             Cache.SetLimitedCache("ExcelMappings", ExcelMappings);

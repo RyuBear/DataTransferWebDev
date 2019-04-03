@@ -29,12 +29,12 @@ namespace Transfer.Models
         public virtual DbSet<tblSQLSetting> tblSQLSetting { get; set; }
         public virtual DbSet<tblAdmin> tblAdmin { get; set; }
         public virtual DbSet<tblXMLMapping> tblXMLMapping { get; set; }
-        public virtual DbSet<tblExcelMapping> tblExcelMapping { get; set; }
         public virtual DbSet<tblExcelSetting> tblExcelSetting { get; set; }
         public virtual DbSet<tblXMLSetting> tblXMLSetting { get; set; }
         public virtual DbSet<tblLog> tblLog { get; set; }
         public virtual DbSet<tblSMTP> tblSMTP { get; set; }
         public virtual DbSet<bscode> bscode { get; set; }
         public virtual DbSet<bscode_kind> bscode_kind { get; set; }
+        public virtual DbSet<tblExcelMapping> tblExcelMapping { get; set; }
     }
 }

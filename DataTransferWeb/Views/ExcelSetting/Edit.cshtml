@@ -40,14 +40,21 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row">
-                            <div class="col-lg-2 col-md-2">
+                            <div class="col-lg-1 col-md-1">
                                 @Html.LabelFor(x => x.SQLName)
                             </div>
-                            <div class="col-lg-7 col-md-7">
+                            <div class="col-lg-3 col-md-3">
                                 @Html.DropDownListFor(x => x.SQLName, DropDownListMenu.SQLNameOption(), new { @class = "form-control", @style = "font-weight:normal;" })
                             </div>
                             <div class="col-lg-1 col-md-1">
                                 <input type="button" id="btnOK" class="btn btn-success" value="OK" onclick="return selectSQL();" />
+                            </div>
+
+                            <div class="col-lg-offset-2 col-md-offset-2 col-lg-2 col-md-2">
+                                <input type="button" id="btnAdd" class="btn btn-primary" value="Add" onclick="add();" />
+                            </div>
+                            <div class="col-lg-offset-1 col-md-offset-1 col-lg-2 col-md-2">
+                                <input type="button" id="btnDelete" class="btn btn-primary" value="Del" onclick="del();" />
                             </div>
                         </div>
 
@@ -115,10 +122,16 @@
                             </div>
 
                             <div class="col-lg-offset-1 col-md-offset-1 col-lg-2 col-md-2">
-                                <input type="button" id="btnAdd" class="btn btn-primary" value="Add" onclick="add();" />
+                                @Html.LabelFor(x => x.CanRepeat)
                             </div>
-                            <div class="col-lg-offset-1 col-md-offset-1 col-lg-2 col-md-2">
-                                <input type="button" id="btnDelete" class="btn btn-primary" value="Del" onclick="del();" />
+                            <div class="col-lg-3 col-md-3">
+                                <label>
+                                    <input type="checkbox" name="CanRepeat" id="CanRepeat" value="true" />Allow Repeat
+                                </label>
+                               @*<select id="CanRepeat" name="CanRepeat" class="form-control">
+                                   <option value="true">Y</option>
+                                   <option value="false" selected>N</option>
+                               </select>*@
                             </div>
                         </div>
                     </div>
@@ -223,7 +236,8 @@
         var SheetName = $("#SheetName").val();
         var X = $("#X").val();
         var DataType = $("#DataType").val();
-        var NewLineChar = $("#NewLineChar").val();
+        var NewLineChar = $("#NewLineChar").val();        
+        var CanRepeat = $("#CanRepeat").val();
 
         var msg = '';
         if (SQLName.trim() == '') msg += '請選擇 SQL Name\r\n';
@@ -244,7 +258,8 @@
                 SheetName: SheetName,
                 X: X,
                 DataType: DataType,
-                NewLineChar: NewLineChar
+                NewLineChar: NewLineChar,
+                CanRepeat: CanRepeat
             });
 
             $.ajax({
@@ -316,7 +331,9 @@
         $("#SheetName").val('');
         $("#X").val('');
         $("#NewLineChar").val('');
+        $("#NewLineChar").val('');
         $("#DataType").val('');
+        document.getElementById('CanRepeat').checked = false;
     }
 
     function save() {
@@ -356,7 +373,7 @@
         }
     }
 
-    function load(ColumnName, FieldName, DefaultValue, DataType, SheetName, X, NewLineChar) {
+    function load(ColumnName, FieldName, DefaultValue, DataType, SheetName, X, NewLineChar, CanRepeat) {
         var selectItems = $("#FieldName").html();
         selectItems += "<option value='" + FieldName + "'>" + FieldName + "</option>";
         $("#FieldName").html(selectItems);
@@ -369,5 +386,10 @@
         $("#SheetName").val(SheetName);
         $("#X").val(X);
         $("#NewLineChar").val(NewLineChar);
+
+        if (CanRepeat)
+            document.getElementById('CanRepeat').checked = true;
+        else
+            document.getElementById('CanRepeat').checked = false;
     }
 </script>
