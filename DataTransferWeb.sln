@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTransferWeb", "DataTran
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transfer.Models", "Transfer.Models\Transfer.Models.csproj", "{DF16FC21-485D-4B6F-871C-99EE8D129EED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduleProcess", "ScheduleProcess\ScheduleProcess.csproj", "{C17902F9-2D3E-4BCF-94F9-EBCCA4B53E2A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{DF16FC21-485D-4B6F-871C-99EE8D129EED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF16FC21-485D-4B6F-871C-99EE8D129EED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF16FC21-485D-4B6F-871C-99EE8D129EED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C17902F9-2D3E-4BCF-94F9-EBCCA4B53E2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C17902F9-2D3E-4BCF-94F9-EBCCA4B53E2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C17902F9-2D3E-4BCF-94F9-EBCCA4B53E2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C17902F9-2D3E-4BCF-94F9-EBCCA4B53E2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

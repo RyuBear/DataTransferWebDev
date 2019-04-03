@@ -176,10 +176,13 @@ namespace Transfer.Models.Repository
 
             #region 整理 SQL 語句
             StringBuilder strCon = new StringBuilder();
-            foreach (var c in columns)
+            if (columns != null)
             {
-                if (!string.IsNullOrEmpty(c.Value))
-                    strCon.AppendFormat(" and " + c.ColumnName + c.Comparison + "@" + c.ColumnName);
+                foreach (var c in columns)
+                {
+                    if (!string.IsNullOrEmpty(c.Value))
+                        strCon.AppendFormat(" and " + c.ColumnName + c.Comparison + "@" + c.ColumnName);
+                }
             }
             if (!string.IsNullOrEmpty(strCon.ToString()))
             {
@@ -203,11 +206,14 @@ namespace Transfer.Models.Repository
             {
                 if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentException("參數為空值", "sqlCommand");
                 cmd.Parameters.Clear();
-                foreach (var c in columns)
+                if (columns != null)
                 {
-                    if (!string.IsNullOrEmpty(c.Value))
+                    foreach (var c in columns)
                     {
-                        cmd.Parameters.Add(new SqlParameter { ParameterName = c.ColumnName, Value = c.Value.ToSqlType() });
+                        if (!string.IsNullOrEmpty(c.Value))
+                        {
+                            cmd.Parameters.Add(new SqlParameter { ParameterName = c.ColumnName, Value = c.Value.ToSqlType() });
+                        }
                     }
                 }
                 cmd.CommandText = sql;

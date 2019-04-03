@@ -26,13 +26,11 @@ namespace Transfer.Models.Repository
                 return true;
         }
 
-
         public tblSchedule get(string ScheduleName)
         {
             tblSchedule s = this.Get(x => x.ScheduleName.Equals(ScheduleName, StringComparison.OrdinalIgnoreCase));
             return s;
         }
-
 
         public IEnumerable<tblSchedule> get(string ScheduleName, string CustomerName, string Format)
         {
@@ -88,6 +86,50 @@ namespace Transfer.Models.Repository
             catch (Exception ex)
             {
                 return ex.Message;
+            }
+        }
+
+
+        /// <summary>
+        /// 取得 DATE Schedule 清單
+        /// </summary>
+        /// <returns></returns>
+        public List<tblSchedule> GetDateSchedule(DateTime Now)
+        {
+            try
+            {
+                List<tblSchedule> schedules = this.GetSome(x => x.ModeType.Equals("EXPORT", StringComparison.OrdinalIgnoreCase) && x.WorkType.Equals("1", StringComparison.OrdinalIgnoreCase)).ToList();
+                var list = from s in schedules
+                           where (string.IsNullOrEmpty(s.Month) || s.Month.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().Contains(Now.Month.ToString()))
+                               && s.Date.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().Contains(Now.Day.ToString())
+                           select s;
+                return list.ToList();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 取得 DAY Schedule 清單
+        /// </summary>
+        /// <returns></returns>
+        public List<tblSchedule> GetDaySchedule(DateTime Now)
+        {
+            try
+            {
+                List<tblSchedule> schedules = this.GetSome(x => x.ModeType.Equals("EXPORT", StringComparison.OrdinalIgnoreCase) && x.WorkType.Equals("2", StringComparison.OrdinalIgnoreCase)).ToList();
+                var list = from s in schedules
+                           where (string.IsNullOrEmpty(s.Day) || s.Day.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().Contains(((int)Now.DayOfWeek).ToString()))
+                               && (string.IsNullOrEmpty(s.Hour) || s.Hour.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().Contains(Now.Hour.ToString()))
+                               && s.Min.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().Contains(Now.Minute.ToString())
+                           select s;
+                return list.ToList();
+            }
+            catch (Exception ex)
+            {
+                return null;
             }
         }
     }
