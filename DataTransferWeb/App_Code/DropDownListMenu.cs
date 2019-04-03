@@ -260,4 +260,27 @@ public static class DropDownListMenu
         }
         return items;
     }
+
+    /// <summary>
+    /// Data Destination 選單
+    /// </summary>
+    /// <returns></returns>
+    public static IEnumerable<SelectListItem> ModeTypeOption(string selected = "")
+    {
+        string[] Comparisons = new string[] { "EXPORT", "IMPORT" };
+
+        var items = new List<SelectListItem>();
+        foreach (var c in Comparisons)
+        {
+            items.Add(item: new SelectListItem()
+            {
+                Value = c,
+                Text = c,
+                Selected = (string.IsNullOrEmpty(selected))
+                    ? false
+                    : selected.Equals(c, StringComparison.OrdinalIgnoreCase)
+            });
+        }
+        return items;
+    }
 }

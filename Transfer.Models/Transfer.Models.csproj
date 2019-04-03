@@ -102,6 +102,7 @@
     <Compile Include="Repository\tblLogRepository.cs" />
     <Compile Include="Repository\tblExcelSettingRepository.cs" />
     <Compile Include="Repository\tblExcelMappingRepository.cs" />
+    <Compile Include="Repository\tblScheduleRepository.cs" />
     <Compile Include="Repository\tblXMLSettingRepository.cs" />
     <Compile Include="Repository\tblXMLMappingRepository.cs" />
     <Compile Include="Repository\tblSQLColumnsRepository.cs" />
@@ -120,6 +121,9 @@
       <DependentUpon>TransferDB.tt</DependentUpon>
     </Compile>
     <Compile Include="tblLog.cs">
+      <DependentUpon>TransferDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblSchedule.cs">
       <DependentUpon>TransferDB.tt</DependentUpon>
     </Compile>
     <Compile Include="tblSMTP.cs">

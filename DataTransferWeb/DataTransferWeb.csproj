@@ -265,6 +265,7 @@
     <Compile Include="Controllers\SQLSettingController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ExcelSettingController.cs" />
+    <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Controllers\XMLSettingController.cs" />
     <Compile Include="Entities\TransferDB.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -283,7 +284,9 @@
     <Compile Include="Models\UserData.cs" />
     <Compile Include="ViewModels\LogListVM.cs" />
     <Compile Include="ViewModels\ExcelSettingListVM.cs" />
+    <Compile Include="ViewModels\ScheduleVM.cs" />
     <Compile Include="ViewModels\SQLSettingListVM.cs" />
+    <Compile Include="ViewModels\ScheduleListVM.cs" />
     <Compile Include="ViewModels\XMLSettingListVM.cs" />
     <Compile Include="ViewModels\ExcelSettingVM.cs" />
     <Compile Include="ViewModels\QueryVM.cs" />
@@ -739,6 +742,8 @@
     <Content Include="Views\Query\_DataRow.cshtml" />
     <Content Include="Views\Log\Index.cshtml" />
     <Content Include="Views\Log\_LogRow.cshtml" />
+    <Content Include="Views\Schedule\Index.cshtml" />
+    <Content Include="Views\Schedule\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

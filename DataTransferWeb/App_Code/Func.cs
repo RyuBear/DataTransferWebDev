@@ -267,7 +267,33 @@ namespace DataTransferWeb
             return builder.ToString();
         }
 
-
+        public static Boolean IsNumeric(string strNum, string split, int lower, int upper)
+        {
+            Boolean rtn = true;
+            if (strNum != null)
+            {
+                string[] nums = strNum.Split(new string[] { split }, StringSplitOptions.RemoveEmptyEntries);
+                for (int ii = 0; ii < nums.Length; ii++)
+                {
+                    int num = 0;
+                    bool isNum = int.TryParse(nums[ii], out num);
+                    if (!isNum)
+                    {
+                        rtn = false;
+                        break;
+                    }
+                    else
+                    {
+                        if (num < lower || num > upper)
+                        {
+                            rtn = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            return rtn;
+        }
 
         public static void DelAttachment(FileInfo file)
         {

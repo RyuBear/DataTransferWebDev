@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Transfer.Models.ViewModel;
 using System.Collections.Generic;
-using Transfer.Models.Models;
 using System.Data;
 using System.Data.SqlClient;
 

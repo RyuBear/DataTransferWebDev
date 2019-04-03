@@ -1,0 +1,367 @@
+﻿@model ScheduleVM
+@using Extensions.Enums
+
+@{
+    ViewBag.Title = "轉出/轉入排程設定";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Save", "Schedule", FormMethod.Post, new { Id = "IndexForm" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.ScheduleName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-4">
+                    @Html.HiddenFor(x => x.originScheduleName)
+                    @Html.HiddenFor(x => x.ViewStatus)
+                    @Html.HiddenFor(x => x.UserID)
+                    @Html.TextBoxFor(x => x.ScheduleName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ScheduleName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ModeType, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(x => x.ModeType, DropDownListMenu.ModeTypeOption(Model.ModeType), new { @class = "form-control", @style = "font-weight:normal;", @onchange = "loadDestination();" })
+                        @Html.ValidationMessageFor(model => model.ModeType, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CustomerName, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(x => x.CustomerName, new { @class = "form-control", @onchange = "loadFormat();" })
+                        @Html.ValidationMessageFor(model => model.CustomerName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.WorkType, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        <div class="form-check form-check-inline">
+                            @if (Model.WorkType != null && Model.WorkType.Equals("1"))
+                            {
+                                <input class="form-check-inline" type="radio" name="WorkType" id="WorkTypeDate" value="1" onchange="loadDateDay();" checked>
+                            }
+                            else
+                            {
+                                <input class="form-check-inline" type="radio" name="WorkType" id="WorkTypeDate" value="1" onchange="loadDateDay();">
+                            }
+                            <label class="form-check-label" for="WorkTypeDate">
+                                DATE
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            @if (Model.WorkType != null && Model.WorkType.Equals("2"))
+                            {
+                                <input class="form-check-inline" type="radio" name="WorkType" id="WorkTypeDay" value="2" onchange="loadDateDay();" checked>
+                            }
+                            else
+                            {
+                                <input class="form-check-inline" type="radio" name="WorkType" id="WorkTypeDay" value="2" onchange="loadDateDay();">
+                            }
+                            <label class="form-check-label" for="WorkTypeDay">
+                                DAY
+                            </label>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.WorkType, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div id="dateDiv">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Month, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(x => x.Month, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(x => x.Date, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div id="dayDiv">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Day, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(x => x.Day, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Hour, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(x => x.Hour, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Min, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(x => x.Min, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-4  col-md-8">
+                        <label>
+                            <input type="checkbox" name="Active" id="Active" value="true" class="form-check-inline" />Active
+                            @Html.Hidden("HF_ACTIVE", @Model.Active)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Format, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(x => x.Format, DropDownListMenu.FormatOption(Model.Format), new { @class = "form-control", @style = "font-weight:normal;", @onchange = "loadFormat();" })
+                        @Html.ValidationMessageFor(model => model.Format, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SettingName, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(x => x.SettingName, DropDownListMenu.SettingOption(Model.UserID, Model.CustomerName, Model.Format, Model.SettingName), new { @class = "form-control", @style = "font-weight:normal;" })
+                        @Html.ValidationMessageFor(model => model.SettingName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label id="strDesSource" class="control-label col-md-4">Destination</label>
+                    @Html.HiddenFor(x => x.Destination)
+                    <div class="col-md-8">
+                        <div class="form-check">
+                            <input class="form-check-inline" type="checkbox" name="Destinations" id="Destinations_Path" value="1" onchange="loadPath(this);">
+                            <label class="form-check-label" for="Destinations_Path">Path</label>
+                        </div>
+                        <div id="destDiv">
+                            <div class="form-check">
+                                <input class="form-check-inline" type="checkbox" name="Destinations" id="Destinations_Email" value="2" onchange="loadEmail(this);">
+                                <label class="form-check-label" for="Destinations_Email">EMail</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-inline" type="checkbox" name="Destinations" id="Destinations_Ftp" value="3" onchange="loadFtp(this);">
+                                <label class="form-check-label" for="Destinations_Ftp">FTP</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" id="pathDiv">
+                    @Html.LabelFor(model => model.Path, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(x => x.Path, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group" id="mailDiv">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div id="ftpDiv">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FTPServer, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(x => x.FTPServer, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FTPAccount, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(x => x.FTPAccount, new { @class = "form-control" })
+                        </div>
+                    </div><div class="form-group">
+                        @Html.LabelFor(model => model.FTPPassword, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(x => x.FTPPassword, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-3">
+                    <input type="button" id="btnAdd" class="btn btn-primary btn-block" value="Add" onclick="save();" />
+                </div>
+                <div class="col-md-offset-2 col-md-3">
+                    <input type="button" id="btnDelete" class="btn btn-primary btn-block" value="Del" onclick="del();" />
+                </div>
+            </div>
+            <div class="form-group text-center text-danger">
+                @Html.Raw(Model.SaveResult)
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $(function () {
+        loadDestination();
+        loadDateDay();
+        $("#pathDiv").hide();
+        $("#mailDiv").hide();
+        $("#ftpDiv").hide();
+        var Destination = $("#Destination").val();
+        var active = $("#HF_ACTIVE").val();
+        if (Destination.indexOf("1") >= 0) {
+            document.getElementById('Destinations_Path').checked = true;
+            $("#pathDiv").show();
+        }
+        if (Destination.indexOf("2") >= 0) {
+            document.getElementById('Destinations_Email').checked = true;
+            $("#mailDiv").show();
+        }
+        if (Destination.indexOf("3") >= 0) {
+            document.getElementById('Destinations_Ftp').checked = true;
+            $("#ftpDiv").show();
+        }
+        if (active == 'True') {
+            document.getElementById('Active').checked = true;
+        }
+    });
+    function loadDestination() {
+        var ModeType = $("#ModeType").val();
+        if (ModeType == "IMPORT") {
+            document.getElementById('strDesSource').innerHTML = "Source";
+            $("#mailDiv").hide();
+            $("#ftpDiv").hide();
+            $("#destDiv").hide();
+        }
+        else {
+            document.getElementById('strDesSource').innerHTML = "Destination";
+            $("#mailDiv").show();
+            $("#ftpDiv").show();
+            $("#destDiv").show();
+        }
+    }
+    function loadDateDay() {
+        var WorkType = $("input:radio[name=WorkType]:checked").val();
+        if (WorkType == "1") {
+            $("#dateDiv").show();
+            $("#dayDiv").hide();
+        } else if (WorkType == "2") {
+            $("#dateDiv").hide();
+            $("#dayDiv").show();
+        }
+    }
+    function loadPath(e) {
+        if (e.checked) $("#pathDiv").show();
+        else $("#pathDiv").hide();
+    }
+    function loadEmail(e) {
+        if (e.checked) $("#mailDiv").show();
+        else $("#mailDiv").hide();
+    }
+    function loadFtp(e) {
+        if (e.checked) $("#ftpDiv").show();
+        else $("#ftpDiv").hide();
+    }
+    function loadFormat() {
+        var CustomerName = $("#CustomerName").val();
+        var Format = $("#Format").val();
+        var msg = '';
+        if (CustomerName.trim() == '') msg += '請輸入 Customer Name\r\n';
+        if (Format.trim() == '') msg += '請選擇 Format\r\n';
+
+        if (msg == '') {
+            var param = new Object({
+                CustomerName: CustomerName,
+                Format: Format
+            });
+
+            $.ajax({
+                url: '@Url.Action("AjaxLoadFormat", "Query")',
+                type: "POST",
+                data: param,
+                success: function (result) {
+                    if (result.status == 'ok') {
+                        setOptionList(result);
+                    }
+                    else {
+                        alert(result.status);
+                    }
+                }
+            });
+        }
+    }
+
+    function setOptionList(result) {
+        $("#SettingName").attr("disabled", false);
+        $("#SettingName").html('');
+        $("#SettingName").html(result.Options);
+    }
+
+    function reset() {
+        $("#originScheduleName").val('');
+        $("#ScheduleName").val('');
+        $("#Format").val('');
+        $("#ModeType").val('');
+        $("#CustomerName").val('');
+        $("#SettingName").val('');
+        $("#Month").val('');
+        $("#Date").val('');
+        $("#Day").val('');
+        $("#Hour").val('');
+        $("#Min").val('');
+        $("#Path").val('');
+        $("#Email").val('');
+        $("#FTPServer").val('');
+        $("#FTPAccount").val('');
+        $("#FTPPassword").val('');
+        document.getElementById('WorkType').checked = false;
+        document.getElementById('Destination').checked = false;
+        document.getElementById('Active').checked = false;
+    }
+
+    function save() {
+        var ViewStatus = $('#ViewStatus').val();
+        var ScheduleName = $('#ScheduleName').val();
+        var Format = $('#Format').val();
+        var ModeType = $('#ModeType').val();
+        var CustomerName = $('#CustomerName').val();
+        var SettingName = $('#SettingName').val();
+        var WorkType = $("input:radio[name=WorkType]:checked").val();
+        var UserID = $('#UserID').val();
+
+        var msg = '';
+        if (ScheduleName.trim() == '') msg += '請輸入 Schedule Name!\r\n';
+        if (Format.trim() == '') msg += '請選擇 Format!\r\n';
+        if (CustomerName.trim() == '') msg += '請輸入 Customer Name!\r\n';
+        if (ModeType.trim() == '') msg += '請選擇 Mode Type!';
+        if (SettingName.trim() == '') msg += '請選擇 XML/EXCEL Name!';
+        if (WorkType.trim() == '') msg += '請選擇 WorkType!';
+
+        if (msg != '') {
+            alert(msg);
+        } else {
+            var param = new Object({
+                Name: ScheduleName,
+            });
+            $.ajax(
+            {
+                url: '@Url.Action("AjaxIsExist")',
+                type: "POST",
+                data: param,
+                success: function (result) {
+                    if (ViewStatus != 'E' && result.Exist) {
+                        alert('【' + ScheduleName + '】已存在');
+                    } else {
+                        $("#IndexForm").submit();
+                    }
+                }
+            });
+        }
+    }
+
+    function del() {
+        var originScheduleName = $('#originScheduleName').val();
+        $("#IndexForm").attr("action", '@Url.Action("Delete")/' + id);
+        $("#IndexForm").submit();
+    }
+</script>

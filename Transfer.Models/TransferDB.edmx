@@ -88,6 +88,33 @@
           <Property Name="Status" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Message" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="tblSchedule">
+          <Key>
+            <PropertyRef Name="ScheduleName" />
+          </Key>
+          <Property Name="ScheduleName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ModeType" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Format" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="SettingName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Destination" Type="varchar" MaxLength="10" />
+          <Property Name="Path" Type="nvarchar(max)" />
+          <Property Name="Email" Type="varchar(max)" />
+          <Property Name="FTPServer" Type="nvarchar(max)" />
+          <Property Name="FTPAccount" Type="nvarchar" MaxLength="255" />
+          <Property Name="FTPPassword" Type="nvarchar" MaxLength="255" />
+          <Property Name="WorkType" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="Month" Type="varchar" MaxLength="255" />
+          <Property Name="Date" Type="varchar" MaxLength="255" />
+          <Property Name="Day" Type="varchar" MaxLength="255" />
+          <Property Name="Hour" Type="varchar" MaxLength="255" />
+          <Property Name="Min" Type="varchar" MaxLength="255" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="Creator" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateTime" Type="datetime" />
+          <Property Name="Updator" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="tblSMTP">
           <Key>
             <PropertyRef Name="Email" />
@@ -244,6 +271,7 @@
           <EntitySet Name="tblExcelMapping" EntityType="Self.tblExcelMapping" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblExcelSetting" EntityType="Self.tblExcelSetting" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblLog" EntityType="Self.tblLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblSchedule" EntityType="Self.tblSchedule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblSMTP" EntityType="Self.tblSMTP" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblSQLColumns" EntityType="Self.tblSQLColumns" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblSQLSetting" EntityType="Self.tblSQLSetting" Schema="dbo" store:Type="Tables" />
@@ -322,6 +350,7 @@
             <End Role="tblExcelSetting" EntitySet="tblExcelSetting" />
             <End Role="tblExcelMapping" EntitySet="tblExcelMapping" />
           </AssociationSet>
+          <EntitySet Name="tblSchedule" EntityType="TransferDBModel.tblSchedule" />
           </EntityContainer>
         <EntityType Name="tblSQLColumns">
           <Key>
@@ -569,6 +598,33 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="tblSchedule">
+          <Key>
+            <PropertyRef Name="ScheduleName" />
+          </Key>
+          <Property Name="ScheduleName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModeType" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Format" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CustomerName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SettingName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Destination" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Path" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FTPServer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FTPAccount" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="FTPPassword" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="WorkType" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="Month" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Date" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Day" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Hour" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Min" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Creator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+          <Property Name="Updator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -728,6 +784,34 @@
                 <ScalarProperty Name="FieldName" ColumnName="FieldName" />
                 <ScalarProperty Name="ColumnName" ColumnName="ColumnName" />
                 <ScalarProperty Name="ExcelName" ColumnName="ExcelName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblSchedule">
+            <EntityTypeMapping TypeName="TransferDBModel.tblSchedule">
+              <MappingFragment StoreEntitySet="tblSchedule">
+                <ScalarProperty Name="Updator" ColumnName="Updator" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Min" ColumnName="Min" />
+                <ScalarProperty Name="Hour" ColumnName="Hour" />
+                <ScalarProperty Name="Day" ColumnName="Day" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="WorkType" ColumnName="WorkType" />
+                <ScalarProperty Name="FTPPassword" ColumnName="FTPPassword" />
+                <ScalarProperty Name="FTPAccount" ColumnName="FTPAccount" />
+                <ScalarProperty Name="FTPServer" ColumnName="FTPServer" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="SettingName" ColumnName="SettingName" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="Format" ColumnName="Format" />
+                <ScalarProperty Name="ModeType" ColumnName="ModeType" />
+                <ScalarProperty Name="ScheduleName" ColumnName="ScheduleName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

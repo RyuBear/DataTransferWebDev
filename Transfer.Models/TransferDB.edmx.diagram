@@ -23,6 +23,7 @@
         <AssociationConnector Association="TransferDBModel.FK_bscode_bscode" />
         <EntityTypeShape EntityType="TransferDBModel.tblExcelMapping" Width="1.5" PointX="3" PointY="8.125" />
         <AssociationConnector Association="TransferDBModel.FK_tblExcelMapping_tblExcelSetting" />
+        <EntityTypeShape EntityType="TransferDBModel.tblSchedule" Width="1.5" PointX="7.375" PointY="8.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
