@@ -48,10 +48,6 @@ namespace DataTransferWeb.ViewModels
         [Display(Name = "Repeat Show")]
         public bool CanRepeat { get; set; }
 
-
-        [Display(Name = "Repeat Show")]
-        public string CanRepeat2 { get; set; }
-
         [Display(Name = "Excel Name")]
         public string ExcelName { get; set; }
         

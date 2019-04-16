@@ -232,8 +232,8 @@
         var SheetName = $("#SheetName").val();
         var X = $("#X").val();
         var DataType = $("#DataType").val();
-        var NewLineChar = $("#NewLineChar").val();        
-        var CanRepeat = $("#CanRepeat").val();
+        var NewLineChar = $("#NewLineChar").val();
+        var CanRepeat = document.getElementById('CanRepeat').checked;
 
         var msg = '';
         if (SQLName.trim() == '') msg += '請選擇 SQL Name\r\n';
