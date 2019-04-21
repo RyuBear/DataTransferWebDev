@@ -389,9 +389,11 @@ namespace DataTransferWeb.Controllers
             using (tblExcelSettingRepository setting = new tblExcelSettingRepository())
             {
                 vm.SaveResult = setting.Save(vm.ExcelName, vm.CustomerName, vm.SQLName, vm.FileName, vm.FileNameDateFormat, vm.UserID, userInfo.Account, ExcelMappings);
-                if (vm.SaveResult.Equals("ok")) vm.SaveResult = "Save Successful!";
+                if (vm.SaveResult.Equals("ok"))
+                    return RedirectToAction("Index");
+                else
+                    return View("Edit", vm);
             }
-            return RedirectToAction("Index");
         }
 
         public ActionResult Delete(string id)

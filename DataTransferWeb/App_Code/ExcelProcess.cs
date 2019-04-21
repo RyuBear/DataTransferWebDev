@@ -7,12 +7,13 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using Transfer.Models;
+using Transfer.Models.Repository;
 
 namespace DataTransferWeb
 {
     public class ExcelProcess
     {
-
+        static List<vwCodeMapping> codeMap = new List<vwCodeMapping>();
 
         /// <summary>
         /// 輸出Excel(重複不顯示)
@@ -23,6 +24,13 @@ namespace DataTransferWeb
         /// <param name="mappings">填入之資料</param>
         public static HSSFWorkbook GenerateExcel(DataTable dt, List<tblExcelMapping> mappings)
         {
+            string ExcelName = mappings[0].ExcelName;
+            // 取得代碼轉換資料
+            using (vwCodeMappingRepository rep = new vwCodeMappingRepository())
+            {
+                codeMap = rep.query("", "EXPORT", "EXCEL", ExcelName, "");
+            }
+
             HSSFWorkbook book = new HSSFWorkbook();
 
             IEnumerable<string> sheetNames = mappings.Select(x => x.SheetName).Distinct();
@@ -100,6 +108,15 @@ namespace DataTransferWeb
                                 value = Columns[i].DefaultValue;
                             else
                                 value = (string.IsNullOrEmpty(dt.Rows[row][Columns[i].FieldName].ToString())) ? Columns[i].DefaultValue : dt.Rows[row][Columns[i].FieldName].ToString();
+                            
+                            // 代碼轉換
+                            if (codeMap.Where(x => x.FieldName.Equals(Columns[i].ColumnName, StringComparison.OrdinalIgnoreCase)).Count() > 0
+                             && codeMap.Where(x => x.BeforeValue.Equals(value, StringComparison.OrdinalIgnoreCase)).Count() > 0)
+                            {
+                                vwCodeMapping map = codeMap.Find(x => x.FieldName.Equals(Columns[i].ColumnName, StringComparison.OrdinalIgnoreCase) && x.BeforeValue.Equals(value, StringComparison.OrdinalIgnoreCase));
+                                if (map != null)
+                                    value = map.AfterValue;
+                            }
 
                             if (!string.IsNullOrEmpty(Columns[i].NewLineChar)) value = value.Replace(Columns[i].NewLineChar, "\n");
                         }

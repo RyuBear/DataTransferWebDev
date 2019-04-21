@@ -260,6 +260,7 @@
     <Compile Include="App_Code\SFtpProcess.cs" />
     <Compile Include="App_Code\XmlProcess.cs" />
     <Compile Include="Comparer\ColumnComparer.cs" />
+    <Compile Include="Controllers\CodeMapController.cs" />
     <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\QueryController.cs" />
     <Compile Include="Controllers\SQLSettingController.cs" />
@@ -282,6 +283,8 @@
     <Compile Include="Models\FTPData.cs" />
     <Compile Include="Models\EmailData.cs" />
     <Compile Include="Models\UserData.cs" />
+    <Compile Include="ViewModels\CodeMapVM.cs" />
+    <Compile Include="ViewModels\CodeMapListVM.cs" />
     <Compile Include="ViewModels\LogListVM.cs" />
     <Compile Include="ViewModels\ExcelSettingListVM.cs" />
     <Compile Include="ViewModels\ScheduleVM.cs" />
@@ -744,6 +747,9 @@
     <Content Include="Views\Log\_LogRow.cshtml" />
     <Content Include="Views\Schedule\Index.cshtml" />
     <Content Include="Views\Schedule\Edit.cshtml" />
+    <Content Include="Views\CodeMap\Index.cshtml" />
+    <Content Include="Views\CodeMap\Edit.cshtml" />
+    <Content Include="Views\CodeMap\New.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -37,5 +37,7 @@ namespace Transfer.Models
         public virtual DbSet<bscode_kind> bscode_kind { get; set; }
         public virtual DbSet<tblExcelMapping> tblExcelMapping { get; set; }
         public virtual DbSet<tblSchedule> tblSchedule { get; set; }
+        public virtual DbSet<tblCodeMapping> tblCodeMapping { get; set; }
+        public virtual DbSet<vwCodeMapping> vwCodeMapping { get; set; }
     }
 }

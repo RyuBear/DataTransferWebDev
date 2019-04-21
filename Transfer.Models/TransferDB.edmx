@@ -42,6 +42,25 @@
           <Property Name="Password" Type="nvarchar" MaxLength="255" />
           <Property Name="UseStatus" Type="bit" />
         </EntityType>
+        <EntityType Name="tblCodeMapping">
+          <Key>
+            <PropertyRef Name="SettingName" />
+            <PropertyRef Name="Format" />
+            <PropertyRef Name="ModeType" />
+            <PropertyRef Name="FieldName" />
+            <PropertyRef Name="BeforeValue" />
+          </Key>
+          <Property Name="SettingName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Format" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="ModeType" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="FieldName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="BeforeValue" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="AfterValue" Type="nvarchar(max)" />
+          <Property Name="CreateTime" Type="datetime" />
+          <Property Name="Creator" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateTime" Type="datetime" />
+          <Property Name="Updator" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="tblExcelMapping">
           <Key>
             <PropertyRef Name="ExcelName" />
@@ -180,6 +199,27 @@
           <Property Name="UpdateTime" Type="datetime" />
           <Property Name="Updator" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'TransferDB.dbo.vwCodeMapping' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="vwCodeMapping">
+          <Key>
+            <PropertyRef Name="CustomerName" />
+            <PropertyRef Name="ModeType" />
+            <PropertyRef Name="Format" />
+            <PropertyRef Name="SettingName" />
+            <PropertyRef Name="FieldName" />
+            <PropertyRef Name="BeforeValue" />
+          </Key>
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="ModeType" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Format" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="SettingName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="FieldName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="BeforeValue" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="AfterValue" Type="nvarchar(max)" />
+          <Property Name="Updator" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateTime" Type="datetime" />
+        </EntityType>
         <Association Name="FK_bscode_bscode">
           <End Role="bscode" Type="Self.bscode" Multiplicity="1" />
           <End Role="bscode1" Type="Self.bscode" Multiplicity="0..1" />
@@ -268,6 +308,7 @@
           <EntitySet Name="bscode" EntityType="Self.bscode" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="bscode_kind" EntityType="Self.bscode_kind" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblAdmin" EntityType="Self.tblAdmin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblCodeMapping" EntityType="Self.tblCodeMapping" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblExcelMapping" EntityType="Self.tblExcelMapping" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblExcelSetting" EntityType="Self.tblExcelSetting" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblLog" EntityType="Self.tblLog" Schema="dbo" store:Type="Tables" />
@@ -277,6 +318,19 @@
           <EntitySet Name="tblSQLSetting" EntityType="Self.tblSQLSetting" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblXMLMapping" EntityType="Self.tblXMLMapping" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblXMLSetting" EntityType="Self.tblXMLSetting" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vwCodeMapping" EntityType="Self.vwCodeMapping" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vwCodeMapping].[CustomerName] AS [CustomerName], 
+    [vwCodeMapping].[ModeType] AS [ModeType], 
+    [vwCodeMapping].[Format] AS [Format], 
+    [vwCodeMapping].[SettingName] AS [SettingName], 
+    [vwCodeMapping].[FieldName] AS [FieldName], 
+    [vwCodeMapping].[BeforeValue] AS [BeforeValue], 
+    [vwCodeMapping].[AfterValue] AS [AfterValue], 
+    [vwCodeMapping].[Updator] AS [Updator], 
+    [vwCodeMapping].[UpdateTime] AS [UpdateTime]
+    FROM [dbo].[vwCodeMapping] AS [vwCodeMapping]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_bscode_bscode" Association="Self.FK_bscode_bscode">
             <End Role="bscode" EntitySet="bscode" />
             <End Role="bscode1" EntitySet="bscode" />
@@ -351,6 +405,8 @@
             <End Role="tblExcelMapping" EntitySet="tblExcelMapping" />
           </AssociationSet>
           <EntitySet Name="tblSchedule" EntityType="TransferDBModel.tblSchedule" />
+          <EntitySet Name="tblCodeMapping" EntityType="TransferDBModel.tblCodeMapping" />
+          <EntitySet Name="vwCodeMapping" EntityType="TransferDBModel.vwCodeMapping" />
           </EntityContainer>
         <EntityType Name="tblSQLColumns">
           <Key>
@@ -625,6 +681,44 @@
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
           <Property Name="Updator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="tblCodeMapping">
+          <Key>
+            <PropertyRef Name="SettingName" />
+            <PropertyRef Name="Format" />
+            <PropertyRef Name="ModeType" />
+            <PropertyRef Name="FieldName" />
+            <PropertyRef Name="BeforeValue" />
+          </Key>
+          <Property Name="SettingName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Format" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ModeType" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="FieldName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BeforeValue" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="AfterValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateTime" Type="DateTime" Precision="3" />
+          <Property Name="Creator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+          <Property Name="Updator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="vwCodeMapping">
+          <Key>
+            <PropertyRef Name="CustomerName" />
+            <PropertyRef Name="ModeType" />
+            <PropertyRef Name="Format" />
+            <PropertyRef Name="SettingName" />
+            <PropertyRef Name="FieldName" />
+            <PropertyRef Name="BeforeValue" />
+          </Key>
+          <Property Name="CustomerName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ModeType" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Format" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="SettingName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FieldName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BeforeValue" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="AfterValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Updator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -812,6 +906,37 @@
                 <ScalarProperty Name="Format" ColumnName="Format" />
                 <ScalarProperty Name="ModeType" ColumnName="ModeType" />
                 <ScalarProperty Name="ScheduleName" ColumnName="ScheduleName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblCodeMapping">
+            <EntityTypeMapping TypeName="TransferDBModel.tblCodeMapping">
+              <MappingFragment StoreEntitySet="tblCodeMapping">
+                <ScalarProperty Name="Updator" ColumnName="Updator" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="AfterValue" ColumnName="AfterValue" />
+                <ScalarProperty Name="BeforeValue" ColumnName="BeforeValue" />
+                <ScalarProperty Name="FieldName" ColumnName="FieldName" />
+                <ScalarProperty Name="ModeType" ColumnName="ModeType" />
+                <ScalarProperty Name="Format" ColumnName="Format" />
+                <ScalarProperty Name="SettingName" ColumnName="SettingName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vwCodeMapping">
+            <EntityTypeMapping TypeName="TransferDBModel.vwCodeMapping">
+              <MappingFragment StoreEntitySet="vwCodeMapping">
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="Updator" ColumnName="Updator" />
+                <ScalarProperty Name="AfterValue" ColumnName="AfterValue" />
+                <ScalarProperty Name="BeforeValue" ColumnName="BeforeValue" />
+                <ScalarProperty Name="FieldName" ColumnName="FieldName" />
+                <ScalarProperty Name="SettingName" ColumnName="SettingName" />
+                <ScalarProperty Name="Format" ColumnName="Format" />
+                <ScalarProperty Name="ModeType" ColumnName="ModeType" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

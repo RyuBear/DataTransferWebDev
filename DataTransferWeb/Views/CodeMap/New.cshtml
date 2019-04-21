@@ -1,0 +1,159 @@
+﻿@model DataTransferWeb.ViewModels.CodeMapVM
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm("Save", "CodeMap", FormMethod.Post, new { Id = "IndexForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @Html.HiddenFor(x => x.ViewStatus)
+        <div class="form-group">
+            @Html.LabelFor(model => model.CustomerName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(x => x.CustomerName, new { @class = "form-control", @onchange = "loadFormat();" })
+                @Html.ValidationMessageFor(model => model.CustomerName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ModeType, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(x => x.ModeType, DropDownListMenu.ModeTypeOption(), new { @class = "form-control", @onchange = "loadFormat();" })
+                @Html.ValidationMessageFor(model => model.ModeType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Format, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(x => x.Format, DropDownListMenu.FormatOption(Model.Format), new { @class = "form-control", @style = "font-weight:normal;", @onchange = "loadFormat();" })
+                @Html.ValidationMessageFor(model => model.Format, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SettingName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(x => x.SettingName, DropDownListMenu.SettingOption(Model.UserID, Model.CustomerName, Model.Format, Model.SettingName), new { @class = "form-control", @style = "font-weight:normal;", @onchange = "loadColumns();" })
+                @Html.ValidationMessageFor(model => model.SettingName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FieldName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select id="FieldName" name="FieldName" class="form-control"></select>
+                @Html.ValidationMessageFor(model => model.FieldName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.BeforeValue, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NewBeforeValue, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NewBeforeValue, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AfterValue, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.AfterValue, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AfterValue, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-primary" />
+
+                <input type="button" value="Cancel" class="btn btn-primary" onclick="history.go(-1);" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @Model.SaveResult
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @Model.SaveResult
+            </div>
+        </div>
+    </div>
+}
+<script>
+    function loadFormat() {
+        var CustomerName = $("#CustomerName").val();
+        var ModeType = $("#ModeType").val();
+        var Format = $("#Format").val();
+        var msg = '';
+        if (CustomerName.trim() == '') msg += '請輸入 Customer Name\r\n';
+        if (Format.trim() == '') msg += '請選擇 Format\r\n';
+
+        if (msg == '') {
+            var param = new Object({
+                CustomerName: CustomerName,
+                ModeType: ModeType,
+                Format: Format
+            });
+
+            $.ajax({
+                url: '@Url.Action("AjaxLoadFormat")',
+                type: "POST",
+                data: param,
+                success: function (result) {
+                    if (result.status == 'ok') {
+                        $("#SettingName").attr("disabled", false);
+                        $("#SettingName").html('');
+                        $("#SettingName").html(result.Options);
+                    }
+                    else {ＡＬＥＲＡ
+                        alert(result.status);
+                    }
+                }
+            });
+        }
+    }
+
+    function loadColumns() {
+        var Format = $("#Format").val();
+        var ModeType = $("#ModeType").val();
+        var SettingName = $("#SettingName").val();
+        var msg = '';
+
+        if (msg == '') {
+            var param = new Object({
+                Format: Format,
+                ModeType: ModeType,
+                SettingName: SettingName,
+            });
+
+            $.ajax({
+                url: '@Url.Action("AjaxLoadColumns")',
+                type: "POST",
+                data: param,
+                success: function (result) {
+                    if (result.status == 'ok') {
+                        $("#FieldName").attr("disabled", false);
+                        $("#FieldName").html('');
+                        $("#FieldName").html(result.Options);
+                    }
+                    else {
+                        alert(result.status);
+                    }
+                }
+            });
+        }
+    }
+</script>

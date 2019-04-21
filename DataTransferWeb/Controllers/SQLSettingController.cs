@@ -143,10 +143,12 @@ namespace DataTransferWeb.Controllers
                 using (tblSQLSettingRepository setting = new tblSQLSettingRepository())
                 {
                     vm.SQLResult = setting.Save(vm.SQLName, vm.SQLStatement, vm.DataRow, vm.SQLType, Columns, userInfo.Account);
-                    if (vm.SQLResult.Equals("ok")) vm.SQLResult = "Save Successful!";
+                    if (vm.SQLResult.Equals("ok"))
+                        return RedirectToAction("Index");
+                    else
+                        return View("Edit", vm);
                 }
             }
-            return RedirectToAction("Index");
         }
         
         public ActionResult Delete(string id)

@@ -32,7 +32,7 @@
 
 
     <style type="text/css">
-    .sidebar_main {
+        .sidebar_main {
             font-size: 16px;
             font-weight: bold;
         }
@@ -42,7 +42,7 @@
             font-weight: normal;
         }
 
-        .form-control{
+        .form-control {
             height: 34px;
         }
     </style>
@@ -67,6 +67,9 @@
                     </div>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("Index", "CodeMap")">代碼轉換設定</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="@Url.Action("Index", "Query")">產出查詢</a>
                 </li>
                 <li class="nav-item">
@@ -85,33 +88,33 @@
     <div id="wrapper">
         <!-- Navigation -->
         @*<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-            <a class="navbar-brand" href="#">資料轉換系統</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+                <a class="navbar-brand" href="#">資料轉換系統</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Index", "SQLSetting")">SQL設定</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            轉出格式設定
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="@Url.Action("Index", "XMLSetting")">XML</a>
-                            <a class="dropdown-item" href="@Url.Action("Index", "ExcelSetting")">Excel</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                        </div>
-                    </li>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "SQLSetting")">SQL設定</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                轉出格式設定
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="@Url.Action("Index", "XMLSetting")">XML</a>
+                                <a class="dropdown-item" href="@Url.Action("Index", "ExcelSetting")">Excel</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                            </div>
+                        </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Logout", "Home")">登出</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>*@
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Logout", "Home")">登出</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>*@
 
         <!-- Page Content -->
         <div id="page-wrapper">

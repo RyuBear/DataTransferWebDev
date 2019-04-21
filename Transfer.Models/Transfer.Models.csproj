@@ -98,11 +98,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\EFGenericRepository.cs" />
     <Compile Include="Repository\bscodeRepository.cs" />
+    <Compile Include="Repository\vwCodeMappingRepository.cs" />
     <Compile Include="Repository\tblSMTPRepository.cs" />
     <Compile Include="Repository\tblLogRepository.cs" />
     <Compile Include="Repository\tblExcelSettingRepository.cs" />
     <Compile Include="Repository\tblExcelMappingRepository.cs" />
     <Compile Include="Repository\tblScheduleRepository.cs" />
+    <Compile Include="Repository\tblCodeMappingRepository.cs" />
     <Compile Include="Repository\tblXMLSettingRepository.cs" />
     <Compile Include="Repository\tblXMLMappingRepository.cs" />
     <Compile Include="Repository\tblSQLColumnsRepository.cs" />
@@ -112,6 +114,9 @@
     <Compile Include="Repository\tblSQLSettingRepository.cs" />
     <Compile Include="Repository\tblAdminRepository.cs" />
     <Compile Include="tblAdmin.cs">
+      <DependentUpon>TransferDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tblCodeMapping.cs">
       <DependentUpon>TransferDB.tt</DependentUpon>
     </Compile>
     <Compile Include="tblExcelMapping.cs">
@@ -163,6 +168,9 @@
     <Compile Include="Utility\ObjectUtils.cs" />
     <Compile Include="Utility\StringConvert.cs" />
     <Compile Include="ViewModel\LoginData.cs" />
+    <Compile Include="vwCodeMapping.cs">
+      <DependentUpon>TransferDB.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config">

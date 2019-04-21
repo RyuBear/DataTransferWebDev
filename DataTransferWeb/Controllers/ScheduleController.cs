@@ -182,9 +182,11 @@ namespace DataTransferWeb.Controllers
                 }
 
                 vm.SaveResult = rep.Save(vm.originScheduleName, s, userInfo.Account);
-                if (vm.SaveResult.Equals("ok")) vm.SaveResult = "Save Successful!";
+                if (vm.SaveResult.Equals("ok"))
+                    return RedirectToAction("Index");
+                else
+                    return View("Edit", vm);
             }
-            return RedirectToAction("Index");
         }
 
         public ActionResult Delete(string id)

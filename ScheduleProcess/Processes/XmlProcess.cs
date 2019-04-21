@@ -11,6 +11,8 @@ namespace ScheduleProcess.Processes
 {
     public class XmlProcess
     {
+        static List<vwCodeMapping> codeMap = new List<vwCodeMapping>();
+
         //回傳重複的 "字串" 所組成的字串
         public static string strRepeat(string stringToRepeat, int repeat)
         {
@@ -52,6 +54,15 @@ namespace ScheduleProcess.Processes
                         value = root.DefaultValue;
                     else
                         value = (string.IsNullOrEmpty(row[root.FieldName].ToString())) ? root.DefaultValue : row[root.FieldName].ToString();
+                    
+                    // 代碼轉換
+                    if (codeMap.Where(x => x.FieldName.Equals(root.TagName, StringComparison.OrdinalIgnoreCase)).Count() > 0
+                      && codeMap.Where(x => x.BeforeValue.Equals(value, StringComparison.OrdinalIgnoreCase)).Count() > 0)
+                    {
+                        vwCodeMapping map = codeMap.Find(x => x.FieldName.Equals(root.TagName, StringComparison.OrdinalIgnoreCase) && x.BeforeValue.Equals(value, StringComparison.OrdinalIgnoreCase));
+                        if (map != null)
+                            value = map.AfterValue;
+                    }
                 }
 
                 XmlNode node = Node.SelectSingleNode(strRepeat("/", layer) + root.TagName);

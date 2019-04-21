@@ -9,17 +9,17 @@
                 <thead class="thead-inverse">
                     <tr align="center">
                         @for (int i = 0; i < Model.SQLResultDataRow.Columns.Count; i++)
-                {
+                        {
                             <th>@Model.SQLResultDataRow.Columns[i].ColumnName</th>
                         }
                     </tr>
                 </thead>
                 <tbody>
                     @for (int i = 0; i < Model.SQLResultDataRow.Rows.Count; i++)
-                {
+                    {
                         <tr>
                             @for (int j = 0; j < Model.SQLResultDataRow.Columns.Count; j++)
-                    {
+                            {
                                 <td>@(Model.SQLResultDataRow.Rows[i][j].ToString())</td>
                             }
                         </tr>
