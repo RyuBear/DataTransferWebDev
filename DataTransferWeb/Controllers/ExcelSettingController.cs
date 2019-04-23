@@ -167,7 +167,7 @@ namespace DataTransferWeb.Controllers
             catch { }
 
             // 判斷 Column Name 是否有重複
-            if (!string.IsNullOrEmpty(vm.ColumnName) && !vm.ColumnName.Equals(vm.newColumnName, StringComparison.OrdinalIgnoreCase))
+            if (string.IsNullOrEmpty(vm.ColumnName) || !vm.ColumnName.Equals(vm.newColumnName, StringComparison.OrdinalIgnoreCase))
             {
                 tblExcelMapping map = ExcelMappings.Find(x => x.ColumnName.Equals(vm.newColumnName, StringComparison.OrdinalIgnoreCase));
                 if (map != null)

@@ -170,7 +170,7 @@ namespace DataTransferWeb.Controllers
             catch { }
 
             // 判斷 Tag Name 是否有重複
-            if (!string.IsNullOrEmpty(vm.TagName) && !vm.TagName.Equals(vm.newTagName, StringComparison.OrdinalIgnoreCase))
+            if (string.IsNullOrEmpty(vm.TagName) || !vm.TagName.Equals(vm.newTagName, StringComparison.OrdinalIgnoreCase))
             {
                 tblXMLMapping map = xmlMappings.Find(x => x.TagName.Equals(vm.newTagName, StringComparison.OrdinalIgnoreCase));
                 if (map != null)
