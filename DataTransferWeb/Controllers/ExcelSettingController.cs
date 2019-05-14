@@ -179,6 +179,29 @@ namespace DataTransferWeb.Controllers
                     return Json(result);
                 }
             }
+
+
+            // 判斷 X 是否 >0
+            if (vm.X <= 0)
+            {
+                var result = new
+                {
+                    status = "X 起始值為 1",
+                };
+                return Json(result);
+            }
+            else
+            {
+                tblExcelMapping map = ExcelMappings.Find(x => x.X == vm.X);
+                if (map != null)
+                {
+                    var result = new
+                    {
+                        status = "X 重複！",
+                    };
+                    return Json(result);
+                }
+            }
             // 更新時 將舊暫存資料刪除
             tblExcelMapping mapping = ExcelMappings.Find(x => x.ColumnName.Equals(vm.ColumnName, StringComparison.OrdinalIgnoreCase));
             if (mapping != null)

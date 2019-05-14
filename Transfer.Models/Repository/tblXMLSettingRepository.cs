@@ -41,8 +41,8 @@ namespace Transfer.Models.Repository
         public List<tblXMLSetting> get(string XMLName, string SQLName, string CustomerName)
         {
             IQueryable<tblXMLSetting> settings = this.GetAll();
-            if (!string.IsNullOrEmpty(XMLName)) settings = this.GetSome(settings, x => x.XMLName.Equals(XMLName, StringComparison.OrdinalIgnoreCase));
-            if (!string.IsNullOrEmpty(SQLName)) settings = this.GetSome(settings, x => x.SQLName.Equals(SQLName, StringComparison.OrdinalIgnoreCase));
+            if (!string.IsNullOrEmpty(XMLName)) settings = this.GetSome(settings, x => x.XMLName.Contains(XMLName));
+            if (!string.IsNullOrEmpty(SQLName)) settings = this.GetSome(settings, x => x.SQLName.Contains(SQLName));
             if (!string.IsNullOrEmpty(CustomerName)) settings = this.GetSome(settings, x => x.CustomerName.Equals(CustomerName, StringComparison.OrdinalIgnoreCase));
 
             return settings.ToList();

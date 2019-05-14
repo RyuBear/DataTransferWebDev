@@ -19,7 +19,7 @@ namespace Transfer.Models.Repository
         public List<tblSQLSetting> get(string SQLName, string SQLType)
         {
             IQueryable<tblSQLSetting> settings = this.GetAll();
-            if (!string.IsNullOrEmpty(SQLName)) settings = this.GetSome(settings, x => x.SQLName.Equals(SQLName, StringComparison.OrdinalIgnoreCase));
+            if (!string.IsNullOrEmpty(SQLName)) settings = this.GetSome(settings, x => x.SQLName.Contains(SQLName));
             if (!string.IsNullOrEmpty(SQLType)) settings = this.GetSome(settings, x => x.SQLType.Equals(SQLType, StringComparison.OrdinalIgnoreCase));
 
             return settings.ToList();

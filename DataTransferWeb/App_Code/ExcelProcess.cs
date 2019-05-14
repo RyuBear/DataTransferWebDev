@@ -51,7 +51,7 @@ namespace DataTransferWeb
                 style.VerticalAlignment = VerticalAlignment.Center;
                 for (int i = 0; i < Columns.Count(); i++)
                 {
-                    int X = Columns[i].X;
+                    int X = Columns[i].X - 1;
                     ICell cell = headerrow.CreateCell(X);
                     cell.CellStyle = style;
                     cell.SetCellValue(Columns[i].ColumnName);
@@ -61,7 +61,7 @@ namespace DataTransferWeb
                 #region 填入內容
                 for (int i = 0; i < Columns.Count(); i++)
                 {
-                    int X = Columns[i].X;
+                    int X = Columns[i].X - 1;
                     ICellStyle dataStyle = book.CreateCellStyle();
                     dataStyle.Alignment = HorizontalAlignment.Center;
                     dataStyle.VerticalAlignment = VerticalAlignment.Center;
@@ -92,7 +92,6 @@ namespace DataTransferWeb
                         dataStyle.DataFormat = decimalFormat.GetFormat("###,##0.0000");
                     }
 
-                    int fixRow = -1;
                     for (int row = 0; row < dt.Rows.Count; row++)
                     {
                         IRow dataRow;
@@ -108,7 +107,7 @@ namespace DataTransferWeb
                                 value = Columns[i].DefaultValue;
                             else
                                 value = (string.IsNullOrEmpty(dt.Rows[row][Columns[i].FieldName].ToString())) ? Columns[i].DefaultValue : dt.Rows[row][Columns[i].FieldName].ToString();
-                            
+
                             // 代碼轉換
                             if (codeMap.Where(x => x.FieldName.Equals(Columns[i].ColumnName, StringComparison.OrdinalIgnoreCase)).Count() > 0
                              && codeMap.Where(x => x.BeforeValue.Equals(value, StringComparison.OrdinalIgnoreCase)).Count() > 0)
@@ -174,7 +173,7 @@ namespace DataTransferWeb
                 style.VerticalAlignment = VerticalAlignment.Center;
                 for (int i = 0; i < Columns.Count(); i++)
                 {
-                    int X = Columns[i].X;
+                    int X = Columns[i].X - 1;
                     ICell cell = headerrow.CreateCell(X);
                     cell.CellStyle = style;
                     cell.SetCellValue(Columns[i].ColumnName);
@@ -184,7 +183,7 @@ namespace DataTransferWeb
                 #region 填入內容
                 for (int i = 0; i < Columns.Count(); i++)
                 {
-                    int X = Columns[i].X;
+                    int X = Columns[i].X - 1;
                     ICellStyle dataStyle = book.CreateCellStyle();
                     dataStyle.Alignment = HorizontalAlignment.Center;
                     dataStyle.VerticalAlignment = VerticalAlignment.Center;

@@ -51,7 +51,7 @@ namespace ScheduleProcess.Processes
                 style.VerticalAlignment = VerticalAlignment.Center;
                 for (int i = 0; i < Columns.Count(); i++)
                 {
-                    int X = Columns[i].X;
+                    int X = Columns[i].X - 1;
                     ICell cell = headerrow.CreateCell(X);
                     cell.CellStyle = style;
                     cell.SetCellValue(Columns[i].ColumnName);
@@ -61,7 +61,7 @@ namespace ScheduleProcess.Processes
                 #region 填入內容
                 for (int i = 0; i < Columns.Count(); i++)
                 {
-                    int X = Columns[i].X;
+                    int X = Columns[i].X - 1;
                     ICellStyle dataStyle = book.CreateCellStyle();
                     dataStyle.Alignment = HorizontalAlignment.Center;
                     dataStyle.VerticalAlignment = VerticalAlignment.Center;
@@ -174,7 +174,7 @@ namespace ScheduleProcess.Processes
                 style.VerticalAlignment = VerticalAlignment.Center;
                 for (int i = 0; i < Columns.Count(); i++)
                 {
-                    int X = Columns[i].X;
+                    int X = Columns[i].X - 1;
                     ICell cell = headerrow.CreateCell(X);
                     cell.CellStyle = style;
                     cell.SetCellValue(Columns[i].ColumnName);
@@ -184,7 +184,7 @@ namespace ScheduleProcess.Processes
                 #region 填入內容
                 for (int i = 0; i < Columns.Count(); i++)
                 {
-                    int X = Columns[i].X;
+                    int X = Columns[i].X - 1;
                     ICellStyle dataStyle = book.CreateCellStyle();
                     dataStyle.Alignment = HorizontalAlignment.Center;
                     dataStyle.VerticalAlignment = VerticalAlignment.Center;
