@@ -4,6 +4,17 @@
         height: 25vh; /* 固定高度 */
     }
 </style>
+<script type="text/javascript">
+    function comparisonChange(e) {
+        var compareID = e.id;   //vm_Columns_0__Comparison
+        var value2 = compareID.replace('Comparison', 'Value2');
+        var compareValue = e.value;
+        if (compareValue == "BETWEEN")
+            $("#" + value2).show();
+        else
+            $("#" + value2).hide();
+    }
+</script>
 <div class="table-fix-head" id='table-cont'>
     <table class="table table-striped table-bordered table-hover" id="dataTables">
         <thead class="thead-inverse">
@@ -25,10 +36,18 @@
                             @Html.Hidden(string.Format("vm.Columns[{0}].ColumnName", i), Model.Columns[i].ColumnName)
                         </td>
                         <td>
-                            @Html.DropDownList(string.Format("vm.Columns[{0}].Comparison", i), DropDownListMenu.ComparisonOption(Model.Columns[i].Comparison), new { @class = "form-control", @style = "font-weight:normal;" })
+                            @Html.DropDownList(string.Format("vm.Columns[{0}].Comparison", i), DropDownListMenu.ComparisonOption(Model.Columns[i].Comparison), new { @class = "form-control", @style = "font-weight:normal;", @onchange = "comparisonChange(this);" })
                         </td>
                         <td>
                             @Html.TextBox(string.Format("vm.Columns[{0}].Value", i), Model.Columns[i].Value, new { @class = "form-control" })
+                            @if (Model.Columns[i].Comparison != null && Model.Columns[i].Comparison.Equals("Between", StringComparison.OrdinalIgnoreCase))
+                            {
+                                @Html.TextBox(string.Format("vm.Columns[{0}].Value2", i), Model.Columns[i].Value2, new { @class = "form-control" })
+                            }
+                            else
+                            {
+                                @Html.TextBox(string.Format("vm.Columns[{0}].Value2", i), Model.Columns[i].Value2, new { @class = "form-control", @style = "display:none;" })
+                            }
                         </td>
                     </tr>
                 }

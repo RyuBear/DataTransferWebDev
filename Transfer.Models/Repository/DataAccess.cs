@@ -181,7 +181,15 @@ namespace Transfer.Models.Repository
                 foreach (var c in columns)
                 {
                     if (!string.IsNullOrEmpty(c.Value))
-                        strCon.AppendFormat(" and " + c.ColumnName + c.Comparison + "@" + c.ColumnName);
+                    {
+                        if (c.Comparison.Equals("BETWEEN", StringComparison.OrdinalIgnoreCase))
+                            if (!string.IsNullOrEmpty(c.Value2))
+                                strCon.AppendFormat(" and (" + c.ColumnName + " " + c.Comparison + " @" + c.ColumnName + " AND @" + c.ColumnName + "2)");
+                            else
+                                return Tuple.Create(false, new DataTable(), c.ColumnName + "必須輸入2個值");
+                        else
+                            strCon.AppendFormat(" and " + c.ColumnName + c.Comparison + "@" + c.ColumnName);
+                    }
                 }
             }
             if (!string.IsNullOrEmpty(strCon.ToString()))
@@ -213,6 +221,8 @@ namespace Transfer.Models.Repository
                         if (!string.IsNullOrEmpty(c.Value))
                         {
                             cmd.Parameters.Add(new SqlParameter { ParameterName = c.ColumnName, Value = c.Value.ToSqlType() });
+                            if (c.Comparison.Equals("BETWEEN", StringComparison.OrdinalIgnoreCase))
+                                cmd.Parameters.Add(new SqlParameter { ParameterName = c.ColumnName + "2", Value = c.Value2.ToSqlType() });
                         }
                     }
                 }

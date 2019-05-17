@@ -196,7 +196,7 @@ public static class DropDownListMenu
     /// <returns></returns>
     public static IEnumerable<SelectListItem> ComparisonOption(string selected = "")
     {
-        string[] Comparisons = new string[] { "=", ">=", "<=", ">", "<" };
+        string[] Comparisons = new string[] { "=", ">=", "<=", ">", "<", "BETWEEN" };
 
         var items = new List<SelectListItem>();
 

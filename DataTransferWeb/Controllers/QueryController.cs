@@ -170,6 +170,8 @@ namespace DataTransferWeb.Controllers
                 {
                     Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(setting.SQLStatement.Replace("\r\n", ""), vm.DataRow, vm.Columns);
                     vm.SQLResultDataRow = result.Item2;
+                    if (!result.Item1)
+                        ViewBag.QueryMsg = result.Item3;
                 }
             }
             return View("Index", vm);

@@ -15,5 +15,6 @@ namespace Transfer.Models.Models
         public string Comparison{ get; set; }
 
         public string Value { get; set; }
+        public string Value2 { get; set; }
     }
 }
