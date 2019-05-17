@@ -168,7 +168,7 @@ namespace DataTransferWeb.Controllers
                 tblSQLSetting setting = rep.select(SQLName);
                 using (DataAccess da = new DataAccess())
                 {
-                    Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(setting.SQLStatement.Replace("\r\n", ""), vm.DataRow, vm.Columns);
+                    Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(setting.SQLStatement.Replace("\r\n", " "), vm.DataRow, vm.Columns);
                     vm.SQLResultDataRow = result.Item2;
                     if (!result.Item1)
                         ViewBag.QueryMsg = result.Item3;
@@ -222,7 +222,7 @@ namespace DataTransferWeb.Controllers
                             tblSQLSetting sqlSetting = set.select(SQLName);
                             using (DataAccess da = new DataAccess())
                             {
-                                Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(sqlSetting.SQLStatement.Replace("\r\n", ""), null, vm.Columns);
+                                Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(sqlSetting.SQLStatement.Replace("\r\n", " "), null, vm.Columns);
                                 if (!result.Item1)
                                 {
                                     log.Save("轉出", userInfo.Name, vm.CustomerName, vm.Format, vm.DataDestination, vm.Email, vm.FTPServerIP, vm.FileName, "失敗", result.Item3);
@@ -317,7 +317,7 @@ namespace DataTransferWeb.Controllers
                             tblSQLSetting sqlSetting = set.select(SQLName);
                             using (DataAccess da = new DataAccess())
                             {
-                                Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(sqlSetting.SQLStatement.Replace("\r\n", ""), null, vm.Columns);
+                                Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(sqlSetting.SQLStatement.Replace("\r\n", " "), null, vm.Columns);
                                 if (!result.Item1)
                                 {
                                     log.Save("轉出", userInfo.Name, vm.CustomerName, vm.Format, vm.DataDestination, vm.Email, vm.FTPServerIP, vm.FileName, "失敗", result.Item3);
