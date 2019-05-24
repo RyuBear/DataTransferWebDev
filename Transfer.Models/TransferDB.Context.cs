@@ -28,7 +28,6 @@ namespace Transfer.Models
         public virtual DbSet<tblSQLColumns> tblSQLColumns { get; set; }
         public virtual DbSet<tblSQLSetting> tblSQLSetting { get; set; }
         public virtual DbSet<tblAdmin> tblAdmin { get; set; }
-        public virtual DbSet<tblXMLMapping> tblXMLMapping { get; set; }
         public virtual DbSet<tblExcelSetting> tblExcelSetting { get; set; }
         public virtual DbSet<tblXMLSetting> tblXMLSetting { get; set; }
         public virtual DbSet<tblLog> tblLog { get; set; }
@@ -39,5 +38,6 @@ namespace Transfer.Models
         public virtual DbSet<tblSchedule> tblSchedule { get; set; }
         public virtual DbSet<tblCodeMapping> tblCodeMapping { get; set; }
         public virtual DbSet<vwCodeMapping> vwCodeMapping { get; set; }
+        public virtual DbSet<tblXMLMapping> tblXMLMapping { get; set; }
     }
 }

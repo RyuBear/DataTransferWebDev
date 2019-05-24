@@ -90,9 +90,9 @@
                             <div class="col-lg-8 col-md-8">
                                 <select id="FatherTag" name="FatherTag" class="form-control">
                                     <option value="">-Please Select-</option>
-                                    @foreach (var c in Model.SetedColumns)
+                                    @foreach (var c in Model.XMLMappingDataRow)
                                     {
-                                        <option value="@c.ColumnName">@c.ColumnName</option>
+                                        <option value="@c.TagName">@c.TagName</option>
                                     }
                                 </select>
                             </div>

@@ -171,12 +171,13 @@
           <Key>
             <PropertyRef Name="XMLName" />
             <PropertyRef Name="TagName" />
+            <PropertyRef Name="FatherTag" />
           </Key>
-          <Property Name="XMLName" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="TagName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="XMLName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="TagName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="FieldName" Type="nvarchar" MaxLength="50" />
           <Property Name="DefaultValue" Type="nvarchar(max)" />
-          <Property Name="FatherTag" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="FatherTag" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CanRepeat" Type="bit" Nullable="false" />
           <Property Name="Idx" Type="int" Nullable="false" />
           <Property Name="CreateTime" Type="datetime" Nullable="false" />
@@ -188,7 +189,7 @@
           <Key>
             <PropertyRef Name="XMLName" />
           </Key>
-          <Property Name="XMLName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="XMLName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="SQLName" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="CustomerName" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="FileName" Type="nvarchar" MaxLength="255" />
@@ -376,16 +377,11 @@
             <End Role="tblSQLSetting1" EntitySet="tblSQLSetting" />
           </AssociationSet>
           <EntitySet Name="tblAdmin" EntityType="TransferDBModel.tblAdmin" />
-          <EntitySet Name="tblXMLMapping" EntityType="TransferDBModel.tblXMLMapping" />
           <EntitySet Name="tblExcelSetting" EntityType="TransferDBModel.tblExcelSetting" />
           <EntitySet Name="tblXMLSetting" EntityType="TransferDBModel.tblXMLSetting" />
           <AssociationSet Name="FK_tblExcelSetting_tblSQLSetting" Association="TransferDBModel.FK_tblExcelSetting_tblSQLSetting">
             <End Role="tblSQLSetting" EntitySet="tblSQLSetting" />
             <End Role="tblExcelSetting" EntitySet="tblExcelSetting" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblXMLMapping_tblXMLSetting" Association="TransferDBModel.FK_tblXMLMapping_tblXMLSetting">
-            <End Role="tblXMLSetting" EntitySet="tblXMLSetting" />
-            <End Role="tblXMLMapping" EntitySet="tblXMLMapping" />
           </AssociationSet>
           <AssociationSet Name="FK_tblXMLSetting_tblSQLSetting" Association="TransferDBModel.FK_tblXMLSetting_tblSQLSetting">
             <End Role="tblXMLSetting" EntitySet="tblXMLSetting" />
@@ -407,6 +403,11 @@
           <EntitySet Name="tblSchedule" EntityType="TransferDBModel.tblSchedule" />
           <EntitySet Name="tblCodeMapping" EntityType="TransferDBModel.tblCodeMapping" />
           <EntitySet Name="vwCodeMapping" EntityType="TransferDBModel.vwCodeMapping" />
+          <EntitySet Name="tblXMLMapping" EntityType="TransferDBModel.tblXMLMapping" />
+          <AssociationSet Name="FK_tblXMLMapping_tblXMLSetting" Association="TransferDBModel.FK_tblXMLMapping_tblXMLSetting">
+            <End Role="tblXMLSetting" EntitySet="tblXMLSetting" />
+            <End Role="tblXMLMapping" EntitySet="tblXMLMapping" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="tblSQLColumns">
           <Key>
@@ -468,24 +469,6 @@
           <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="UseStatus" Type="Boolean" />
         </EntityType>
-        <EntityType Name="tblXMLMapping">
-          <Key>
-            <PropertyRef Name="XMLName" />
-            <PropertyRef Name="TagName" />
-          </Key>
-          <Property Name="XMLName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="TagName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="FieldName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DefaultValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="FatherTag" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="CanRepeat" Type="Boolean" Nullable="false" />
-          <Property Name="Idx" Type="Int32" Nullable="false" />
-          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Creator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
-          <Property Name="Updator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="tblXMLSetting" Relationship="TransferDBModel.FK_tblXMLMapping_tblXMLSetting" FromRole="tblXMLMapping" ToRole="tblXMLSetting" />
-        </EntityType>
         <EntityType Name="tblExcelSetting">
           <Key>
             <PropertyRef Name="ExcelName" />
@@ -507,7 +490,7 @@
           <Key>
             <PropertyRef Name="XMLName" />
           </Key>
-          <Property Name="XMLName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="XMLName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SQLName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="CustomerName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="FileName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
@@ -516,10 +499,10 @@
           <Property Name="Creator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
           <Property Name="Updator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="tblXMLMapping" Relationship="TransferDBModel.FK_tblXMLMapping_tblXMLSetting" FromRole="tblXMLSetting" ToRole="tblXMLMapping" />
           <NavigationProperty Name="tblXMLSetting1" Relationship="TransferDBModel.FK_tblXMLSetting_tblSQLSetting" FromRole="tblXMLSetting" ToRole="tblXMLSetting1" />
           <NavigationProperty Name="tblXMLSetting2" Relationship="TransferDBModel.FK_tblXMLSetting_tblSQLSetting" FromRole="tblXMLSetting1" ToRole="tblXMLSetting" />
           <Property Name="UserId" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblXMLMapping" Relationship="TransferDBModel.FK_tblXMLMapping_tblXMLSetting" FromRole="tblXMLSetting" ToRole="tblXMLMapping" />
         </EntityType>
         <Association Name="FK_tblExcelSetting_tblSQLSetting">
           <End Type="TransferDBModel.tblSQLSetting" Role="tblSQLSetting" Multiplicity="1" />
@@ -530,18 +513,6 @@
             </Principal>
             <Dependent Role="tblExcelSetting">
               <PropertyRef Name="SQLName" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tblXMLMapping_tblXMLSetting">
-          <End Type="TransferDBModel.tblXMLSetting" Role="tblXMLSetting" Multiplicity="1" />
-          <End Type="TransferDBModel.tblXMLMapping" Role="tblXMLMapping" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblXMLSetting">
-              <PropertyRef Name="XMLName" />
-            </Principal>
-            <Dependent Role="tblXMLMapping">
-              <PropertyRef Name="XMLName" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -719,6 +690,37 @@
           <Property Name="Updator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="tblXMLMapping">
+          <Key>
+            <PropertyRef Name="XMLName" />
+            <PropertyRef Name="TagName" />
+            <PropertyRef Name="FatherTag" />
+          </Key>
+          <Property Name="XMLName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TagName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FieldName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DefaultValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FatherTag" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CanRepeat" Type="Boolean" Nullable="false" />
+          <Property Name="Idx" Type="Int32" Nullable="false" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Creator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+          <Property Name="Updator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblXMLSetting" Relationship="TransferDBModel.FK_tblXMLMapping_tblXMLSetting" FromRole="tblXMLMapping" ToRole="tblXMLSetting" />
+        </EntityType>
+        <Association Name="FK_tblXMLMapping_tblXMLSetting">
+          <End Type="TransferDBModel.tblXMLSetting" Role="tblXMLSetting" Multiplicity="1" />
+          <End Type="TransferDBModel.tblXMLMapping" Role="tblXMLMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblXMLSetting">
+              <PropertyRef Name="XMLName" />
+            </Principal>
+            <Dependent Role="tblXMLMapping">
+              <PropertyRef Name="XMLName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -755,23 +757,6 @@
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="NameChi" ColumnName="NameChi" />
                 <ScalarProperty Name="PersonalID" ColumnName="PersonalID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblXMLMapping">
-            <EntityTypeMapping TypeName="TransferDBModel.tblXMLMapping">
-              <MappingFragment StoreEntitySet="tblXMLMapping">
-                <ScalarProperty Name="Updator" ColumnName="Updator" />
-                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
-                <ScalarProperty Name="Creator" ColumnName="Creator" />
-                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
-                <ScalarProperty Name="Idx" ColumnName="Idx" />
-                <ScalarProperty Name="CanRepeat" ColumnName="CanRepeat" />
-                <ScalarProperty Name="FatherTag" ColumnName="FatherTag" />
-                <ScalarProperty Name="DefaultValue" ColumnName="DefaultValue" />
-                <ScalarProperty Name="FieldName" ColumnName="FieldName" />
-                <ScalarProperty Name="TagName" ColumnName="TagName" />
-                <ScalarProperty Name="XMLName" ColumnName="XMLName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -937,6 +922,23 @@
                 <ScalarProperty Name="Format" ColumnName="Format" />
                 <ScalarProperty Name="ModeType" ColumnName="ModeType" />
                 <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblXMLMapping">
+            <EntityTypeMapping TypeName="TransferDBModel.tblXMLMapping">
+              <MappingFragment StoreEntitySet="tblXMLMapping">
+                <ScalarProperty Name="Updator" ColumnName="Updator" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Idx" ColumnName="Idx" />
+                <ScalarProperty Name="CanRepeat" ColumnName="CanRepeat" />
+                <ScalarProperty Name="FatherTag" ColumnName="FatherTag" />
+                <ScalarProperty Name="DefaultValue" ColumnName="DefaultValue" />
+                <ScalarProperty Name="FieldName" ColumnName="FieldName" />
+                <ScalarProperty Name="TagName" ColumnName="TagName" />
+                <ScalarProperty Name="XMLName" ColumnName="XMLName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

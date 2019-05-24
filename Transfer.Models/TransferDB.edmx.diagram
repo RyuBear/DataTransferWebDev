@@ -10,11 +10,9 @@
         <AssociationConnector Association="TransferDBModel.FK_SQLColumns_SQLSetting" />
         <AssociationConnector Association="TransferDBModel.FK_SQLSetting_SQLSetting" />
         <EntityTypeShape EntityType="TransferDBModel.tblAdmin" Width="1.5" PointX="5.375" PointY="0.75" />
-        <EntityTypeShape EntityType="TransferDBModel.tblXMLMapping" Width="1.5" PointX="1" PointY="8.125" />
         <EntityTypeShape EntityType="TransferDBModel.tblExcelSetting" Width="1.5" PointX="3" PointY="4.125" />
         <EntityTypeShape EntityType="TransferDBModel.tblXMLSetting" Width="1.5" PointX="1.125" PointY="4.125" />
         <AssociationConnector Association="TransferDBModel.FK_tblExcelSetting_tblSQLSetting" />
-        <AssociationConnector Association="TransferDBModel.FK_tblXMLMapping_tblXMLSetting" />
         <AssociationConnector Association="TransferDBModel.FK_tblXMLSetting_tblSQLSetting" />
         <EntityTypeShape EntityType="TransferDBModel.tblLog" Width="1.5" PointX="5.375" PointY="3.75" />
         <EntityTypeShape EntityType="TransferDBModel.tblSMTP" Width="1.5" PointX="7.375" PointY="0.75" />
@@ -26,6 +24,8 @@
         <EntityTypeShape EntityType="TransferDBModel.tblSchedule" Width="1.5" PointX="7.375" PointY="8.75" />
         <EntityTypeShape EntityType="TransferDBModel.tblCodeMapping" Width="1.5" PointX="9.375" PointY="0.75" />
         <EntityTypeShape EntityType="TransferDBModel.vwCodeMapping" Width="1.5" PointX="9.375" PointY="4.75" />
+        <EntityTypeShape EntityType="TransferDBModel.tblXMLMapping" Width="1.5" PointX="1.125" PointY="8.125" />
+        <AssociationConnector Association="TransferDBModel.FK_tblXMLMapping_tblXMLSetting" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

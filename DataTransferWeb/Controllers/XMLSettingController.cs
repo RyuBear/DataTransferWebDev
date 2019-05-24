@@ -96,11 +96,12 @@ namespace DataTransferWeb.Controllers
                         List<tblSQLColumns> setedColumns = new List<tblSQLColumns>(); ;
                         foreach (var c in mapping)
                         {
-                            setedColumns.Add(new tblSQLColumns()
-                            {
-                                SQLName = model.SQLName,
-                                ColumnName = c.FieldName
-                            });
+                            if (!string.IsNullOrEmpty(c.FieldName))
+                                setedColumns.Add(new tblSQLColumns()
+                                {
+                                    SQLName = model.SQLName,
+                                    ColumnName = c.FieldName
+                                });
                         }
                         model.SetedColumns = setedColumns;
 
@@ -172,7 +173,8 @@ namespace DataTransferWeb.Controllers
             // 判斷 Tag Name 是否有重複
             if (string.IsNullOrEmpty(vm.TagName) || !vm.TagName.Equals(vm.newTagName, StringComparison.OrdinalIgnoreCase))
             {
-                tblXMLMapping map = xmlMappings.Find(x => x.TagName.Equals(vm.newTagName, StringComparison.OrdinalIgnoreCase));
+                tblXMLMapping map = xmlMappings.Find(x => x.TagName.Equals(vm.newTagName, StringComparison.OrdinalIgnoreCase)
+                                                       && x.FatherTag.Equals(vm.FatherTag, StringComparison.OrdinalIgnoreCase));
                 if (map != null)
                 {
                     var result = new
@@ -183,7 +185,8 @@ namespace DataTransferWeb.Controllers
                 }
             }
             // 更新時 將舊暫存資料刪除
-            tblXMLMapping mapping = xmlMappings.Find(x => x.TagName.Equals(vm.TagName, StringComparison.OrdinalIgnoreCase));
+            tblXMLMapping mapping = xmlMappings.Find(x => x.TagName.Equals(vm.TagName, StringComparison.OrdinalIgnoreCase)
+                                                       && x.FatherTag.Equals(vm.FatherTag, StringComparison.OrdinalIgnoreCase));
             if (mapping != null)
             {
                 ColumnName = mapping.FieldName;

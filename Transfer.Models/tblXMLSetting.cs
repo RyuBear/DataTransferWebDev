@@ -31,9 +31,9 @@ namespace Transfer.Models
         public string Updator { get; set; }
         public string UserId { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tblXMLMapping> tblXMLMapping { get; set; }
         public virtual tblXMLSetting tblXMLSetting1 { get; set; }
         public virtual tblXMLSetting tblXMLSetting2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblXMLMapping> tblXMLMapping { get; set; }
     }
 }

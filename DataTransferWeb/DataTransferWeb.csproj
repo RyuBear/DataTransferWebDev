@@ -417,6 +417,7 @@
     <Content Include="layer\theme\default\loading-0.gif" />
     <Content Include="layer\theme\default\loading-1.gif" />
     <Content Include="layer\theme\default\loading-2.gif" />
+    <Content Include="output.xml" />
     <Content Include="Scripts\ai.0.22.9-build00167.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
     <Content Include="Scripts\alertify\alertify.js" />

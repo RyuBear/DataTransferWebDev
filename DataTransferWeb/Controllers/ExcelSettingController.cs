@@ -99,11 +99,12 @@ namespace DataTransferWeb.Controllers
                         List<tblSQLColumns> ExcelsetedColumns = new List<tblSQLColumns>(); ;
                         foreach (var c in mapping)
                         {
-                            ExcelsetedColumns.Add(new tblSQLColumns()
-                            {
-                                SQLName = model.SQLName,
-                                ColumnName = c.FieldName
-                            });
+                            if (!string.IsNullOrEmpty(c.FieldName))
+                                ExcelsetedColumns.Add(new tblSQLColumns()
+                                {
+                                    SQLName = model.SQLName,
+                                    ColumnName = c.FieldName
+                                });
                         }
                         model.SetedColumns = ExcelsetedColumns;
 
