@@ -172,6 +172,7 @@ namespace Transfer.Models.Repository
 
         public Tuple<bool, DataTable, string> TryExecuteDataTable(string sqlCommand, int? Row, List<ColumnData> columns)
         {
+            sqlCommand = sqlCommand.Replace("\r\n", " ");
             string msg = string.Empty;
 
             #region 整理 SQL 語句

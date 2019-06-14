@@ -70,7 +70,7 @@ namespace ScheduleProcess
                             tblSQLSetting sqlSetting = set.select(SQLName);
                             using (DataAccess da = new DataAccess())
                             {
-                                Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(sqlSetting.SQLStatement.Replace("\r\n", " "), null, null);
+                                Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(sqlSetting.SQLStatement, null, null);
                                 if (!result.Item1)
                                 {
                                     log.Save("轉出", "Schedule", s.CustomerName, s.Format, "", s.Email, s.FTPServer, FileName, "失敗", result.Item3);
@@ -162,7 +162,7 @@ namespace ScheduleProcess
                             tblSQLSetting sqlSetting = set.select(SQLName);
                             using (DataAccess da = new DataAccess())
                             {
-                                Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(sqlSetting.SQLStatement.Replace("\r\n", " "), null, null);
+                                Tuple<bool, DataTable, string> result = da.TryExecuteDataTable(sqlSetting.SQLStatement, null, null);
                                 if (!result.Item1)
                                 {
                                     log.Save("轉出", "Schedule", s.CustomerName, s.Format, "", s.Email, s.FTPServer, FileName, "失敗", result.Item3);
