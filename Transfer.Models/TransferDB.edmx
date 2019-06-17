@@ -140,6 +140,7 @@
           </Key>
           <Property Name="Email" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="DisplayName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Account" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="Password" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="SMTP" Type="varchar(max)" Nullable="false" />
           <Property Name="Port" Type="int" Nullable="false" />
@@ -554,6 +555,7 @@
           <Property Name="SMTP" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Port" Type="Int32" Nullable="false" />
           <Property Name="SSL" Type="Boolean" Nullable="false" />
+          <Property Name="Account" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="bscode">
           <Key>
@@ -812,6 +814,7 @@
           <EntitySetMapping Name="tblSMTP">
             <EntityTypeMapping TypeName="TransferDBModel.tblSMTP">
               <MappingFragment StoreEntitySet="tblSMTP">
+                <ScalarProperty Name="Account" ColumnName="Account" />
                 <ScalarProperty Name="SSL" ColumnName="SSL" />
                 <ScalarProperty Name="Port" ColumnName="Port" />
                 <ScalarProperty Name="SMTP" ColumnName="SMTP" />

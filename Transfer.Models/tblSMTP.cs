@@ -20,5 +20,6 @@ namespace Transfer.Models
         public string SMTP { get; set; }
         public int Port { get; set; }
         public bool SSL { get; set; }
+        public string Account { get; set; }
     }
 }

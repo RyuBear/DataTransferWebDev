@@ -9,6 +9,7 @@ using ScheduleProcess.Models;
 using Transfer.Models.Repository;
 using ScheduleProcess;
 using Transfer.Models;
+using System.Configuration;
 
 namespace Functions
 {
@@ -27,8 +28,9 @@ namespace Functions
         {
             using (tblSMTPRepository rep = new tblSMTPRepository())
             {
-                tblSMTP smtp = rep.get("chris@standard-info.com");
+                tblSMTP smtp = rep.get(ConfigurationManager.AppSettings["Mail"].ToString());
                 data.Email = smtp.Email;
+                data.Account = smtp.Account;
                 data.DisplayName = smtp.DisplayName;
                 data.SMTP = smtp.SMTP;
                 data.Password = smtp.Password;
@@ -73,7 +75,7 @@ namespace Functions
                 SmtpClient MySmtp = new SmtpClient(data.SMTP, data.Port);
 
                 //設定你的帳號密碼
-                MySmtp.Credentials = new System.Net.NetworkCredential(data.Email, data.Password);
+                MySmtp.Credentials = new System.Net.NetworkCredential(data.Account, data.Password);
 
                 //Gmial 的 smtp 使用 SSL
                 MySmtp.EnableSsl = data.SSL;
