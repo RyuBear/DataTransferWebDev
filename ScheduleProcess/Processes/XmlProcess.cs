@@ -90,7 +90,7 @@ namespace ScheduleProcess.Processes
                     {
                         int nodeCount = 0;
                         if (!string.IsNullOrEmpty(root.FieldName))
-                            nodeCount = nodes.Cast<XmlNode>().Where(n => n.InnerText == row[root.FieldName].ToString()).Count();
+                            nodeCount = nodes.Cast<XmlNode>().Where(n => n.FirstChild.InnerText == row[root.FieldName].ToString()).Count();
                         if ((node == null) || (nodes.Count > 0 && !string.IsNullOrEmpty(root.FieldName) && nodeCount == 0))
                         {
                             XmlElement rootNode = xmlDoc.CreateElement(root.TagName);

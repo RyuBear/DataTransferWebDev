@@ -1,1 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8" ?> 
+﻿<test>
+  <A>
+    A1<說明>
+      <B>B1</B>
+      <B>B2</B>
+    </說明><產品>
+      <C>C1</C>
+      <C>C2</C>
+      <C>C3</C>
+    </產品>
+  </A>
+</test>

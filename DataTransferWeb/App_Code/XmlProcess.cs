@@ -36,6 +36,7 @@ namespace DataTransferWeb
             }
 
             XmlDocument xmlDoc = new XmlDocument();
+            
             //根節點 只有1個
             var rootTag = xmlMappings.Where(x => string.IsNullOrEmpty(x.FatherTag)).First();
 
@@ -98,7 +99,7 @@ namespace DataTransferWeb
                     {
                         int nodeCount = 0;
                         if (!string.IsNullOrEmpty(root.FieldName))
-                            nodeCount = nodes.Cast<XmlNode>().Where(n => n.InnerText == row[root.FieldName].ToString()).Count();
+                            nodeCount = nodes.Cast<XmlNode>().Where(n => n.FirstChild.InnerText == row[root.FieldName].ToString()).Count();
                         if ((node == null) || (nodes.Count > 0 && !string.IsNullOrEmpty(root.FieldName) && nodeCount == 0))
                         {
                             XmlElement rootNode = xmlDoc.CreateElement(root.TagName);

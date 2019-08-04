@@ -77,12 +77,25 @@ namespace ScheduleProcess
                                 }
 
                                 XmlDocument xmlDoc = XmlProcess.GenerateXML(result.Item2, mapping);
+                                XmlWriterSettings settings = new XmlWriterSettings();
+                                settings.Indent = true;
+                                settings.OmitXmlDeclaration = false;
+                                settings.NewLineOnAttributes = true;
+                                settings.Encoding = Encoding.GetEncoding("utf-8");
+
                                 // Path
                                 if (Destinations.Contains("1"))
                                 {
                                     try
                                     {
-                                        xmlDoc.Save(s.Path + "/" + FileName);
+                                        using (Stream fs = File.Open(s.Path + "/" + FileName, FileMode.CreateNew))
+                                        {
+                                            XmlWriter writer = XmlWriter.Create(fs, settings);
+                                            xmlDoc.WriteTo(writer); // Write to memorystream
+                                            writer.Flush();
+                                            fs.Close();
+                                        }
+                                        //xmlDoc.Save(s.Path + "/" + FileName);
                                     }
                                     catch (Exception ex)
                                     {
@@ -96,7 +109,14 @@ namespace ScheduleProcess
 
                                 if (Destinations.Contains("2") || Destinations.Contains("3"))
                                 {
-                                    xmlDoc.Save(System.AppDomain.CurrentDomain.BaseDirectory + "/Files/" + FileName);
+                                    using (Stream fs = File.Open(System.AppDomain.CurrentDomain.BaseDirectory + "/Files/" + FileName, FileMode.CreateNew))
+                                    {
+                                        XmlWriter writer = XmlWriter.Create(fs, settings);
+                                        xmlDoc.WriteTo(writer); // Write to memorystream
+                                        writer.Flush();
+                                        fs.Close();
+                                    }
+                                    //xmlDoc.Save(System.AppDomain.CurrentDomain.BaseDirectory + "/Files/" + FileName);
                                 }
 
                                 // Email

@@ -237,7 +237,7 @@ namespace DataTransferWeb
         /// <returns></returns>
         public static string BeautifyXML(XmlDocument doc)
         {
-            Encoding enc = Encoding.GetEncoding("big5");
+            Encoding enc = Encoding.GetEncoding("utf-8");
 
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;

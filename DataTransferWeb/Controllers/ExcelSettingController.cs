@@ -193,7 +193,7 @@ namespace DataTransferWeb.Controllers
             }
             else
             {
-                tblExcelMapping map = ExcelMappings.Find(x => x.X == vm.X);
+                tblExcelMapping map = ExcelMappings.Find(x => x.ColumnName != vm.ColumnName && x.X == vm.X);
                 if (map != null)
                 {
                     var result = new

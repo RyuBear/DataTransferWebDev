@@ -231,11 +231,16 @@ namespace DataTransferWeb.Controllers
 
                                 vm.SQLResultDataRow = result.Item2;
                                 XmlDocument xmlDoc = XmlProcess.GenerateXML(result.Item2, mapping);
+                                XmlWriterSettings settings = new XmlWriterSettings();
+                                settings.Indent = true;
+                                settings.OmitXmlDeclaration = false;
+                                settings.NewLineOnAttributes = true;
+                                settings.Encoding = Encoding.GetEncoding("utf-8");
 
                                 if (vm.DataDestination.Equals("Download", StringComparison.OrdinalIgnoreCase))
-                                {
+                                {                                    
                                     MemoryStream ms = new MemoryStream();
-                                    using (XmlWriter writer = XmlWriter.Create(ms))
+                                    using (XmlWriter writer = XmlWriter.Create(ms, settings))
                                     {
                                         xmlDoc.WriteTo(writer); // Write to memorystream
                                     }
@@ -253,7 +258,15 @@ namespace DataTransferWeb.Controllers
                                 }
                                 else if (vm.DataDestination.Equals("FTP", StringComparison.OrdinalIgnoreCase))
                                 {
-                                    xmlDoc.Save(Server.MapPath("~/Files/" + vm.FileName));
+                                    using (Stream fs = System.IO.File.Open(Server.MapPath("~/Files/" + vm.FileName), FileMode.CreateNew))
+                                    {
+                                        XmlWriter writer = XmlWriter.Create(fs, settings);
+                                        xmlDoc.WriteTo(writer); // Write to memorystream
+                                        writer.Flush();
+                                        fs.Close();
+                                    }
+
+                                    //xmlDoc.Save(Server.MapPath("~/Files/" + vm.FileName));
                                     FTPData ftpData = new FTPData()
                                     {
                                         FTPServerIP = vm.FTPServerIP,
@@ -275,7 +288,13 @@ namespace DataTransferWeb.Controllers
                                 }
                                 else if (vm.DataDestination.Equals("EMail", StringComparison.OrdinalIgnoreCase))
                                 {
-                                    xmlDoc.Save(Server.MapPath("~/Files/" + vm.FileName));
+                                    using (Stream fs = System.IO.File.Open(Server.MapPath("~/Files/" + vm.FileName), FileMode.CreateNew))
+                                    {
+                                        XmlWriter writer = XmlWriter.Create(fs, settings);
+                                        xmlDoc.WriteTo(writer); // Write to memorystream
+                                        writer.Flush();
+                                        fs.Close();
+                                    }
                                     string subject = string.Empty;
                                     using (bscodeRepository bscode = new bscodeRepository())
                                     {
