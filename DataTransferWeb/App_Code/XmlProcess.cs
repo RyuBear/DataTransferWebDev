@@ -36,7 +36,7 @@ namespace DataTransferWeb
             }
 
             XmlDocument xmlDoc = new XmlDocument();
-            
+
             //根節點 只有1個
             var rootTag = xmlMappings.Where(x => string.IsNullOrEmpty(x.FatherTag)).First();
 
@@ -63,7 +63,7 @@ namespace DataTransferWeb
                         value = root.DefaultValue;
                     else
                         value = (string.IsNullOrEmpty(row[root.FieldName].ToString())) ? root.DefaultValue : row[root.FieldName].ToString();
-                    
+
                     // 代碼轉換
                     if (codeMap.Where(x => x.FieldName.Equals(root.TagName, StringComparison.OrdinalIgnoreCase)).Count() > 0
                       && codeMap.Where(x => x.BeforeValue.Equals(value, StringComparison.OrdinalIgnoreCase)).Count() > 0)
@@ -87,13 +87,16 @@ namespace DataTransferWeb
                 {
                     XmlNodeList nodes = Node.GetElementsByTagName(root.TagName);
 
-                    //// 單純為階層節點時
+                    //// 單純為階層節點時、允許重複
                     if (string.IsNullOrEmpty(root.FieldName) && string.IsNullOrEmpty(root.DefaultValue) && root.CanRepeat)
                     {
                         XmlElement rootNode = xmlDoc.CreateElement(root.TagName);
                         if (!string.IsNullOrEmpty(value)) rootNode.InnerText = value;
                         appendXmlByRow(row, mappings, xmlDoc, rootNode, root.TagName, 1);
-                        Node.AppendChild(rootNode);
+                        // 節點完成後，判斷是否有一模一樣的節點，如果有則不寫出
+                        int count = nodes.Cast<XmlNode>().Where(n => n.InnerText == rootNode.InnerText).Count();
+                        if (count == 0)
+                            Node.AppendChild(rootNode);
                     }
                     else
                     {
@@ -109,7 +112,11 @@ namespace DataTransferWeb
                         }
                         else
                         {
-                            XmlElement element = nodes.Cast<XmlElement>().FirstOrDefault();
+                            XmlElement element;
+                            if (string.IsNullOrEmpty(root.FieldName))
+                                element = nodes.Cast<XmlElement>().FirstOrDefault();
+                            else
+                                element = nodes.Cast<XmlElement>().Where(n => n.FirstChild.InnerText == row[root.FieldName].ToString()).FirstOrDefault();
                             appendXmlByRow(row, mappings, xmlDoc, element, root.TagName, 2);
                         }
                     }
